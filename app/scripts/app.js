@@ -1,11 +1,6 @@
 'use strict';
 
 /**
- * @ngdoc overview
- * @name cdlaUiApp
- * @description
- * # cdlaUiApp
- *
  * Main module of the application.
  */
 angular
@@ -17,7 +12,8 @@ angular
     'ngSanitize',
     'ngTouch',
     'ui.bootstrap',
-    'cdlaControllers'
+    'cdlaControllers',
+    'cdlaServices'
   ])
   .config(function ($routeProvider) {
     $routeProvider
