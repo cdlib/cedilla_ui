@@ -1,8 +1,7 @@
 {
   "name": "cdlaui",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "dependencies": {
-    "socket.io": "^1.1.x"
   },
   "devDependencies": {
     "grunt": "^0.4.1",
