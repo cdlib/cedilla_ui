@@ -27,9 +27,9 @@ cdlaServices.factory('cdlaSocketService', function() {
  */
 cdlaServices.factory('cdlaSocketListener', function() {
     listener = {};
-    listener.listen = function(socket, model, query, digester) {
-        socket.emit('openurl', query);
-        console.log("emitted openurl client event with params " + query);
+    listener.listen = function(socket, scope) {
+        socket.emit('openurl', scope.query);
+        console.log("emitted openurl client event with params " + scope.query);
 
         socket.on('complete', function(data) {
             console.log("data stream is complete");
@@ -40,23 +40,20 @@ cdlaServices.factory('cdlaSocketListener', function() {
             console.log("Handling citation event, data: " + data);
             var citation_update = JSON.parse(data);
             console.log(citation_update);
-            model.citation = citation_update;
- //           digester();
+            scope.item.citation = citation_update;
         });
 
         socket.on('resource', function(data) {
             console.log("Handling resource event, data: " + data);
             var new_resource = JSON.parse(data);
             console.log(new_resource);
-            model.resources.push(new_resource);
-//            digester();
+            scope.item.resources.push(new_resource);
         });
 
         socket.on('error', function(data) {
             console.log("Handling error event, data: " + data);
             error = true;
-            model.error = data;
-            // digester not called because it is undefined at this point for as yet unknown reasons
+            scope.error = data;
         });
     };
 

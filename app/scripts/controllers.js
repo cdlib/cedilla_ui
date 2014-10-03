@@ -33,10 +33,9 @@ cdlaControllers.controller('TestCtrl', ['$scope', function ($scope) {
  * Streaming resources via socket.io
  */
 cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketService', 'cdlaSocketListener', function ($scope, $window, socket, listener) {
-    $scope.item = { 'citation' : undefined, resources : [] };
+    $scope.item = { 'citation' : undefined, resources : [], 'error' : '' };
     $scope.$parent.active_button = '';
     var url = $window.location.toString();
-    var query = url.substr(url.indexOf('?') + 1, url.length);
-    console.log(query);
-    listener.listen(socket, $scope.item, query, $scope.digest);    
+    $scope.query = url.substr(url.indexOf('?') + 1, url.length);
+    listener.listen(socket, $scope);    
 }]);
