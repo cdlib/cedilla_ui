@@ -32,7 +32,7 @@ cdlaControllers.controller('TestCtrl', ['$scope', function ($scope) {
  * Connects to the cedilla aggregator and gets
  * Streaming resources via socket.io
  */
-cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketService', 'cdlaSocketListener', function ($scope, $window, socket, listener) {
+cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdlaSocketListener', function ($scope, $window, socket, listener) {
     $scope.item = { 'citation' : undefined, resources : [], 'error' : '' };
     $scope.$parent.active_button = '';
     var url = $window.location.toString();

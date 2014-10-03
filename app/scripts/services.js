@@ -5,22 +5,6 @@
 
 var cdlaServices = angular.module('cdlaServices', []);
 
-cdlaServices.factory('cdlaSocketService', function() {
-    // TODO inject config service?
-    var connectString = 'http://cdla-api-stg.cdlib.org:3005/';
-
-    // TODO set timeout using io.Manager and listen for client-side events
-    var socket = io.connect(connectString);
-
-    // TODO this is very rudimentary check for failure
-    if (socket) {
-        console.log("Opened connection to " + connectString);
-    } else {
-        throw ("socket connect failed");
-    }
-    return socket;
-});
-
 /**
  * Socket listener listens on a socket and updates the model.
  *
@@ -60,3 +44,9 @@ cdlaServices.factory('cdlaSocketListener', function() {
     return listener;
 });
 
+cdlaServices.factory('cdlaSocket', function (socketFactory) {
+  return socketFactory({
+    ioSocket: io.connect('http://cdla-api-stg.cdlib.org:3005/'),
+    prefix : 'cdla'
+  });
+});
