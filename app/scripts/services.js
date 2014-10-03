@@ -6,6 +6,7 @@ var cdlaServices = angular.module('cdlaServices', []);
 
 cdlaServices.factory('cdlaSocketService', function(){
   var socketService = {};
+
   socketService.test = function() {
     return "ok";
   }
