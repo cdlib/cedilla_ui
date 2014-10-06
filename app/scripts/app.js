@@ -1,11 +1,6 @@
 'use strict';
 
 /**
- * @ngdoc overview
- * @name cdlaUiApp
- * @description
- * # cdlaUiApp
- *
  * Main module of the application.
  */
 angular
@@ -15,7 +10,11 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'ui.bootstrap',
+    'btford.socket-io',
+    'cdlaControllers',
+    'cdlaServices'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -26,6 +25,10 @@ angular
       .when('/test', {
         templateUrl: 'views/test.html',
         controller: 'TestCtrl'
+      })
+      .when('/ourl', {
+        templateUrl: 'views/ourl.html',
+        controller: 'OurlCtrl'
       })
       .otherwise({
         redirectTo: '/'
