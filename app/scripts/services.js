@@ -48,6 +48,5 @@ cdlaServices.factory('cdlaSocket', function (socketFactory) {
   return socketFactory({
     /* global io */
     ioSocket: io.connect('http://cdla-api-stg.cdlib.org:3005/'),
-    prefix : 'cdla'
   });
 });

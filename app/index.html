@@ -21,11 +21,11 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div ng-controller = "HomeCtrl" class="container">
+    <div ng-controller = "MainCtrl" class="container">
       <div class="header">
         <ul class="nav nav-pills pull-right">
-          <li ng-class="{'active': activeButton === 'home'}" ng-click="active_button = 'home'"><a ng-href="#/main">Home</a></li>
-          <li ng-class="{'active': activeButton === 'test'}" ng-click="active_button = 'test'"><a ng-href="#/test">Test Links</a></li>
+          <li ng-class="{'active': navState.currentPage === 'home'}" ng-click="active_button = 'home'"><a ng-href="#/main">Home</a></li>
+          <li ng-class="{'active': navState.currentPage === 'test'}" ng-click="active_button = 'test'"><a ng-href="#/test">Test Links</a></li>
         </ul>
         <h3 class="text-muted">Çedilla Black Cat</h3>
       </div>

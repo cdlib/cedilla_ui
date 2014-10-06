@@ -11,12 +11,53 @@ describe('Controller: MainCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    MainCtrl = $controller('MainCtrl', {
-      $scope: scope
-    });
+    MainCtrl = $controller('MainCtrl', { $scope: scope });
   }));
 
-  it('dummy test', function () {
-    expect(1).toBe(1);
+  it('should be on the home page', function () {
+    expect(scope.navState.currentPage).toBe('home');
   });
+
 });
+
+describe('Controller: HomeCtrl', function () {
+
+  beforeEach(module('cdlaControllers'));
+
+  var HomeCtrl, MainCtrl;
+  var mainScope, childScope;
+
+  beforeEach(inject(function ($controller, $rootScope) {
+    mainScope = $rootScope.$new();
+    MainCtrl = $controller('MainCtrl', { $scope : mainScope });
+    childScope = mainScope.$new(); 
+    HomeCtrl = $controller('HomeCtrl', { $scope : childScope });
+  }));
+
+  it('should be on the home page', function () {
+    expect(childScope.$parent.navState.currentPage).toBe('home'); 
+  });
+
+});
+
+
+describe('Controller: TestCtrl', function () {
+
+  beforeEach(module('cdlaControllers'));
+
+  var TestCtrl, MainCtrl;
+  var mainScope, childScope;
+
+  beforeEach(inject(function ($controller, $rootScope) {
+    mainScope = $rootScope.$new();
+    MainCtrl = $controller('MainCtrl', { $scope : mainScope });
+    childScope = mainScope.$new();
+    TestCtrl = $controller('TestCtrl', { $scope : childScope });
+  }));
+
+  it('should be on the test', function () {
+    expect(childScope.$parent.navState.currentPage).toBe('test');
+  });
+
+});
+
