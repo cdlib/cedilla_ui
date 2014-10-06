@@ -1,8 +1,10 @@
 <div>
-  <h2>Citation</h2>
-  <p>{{item.citation}}</p>
-</div>
-<div>
-  <h2>Resources</h2>
-  <p>{{item.resources}}</p>
+  <div id='debug' ng-class="{'hidden': viewState.showDebug != true}">
+    <h2>Citation</h2>
+    <p>{{item.citation}}</p>
+  </div>
+  <div>
+    <h2>Resources</h2>
+    <p>{{item.resources}}</p>
+  </div>
 </div>
