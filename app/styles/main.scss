@@ -48,6 +48,23 @@ body {
   margin: 30px 0;
 }
 
+/*  CDLA added  */
+ 
+.hidden {
+  display: none;
+}
+
+.ft_frame {
+  height: 700px;
+  width: 100%;
+}
+
+.noscroll {
+  overflow: hidden;
+}
+
+/* end CDLA added */
+
 /* Main marketing message and sign up button */
 .jumbotron {
   text-align: center;
@@ -90,3 +107,5 @@ body {
     border-bottom: 0;
   }
 }
+
+
