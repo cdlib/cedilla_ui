@@ -8,13 +8,17 @@
 
 var cdlaControllers = angular.module('cdlaControllers', []);
 
+var initViewState = function () {
+  return { showDebug : true, showFullText : false, showOptions : false };
+};
+
 /**
  * Main controller of the application.
  */
 cdlaControllers.controller('MainCtrl', ['$scope', function ($scope) {
     console.log('Main controller');
     $scope.navState = { 'currentPage' : 'home' };
-    console.log('Current page is ' + $scope.navState['currentPage']);
+    console.log('Current page is ' + $scope.navState.currentPage);
 }]);
 
 /**
@@ -40,6 +44,7 @@ cdlaControllers.controller('TestCtrl', ['$scope', function ($scope) {
 cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdlaSocketListener', function ($scope, $window, socket, listener) {
     $scope.item = { 'citation' : undefined, resources : [], 'error' : '' };
     $scope.$parent.navState.currentPage = 'ourl';
+    $scope.viewState = initViewState();
     var url = $window.location.toString();
     $scope.query = url.substr(url.indexOf('?') + 1, url.length);
     listener.listen(socket, $scope);    
