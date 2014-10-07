@@ -12,8 +12,16 @@
     <p>{{viewState}}</p>
   </div>
   
-  <div id='fulltext' class="ft_frame" ng-class="{'hidden': !viewState.showFullText || !item.fullTextTarget}">
+  <div id='fulltext' class="ft_frame" ng-class="{'hidden': !viewState.showFullText}">
     <h2>Show fulltext here</h2>
     <iframe src='{{item.fullTextTarget}}' class='ft_frame'></iframe>
   </div>
+
+  <div id='resources' ng-class="{'hidden': !viewState.showOptions}">
+    <h2>Show resources</h2>
+    <ul>
+      <li ng-repeat="resource in item.resources | filter : {format : 'electronic'}">
+        <a href="{{resource.target}}">{{resource.source}}</a>
+      </li>
+    </ul>
 </div>

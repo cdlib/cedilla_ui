@@ -9,7 +9,7 @@
 var cdlaControllers = angular.module('cdlaControllers', []);
 
 var initViewState = function () {
-  return { showDebug : true, showFullText : false, showOptions : false };
+  return { showDebug : true, showFullText : true, showOptions : true};
 };
 
 /**
