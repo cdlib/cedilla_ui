@@ -9,7 +9,7 @@
 var cdlaControllers = angular.module('cdlaControllers', []);
 
 var initViewState = function () {
-  return { showDebug : true, showFullText : true, showOptions : true};
+  return { showDebug : false, showFullText : false, showOptions : true};
 };
 
 /**
@@ -19,6 +19,9 @@ cdlaControllers.controller('MainCtrl', ['$scope', function ($scope) {
     console.log('Main controller');
     $scope.navState = { 'currentPage' : 'home' };
     console.log('Current page is ' + $scope.navState.currentPage);
+    $scope.changeView = function(viewName) {
+      this.$broadcast('changeView', viewName);
+    };
 }]);
 
 /**
@@ -48,4 +51,19 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     var url = $window.location.toString();
     $scope.query = url.substr(url.indexOf('?') + 1, url.length);
     listener.listen(socket, $scope);    
+    $scope.$on('changeView', function(event, data) {
+      switch(data) {
+        case 'fullText':
+          $scope.viewState.showFullText = true;
+          $scope.viewState.showOptions = false;
+          break;
+        case 'options':
+          $scope.viewState.showOptions = true;
+          $scope.viewState.showFullText = false; 
+          break;
+        case 'debug':
+          $scope.viewState.showDebug = true;
+          break;
+      } 
+    });
 }]);

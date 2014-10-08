@@ -23,6 +23,14 @@
     <div ng-controller = "MainCtrl" class="container">
       <div class="header">
         <ul class="nav nav-pills pull-right">
+          <li id="display_controls" class="dropdown" ng-show="navState.currentPage === 'ourl'">
+            <a href class="dropdown-toggle" data-toggle="dropdown">Show <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li id="display_fulltext_item"><a id="display_fulltext" href ng-click="changeView('fullText')">Full Text</a></li>
+              <li id="display_links_item")><a id="display_options" href ng-click="changeView('options')">Options</a></li>
+              <li id="display_debug_item"><a id="display_debug" href ng-click="changeView('debug')">Debug</a></li>
+            </ul>
+          </li>
           <li ng-class="{'active': navState.currentPage === 'home'}" ng-click="navState.currentPage = 'home'"><a ng-href="#/main">Home</a></li>
           <li ng-class="{'active': navState.currentPage === 'test'}" ng-click="navState.currentPage = 'test'"><a ng-href="#/test">Test Links</a></li>
         </ul>
@@ -68,7 +76,6 @@
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-socket-io/socket.js"></script>
     <!-- endbower -->
     <!-- endbuild -->

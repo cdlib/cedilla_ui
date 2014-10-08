@@ -11,7 +11,6 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'ui.bootstrap',
     'btford.socket-io',
     'cdlaControllers',
     'cdlaServices'
