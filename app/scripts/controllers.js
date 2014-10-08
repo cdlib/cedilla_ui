@@ -48,6 +48,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     $scope.item = { 'citation' : undefined, resources : [], 'error' : '' };
     $scope.$parent.navState.currentPage = 'ourl';
     $scope.viewState = initViewState();
+    $scope.$parent.navState.viewState = $scope.viewState; 
     var url = $window.location.toString();
     $scope.query = url.substr(url.indexOf('?') + 1, url.length);
     listener.listen(socket, $scope);    

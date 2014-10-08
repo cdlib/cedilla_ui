@@ -29,8 +29,8 @@
   <div class="well col-md-12">
     <p><strong>Available digitally from</strong></p>
     <ul>
-      <li ng-repeat="resource in item.resources | filter : {format : 'electronic'}">
-        <a href="{{resource.target}}">{{resource.source}}</a>
+      <li ng-repeat="resource in item.resources | digitalLinks">
+        <a href="{{resource.target}}"><span ng-bind-html="resource.source"></span></a>
       </li>
     </ul>
   </div>

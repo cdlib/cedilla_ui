@@ -26,9 +26,15 @@
           <li id="display_controls" class="dropdown" ng-show="navState.currentPage === 'ourl'">
             <a href class="dropdown-toggle" data-toggle="dropdown">Show <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li id="display_fulltext_item"><a id="display_fulltext" href ng-click="changeView('fullText')">Full Text</a></li>
-              <li id="display_links_item")><a id="display_options" href ng-click="changeView('options')">Options</a></li>
-              <li id="display_debug_item"><a id="display_debug" href ng-click="changeView('debug')">Debug</a></li>
+              <li id="display_fulltext_item">
+                <a id="display_fulltext" href ng-click="changeView('fullText')" ng-show="!navState.viewState.showFullText">Full Text</a>
+              </li>
+              <li id="display_links_item")>
+                <a id="display_options" href ng-click="changeView('options')" ng-show="!navState.viewState.showOptions">Options</a>
+              </li>
+              <li id="display_debug_item">
+                <a id="display_debug" href ng-click="changeView('debug')" ng-show="!navState.viewState.showDebug">Debug</a>
+              </li>
             </ul>
           </li>
           <li ng-class="{'active': navState.currentPage === 'home'}" ng-click="navState.currentPage = 'home'"><a ng-href="#/main">Home</a></li>
@@ -84,6 +90,7 @@
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers.js"></script>
     <script src="scripts/services.js"></script>
+    <script src="scripts/filters.js"></script>
     <!-- endbuild -->
 </body>
 </html>

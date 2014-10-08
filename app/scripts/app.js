@@ -13,7 +13,8 @@ angular
     'ngTouch',
     'btford.socket-io',
     'cdlaControllers',
-    'cdlaServices'
+    'cdlaServices',
+    'cdlaFilters'
   ])
   .config(function ($routeProvider) {
     $routeProvider
