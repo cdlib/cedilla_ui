@@ -11,7 +11,7 @@ var cdlaServices = angular.module('cdlaServices', []);
  * Socket listener listens on a socket and updates the model.
  *
  */
-cdlaServices.factory('cdlaSocketListener', function() {
+cdlaServices.factory('cdlaSocketListener', [ '$sce', function($sce) {
     var listener = {};
     listener.listen = function(socket, scope) {
         socket.emit('openurl', scope.query);
@@ -32,7 +32,13 @@ cdlaServices.factory('cdlaSocketListener', function() {
             console.log('Handling resource event, data: ' + data);
             var newResource = JSON.parse(data);
             console.log('Adding new resource: ' + newResource);
-            scope.item.resources.push(newResource);
+            scope.item.resources.push(newResource.resource);
+            if (!scope.item.fullTextTarget && newResource.resource.format === 'electronic') {
+              console.log ('Setting fullTextTarget = ' + newResource.resource.target);
+              scope.item.fullTextTarget = $sce.trustAsResourceUrl(newResource.resource.target);
+              scope.viewState.showOptions = false;
+              scope.viewState.showFullText = true;
+            }
         });
 
         socket.on('error', function(data) {
@@ -42,7 +48,7 @@ cdlaServices.factory('cdlaSocketListener', function() {
     };
 
     return listener;
-});
+}]);
 
 cdlaServices.factory('cdlaSocket', function (socketFactory) {
   return socketFactory({

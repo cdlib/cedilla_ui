@@ -11,10 +11,10 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'ui.bootstrap',
     'btford.socket-io',
     'cdlaControllers',
-    'cdlaServices'
+    'cdlaServices',
+    'cdlaFilters'
   ])
   .config(function ($routeProvider) {
     $routeProvider
