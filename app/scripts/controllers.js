@@ -46,14 +46,20 @@ cdlaControllers.controller('TestCtrl', ['$scope', function ($scope) {
  */
 cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdlaSocketListener', 'cdlaCitation', 
   function ($scope, $window, socket, listener, citationService) {
-    $scope.item = { 'citation' : undefined, resources : [], 'error' : '' };
+   
+    
     $scope.$parent.navState.currentPage = 'ourl';
     $scope.viewState = initViewState();
     $scope.$parent.navState.viewState = $scope.viewState; 
+    
+    $scope.item = { query : '', citation : {}, citationEvents : [], resources : [], error : '' };
     var url = $window.location.toString();
-    $scope.query = url.substr(url.indexOf('?') + 1, url.length);
-    citationService.getCitation($scope.query, $scope.item.citation);
+    $scope.item.query = url.substr(url.indexOf('?') + 1, url.length); 
+    citationService.initCitation($scope.item);
+    
     listener.listen(socket, $scope);    
+    
+    // handle changeView event broadcast from the parent scope
     $scope.$on('changeView', function(event, data) {
       switch(data) {
         case 'fullText':

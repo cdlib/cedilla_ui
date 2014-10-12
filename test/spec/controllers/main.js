@@ -61,23 +61,6 @@ describe('Controller: TestCtrl', function() {
 
 });
 
-describe('Service: testService', function() {
-
-    beforeEach(module('cdlaServices'));
-
-    var _cdlaTest;
-
-    beforeEach(inject(function(cdlaTest) {
-        _cdlaTest = cdlaTest;
-    }));
-
-    it('should be a test', function() {
-        expect(_cdlaTest.description).toBe('test');
-        expect(_cdlaTest.inner).toBe('test inner');
-    });
-
-});
-
 describe('Service: cdlaCitation', function() {
 
     beforeEach(module('cdlaServices'));

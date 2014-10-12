@@ -14,8 +14,8 @@ var cdlaServices = angular.module('cdlaServices', []);
 cdlaServices.factory('cdlaSocketListener', ['$sce', function($sce) {
         var listener = {};
         listener.listen = function(socket, scope) {
-            socket.emit('openurl', scope.query);
-            console.log('emitted openurl client event with params ' + scope.query);
+            socket.emit('openurl', scope.item.query);
+            console.log('emitted openurl client event with params ' + scope.item.query);
 
             socket.on('complete', function() {
                 console.log('data stream is complete');
@@ -25,7 +25,7 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', function($sce) {
                 console.log('Handling citation event, data: ' + data);
                 var citationUpdate = JSON.parse(data);
                 console.log('Updated citation with ' + citationUpdate);
-                scope.item.citation = citationUpdate;
+                scope.item.citationEvents.push(citationUpdate);
             });
 
             socket.on('resource', function(data) {
@@ -66,16 +66,15 @@ cdlaServices.factory('cdlaCitation', ['$http', function($http) {
         /*
          * Returns a deferred query result
          */
-        cdlaCitation.getCitation = function(params, model) {
-            console.log('initializer using ' + JSON.stringify(params) + ' and ' + model);
-            _http.get('http://localhost:3005/citation?' + params)
+        cdlaCitation.initCitation = function(item) {
+            console.log('initCitation using ' + JSON.stringify(item.query) + ' and ' + item.citation);
+            _http.get('http://localhost:3005/citation?' + item.query)
                     .success(function (data, status, headers, config){
                         console.log('result is ' + JSON.stringify(data));
-                        model = data;
+                        item.citation = data;
                     })
                     .error(function(data, status, headers, config){
                         console.log('error is ' + JSON.stringify(data));
-                        model = null;
                     });
             return this;
         };
@@ -86,15 +85,3 @@ cdlaServices.factory('cdlaCitation', ['$http', function($http) {
 
         return cdlaCitation;
     }]);
-
-cdlaServices.factory('cdlaTest', ['cdlaTestInner', function(testInner) {
-        var _testInner;
-
-        _testInner = testInner;
-        return {description: 'test', inner: _testInner.description};
-    }]);
-
-cdlaServices.factory('cdlaTestInner', function() {
-
-    return {description: 'test inner'};
-});
