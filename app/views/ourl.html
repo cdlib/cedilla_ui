@@ -1,40 +1,65 @@
-<div id="debug" ng-show="viewState.showDebug">
-  <div id="citation">
-    <h2>Citation</h2>
-    <p>{{item.citation}}</p>
-  </div>
-  <div>
-    <h2>Resources</h2>
-    <p>{{item.resources}}</p>
-  </div>
-  <div>
-    <h2>ViewState</h2>
-    <p>{{viewState}}</p>
-  </div>
-</div>
 
-<div id="citation_panel" class="row">
-  <div class="panel panel_default">
-    <div id="citation_display"></div>
-   </div>
+<div id="citation_panel" class="row" ng-show="item.displayCitation">
+    <div class="panel panel_default">
+        <div id="citation_display" ng-show="item.displayCitation.container_title">
+            <div id='title_display_field' class='cite_field' ng-show="item.displayCitation.title">
+                <span class='cite_field_label'>Title:</span>
+                <span class='cite_field_val'>{{item.displayCitation.title}}</span>
+            </div>
+            <div id='source_display_field' class='cite_field'>
+                <span class='cite_field_label'>Source:</span>
+                <span class='source_val'>{{item.displayCitation.container_title}}.</span>
+                <span class='source_val' ng-show="item.displayCitation.year">{{item.displayCitation.year}},</span>
+                <span class='source_val' ng-show="item.displayCitation.volume">{{item.displayCitation.volume}}({{item.displayCitation.issue}}),</span>
+                <span class='source_val' ng-show="item.displayCitation.pages">{{item.displayCitation.pages}}</span>
+            </div>
+        </div>
+    </div>
 </div>  
 
 <div id="error_panel"><div id="error_message" class="col-md-12"></div></div>
 
 <div id='fulltext' class="ft_frame" ng-class="{'hidden': !viewState.showFullText}">
-  <iframe src='{{item.fullTextTarget}}' class='ft_frame'></iframe>
+    <iframe src='{{item.fullTextTarget}}' class='ft_frame'></iframe>
 </div>
 
 <div id="resources" class="row" ng-class="{'hidden': !viewState.showOptions}">
-  <div class="well col-md-12">
-    <p><strong>Available digitally from</strong></p>
-    <ul>
-      <li ng-repeat="resource in item.resources | digitalLinks">
-        <a href="{{resource.target}}"><span ng-bind-html="resource.source"></span></a>
-      </li>
-    </ul>
-  </div>
-  <div id="your_library_display" class="well col-md-12">
-    <p><strong>Copies in your library</strong></p>
-  </div>
+    <div class="well col-md-12">
+        <p><strong>Available digitally from</strong></p>
+        <ul>
+            <li ng-repeat="resource in item.resources| digitalLinks">
+                <a href="{{resource.target}}"><span ng-bind-html="resource.source"></span></a>
+            </li>
+        </ul>
+    </div>
+    <div id="your_library_display" class="well col-md-12">
+        <p><strong>Copies in your library</strong></p>
+    </div>
+</div>
+
+<div id="debug" ng-show="viewState.showDebug">
+    <div id="citation_events">
+        <h2>Citation Events</h2>
+        <ul>
+            <li ng-repeat="event in item.citationEvents">{{event}}</li>     
+        </ul>
+    </div>
+    <div id="citation">
+        <h2>Citation</h2>
+        <p>{{item.citation}}</p>  
+    </div>
+    <div>
+        <h2>Display Citation</h2>
+        <p>{{item.displayCitation}}</p>
+    </div>
+    <div>
+        <h2>Resources</h2>
+        <ul>
+            <li ng-repeat="resource in item.resources">{{resource}}</li>
+        </ul>
+    </div>
+    <div>
+        <h2>View State</h2>
+        <p>{{viewState}}</p>
+    </div>
 </div>

@@ -44,14 +44,22 @@ cdlaControllers.controller('TestCtrl', ['$scope', function ($scope) {
  * Connects to the cedilla aggregator and gets
  * Streaming resources via socket.io
  */
-cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdlaSocketListener', function ($scope, $window, socket, listener) {
-    $scope.item = { 'citation' : undefined, resources : [], 'error' : '' };
+cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdlaSocketListener', 'cdlaCitation', 
+  function ($scope, $window, socket, listener, citationService) {
+   
+    
     $scope.$parent.navState.currentPage = 'ourl';
     $scope.viewState = initViewState();
     $scope.$parent.navState.viewState = $scope.viewState; 
+    
+    $scope.item = { query : '', citation : {}, citationEvents : [], displayCitation : {}, resources : [], error : '' };
     var url = $window.location.toString();
-    $scope.query = url.substr(url.indexOf('?') + 1, url.length);
+    $scope.item.query = url.substr(url.indexOf('?') + 1, url.length); 
+    citationService.initCitation($scope.item);
+    
     listener.listen(socket, $scope);    
+    
+    // handle changeView event broadcast from the parent scope
     $scope.$on('changeView', function(event, data) {
       switch(data) {
         case 'fullText':
