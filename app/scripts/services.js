@@ -11,48 +11,90 @@ var cdlaServices = angular.module('cdlaServices', []);
  * Socket listener listens on a socket and updates the model.
  *
  */
-cdlaServices.factory('cdlaSocketListener', [ '$sce', function($sce) {
-    var listener = {};
-    listener.listen = function(socket, scope) {
-        socket.emit('openurl', scope.query);
-        console.log('emitted openurl client event with params ' + scope.query);
+cdlaServices.factory('cdlaSocketListener', ['$sce', function($sce) {
+        var listener = {};
+        listener.listen = function(socket, scope) {
+            socket.emit('openurl', scope.query);
+            console.log('emitted openurl client event with params ' + scope.query);
 
-        socket.on('complete', function() {
-            console.log('data stream is complete');
-        });
+            socket.on('complete', function() {
+                console.log('data stream is complete');
+            });
 
-        socket.on('citation', function(data) {
-            console.log('Handling citation event, data: ' + data);
-            var citationUpdate = JSON.parse(data);
-            console.log('Updated citation with ' + citationUpdate);
-            scope.item.citation = citationUpdate;
-        });
+            socket.on('citation', function(data) {
+                console.log('Handling citation event, data: ' + data);
+                var citationUpdate = JSON.parse(data);
+                console.log('Updated citation with ' + citationUpdate);
+                scope.item.citation = citationUpdate;
+            });
 
-        socket.on('resource', function(data) {
-            console.log('Handling resource event, data: ' + data);
-            var newResource = JSON.parse(data);
-            console.log('Adding new resource: ' + newResource);
-            scope.item.resources.push(newResource.resource);
-            if (!scope.item.fullTextTarget && newResource.resource.format === 'electronic') {
-              console.log ('Setting fullTextTarget = ' + newResource.resource.target);
-              scope.item.fullTextTarget = $sce.trustAsResourceUrl(newResource.resource.target);
-              scope.viewState.showOptions = false;
-              scope.viewState.showFullText = true;
-            }
-        });
+            socket.on('resource', function(data) {
+                console.log('Handling resource event, data: ' + data);
+                var newResource = JSON.parse(data);
+                console.log('Adding new resource: ' + newResource);
+                scope.item.resources.push(newResource.resource);
+                if (!scope.item.fullTextTarget && newResource.resource.format === 'electronic') {
+                    console.log('Setting fullTextTarget = ' + newResource.resource.target);
+                    scope.item.fullTextTarget = $sce.trustAsResourceUrl(newResource.resource.target);
+                    scope.viewState.showOptions = false;
+                    scope.viewState.showFullText = true;
+                }
+            });
 
-        socket.on('error', function(data) {
-            console.log('Handling error event, data: ' + data);
-            scope.error = data;
-        });
-    };
+            socket.on('error', function(data) {
+                console.log('Handling error event, data: ' + data);
+                scope.error = data;
+            });
+        };
 
-    return listener;
-}]);
+        return listener;
+    }]);
 
-cdlaServices.factory('cdlaSocket', function (socketFactory) {
-  return socketFactory({
-    /* global io */
-    ioSocket: io.connect('http://cdla-api-stg.cdlib.org:3005/'),
-  });
+cdlaServices.factory('cdlaSocket', function(socketFactory) {
+    return socketFactory({
+        /* global io */
+        ioSocket: io.connect('http://cdla-api-stg.cdlib.org:3005/')
+    });
+});
+
+
+cdlaServices.factory('cdlaCitation', ['$http', function($http) {
+
+        var cdlaCitation = {};
+        var _http = $http;
+
+        /*
+         * Returns a deferred query result
+         */
+        cdlaCitation.getCitation = function(params, model) {
+            console.log('initializer using ' + JSON.stringify(params) + ' and ' + model);
+            _http.get('http://localhost:3005/citation?' + params)
+                    .success(function (data, status, headers, config){
+                        console.log('result is ' + JSON.stringify(data));
+                        model = data;
+                    })
+                    .error(function(data, status, headers, config){
+                        console.log('error is ' + JSON.stringify(data));
+                        model = null;
+                    });
+            return this;
+        };
+            
+      
+
+        cdlaCitation.description = 'citation service';
+
+        return cdlaCitation;
+    }]);
+
+cdlaServices.factory('cdlaTest', ['cdlaTestInner', function(testInner) {
+        var _testInner;
+
+        _testInner = testInner;
+        return {description: 'test', inner: _testInner.description};
+    }]);
+
+cdlaServices.factory('cdlaTestInner', function() {
+
+    return {description: 'test inner'};
 });
