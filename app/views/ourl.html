@@ -1,7 +1,19 @@
 
-<div id="citation_panel" class="row">
+<div id="citation_panel" class="row" ng-show="item.displayCitation">
     <div class="panel panel_default">
-        <div id="citation_display"></div>
+        <div id="citation_display" ng-show="item.displayCitation.container_title">
+            <div id='title_display_field' class='cite_field' ng-show="item.displayCitation.title">
+                <span class='cite_field_label'>Title:</span>
+                <span class='cite_field_val'>{{item.displayCitation.title}}</span>
+            </div>
+            <div id='source_display_field' class='cite_field'>
+                <span class='cite_field_label'>Source:</span>
+                <span class='source_val'>{{item.displayCitation.container_title}}.</span>
+                <span class='source_val' ng-show="item.displayCitation.year">{{item.displayCitation.year}},</span>
+                <span class='source_val' ng-show="item.displayCitation.volume">{{item.displayCitation.volume}}({{item.displayCitation.issue}}),</span>
+                <span class='source_val' ng-show="item.displayCitation.pages">{{item.displayCitation.pages}}</span>
+            </div>
+        </div>
     </div>
 </div>  
 
