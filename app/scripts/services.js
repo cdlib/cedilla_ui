@@ -58,7 +58,7 @@ cdlaServices.factory('cdlaSocket', function(socketFactory) {
 });
 
 
-cdlaServices.factory('cdlaCitation', ['$http', function($http) {
+cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', function($http, citationFormatter) {
 
         var cdlaCitation = {};
         var _http = $http;
@@ -72,6 +72,7 @@ cdlaServices.factory('cdlaCitation', ['$http', function($http) {
                     .success(function (data, status, headers, config){
                         console.log('result is ' + JSON.stringify(data));
                         item.citation = data;
+                        item.displayCitation = citationFormatter.toDisplayCitation(data);
                     })
                     .error(function(data, status, headers, config){
                         console.log('error is ' + JSON.stringify(data));
@@ -85,3 +86,198 @@ cdlaServices.factory('cdlaCitation', ['$http', function($http) {
 
         return cdlaCitation;
     }]);
+  
+  
+/*
+ * Service for citation formatter helper object.
+ * This object formats various strings related to the citation
+ * for display on screen or in conventional citation formats.
+ */
+cdlaServices.factory('cdlaCitationFormatter', function() {
+
+    var citationFormatter = {};
+
+    /**
+     * citation formatter methods
+     */
+    citationFormatter.toDisplayCitation = function(citation) {
+        console.log("Called getModel with citation " + JSON.stringify(citation));
+        return citationDisplayModel.toDisplayFormat(citation);
+    };
+
+    /*
+     * Model for display of citation information on page
+     */
+    var citationDisplayModel = {
+        /*
+         * Update the display, also used to initialize the display.
+         * (Note: the working assumption is that we will override something
+         * that has already been set; that is, the citation information coming from the aggregator must be authoritative.)
+         */
+        toDisplayFormat: function(citation) {
+
+            this.genre = citation.genre;
+            this.volume = citation.volume;
+            this.issue = citation.issue;
+            this.publisher = citation.publisher;
+            this.title = format_part_title(citation);
+            this.pages = format_pages(citation);
+            this.container_title = formatContainerTitle(citation);
+            this.authors = format_authors(citation);
+            this.year = format_year(citation);
+            this.date = format_date(citation);
+            this.volume = citation.volume;
+            this.issue = citation.issue;
+            this.pages = format_pages(citation);
+
+            if (citation.sample_cover_image) {
+                this.cover_image = citation.sample_cover_image;
+            }
+            return this;
+        }
+    };
+
+
+    /**
+     * Private functions
+     */
+
+
+    /**
+     * The title field displays the part title, if available
+     * For example, if item is a journal article, title is the article title
+     * If the item is a book in a monographic series, the title is the book title
+     */
+    var format_part_title = function(citation) {
+        if (citation.article_title) {
+            return citation.article_title.trim();
+        }
+        if (citation.book_title && citation.genre === "series") {
+            return citation.book_title.trim();
+        }
+        return "";
+    };
+
+    var formatContainerTitle = function(citation) {
+        var result = "";
+        if (citation.journal_title) {
+            result = citation.journal_title;
+        }
+        if (citation.title) {
+            result = citation.title;
+        }
+        if (citation.short_title) {
+            result = citation.short_title;
+        }
+        return result.trim();
+    };
+
+    /**
+     * Return a display string for a single author or list of authors.
+     */
+    var format_authors = function(citation) {
+
+        if (!citation.authors || !citation.authors.length) {
+            return null;
+        }
+        return format_author_single(citation.authors['0']);
+    };
+
+    /**
+     * Return a display string for a single author.
+     */
+    var format_author_single = function(author) {
+        var first_name = author.first_name;
+        var last_name = author.last_name;
+        var initials = author.initials;
+        var middle_initial = author.middle_initial ? author.middle.initial : "";
+        var full_name = author.full_name;
+        var corporate_name = author.corporate_author;
+        var formatted_name = "";
+        if (!first_name) {
+            if (!initials)
+                formatted_name = last_name;
+            else
+                formatted_name = last_name + ", " + initials;
+        } else {
+            if (!middle_initial)
+                formatted_name = last_name + ", " + first_name;
+            else
+                formatted_name = last_name + ", " + first_name + " " + middle_initial;
+        }
+        if (!formatted_name) {
+            formatted_name = corporate_name;
+        }
+        if (!formatted_name) {
+            formatted_name = full_name;
+        }
+        return formatted_name;
+    };
+
+    var format_pages = function(citation) {
+        if (citation.pages) {
+            return citation.pages.trim();
+        }
+        if (!citation.start_page) {
+            return "";
+        }
+        var end_page = citation.end_page;
+        if (!end_page) {
+            end_page = "";
+        }
+        return citation.start_page.trim() + "-" + end_page.trim();
+    };
+
+    var format_year = function(citation) {
+        if (citation.publication_date) {
+            return citation.publication_date.trim().substring(0, 4);
+        }
+        return "";
+    };
+
+    var format_date = function(citation) {
+        // if a whole date is provided in the ourl use that
+        var date = citation.publication_date;
+        if (date) {
+            // TODO: validate? we are trusting the provider here
+            return date;
+        }
+        // otherwise, first see if there is a year
+        else {
+            date = citation.year;
+        }
+        // if no date is provided and no year, return null
+        if (!date) {
+            return null;
+        }
+        // append month and day values if they are there
+        var month = citation.month;
+        if (month) {
+            if (month.length === 1) {
+                month = "0" + month;
+            }
+            date += "-" + month;
+        } else {
+            return date;
+        }
+        var day = citation.day;
+        if (day) {
+            if (day.length === 1) {
+                day = "0" + day;
+            }
+            date += "-" + day;
+        }
+        return date;
+
+    };
+
+    /**
+     * Checks whether the cite display has a trailing comma or period and removes it.
+     * TODO: This can be a filter in angular, not used here
+     */
+ //   var remove_trailing_char = function(cite_display) {
+ //       return cite_display.replace(/[.,]<\/span><\/div>/, "</span></div>");
+ //   };
+
+    return citationFormatter;
+});

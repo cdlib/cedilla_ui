@@ -52,7 +52,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     $scope.viewState = initViewState();
     $scope.$parent.navState.viewState = $scope.viewState; 
     
-    $scope.item = { query : '', citation : {}, citationEvents : [], resources : [], error : '' };
+    $scope.item = { query : '', citation : {}, citationEvents : [], displayCitation : {}, resources : [], error : '' };
     var url = $window.location.toString();
     $scope.item.query = url.substr(url.indexOf('?') + 1, url.length); 
     citationService.initCitation($scope.item);
