@@ -79,6 +79,30 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', function
                     });
             return this;
         };
+        
+            /**
+     * Merge the properties of newCitation into citation.
+     * 
+     * @param citation the citation we already have
+     * @param newCitation a new citation coming in
+     * @param overwrite whether to overwrite citation data if it is already there
+     * 
+     * TODO: this routine apply to any object, so do we need one for just citations?
+     */
+    cdlaCitation.mergeCitation = function(citation, newCitation, overwrite) {
+      for (var key in newCitation) {
+        if (newCitation.hasOwnProperty(key) && newCitation[key]) {
+          if (overwrite) {
+            citation[key] = newCitation[key];
+          } else {
+            if (!citation[key]) {
+              citation[key] = newCitation[key];
+            }
+          }
+        }
+      }
+      return citation;
+    };
             
       
 
