@@ -1,11 +1,23 @@
 'use strict';
 
 /**
+ * 
+ * Third-part dependencies as services
+ */
+
+var lodash = angular.module('lodash', []);
+
+lodash.factory('_', function() {
+  return window._;
+});
+
+
+/**
  * Services module. All cdla_ui services go here.
  * Services are injected into controllers or into other services 
  */
 
-var cdlaServices = angular.module('cdlaServices', []);
+var cdlaServices = angular.module('cdlaServices', ['lodash']);
 
 /**
  * Socket listener listens on a socket and updates the model.
@@ -59,7 +71,7 @@ cdlaServices.factory('cdlaSocket', function(socketFactory) {
 });
 
 
-cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', function($http, citationFormatter) {
+cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', function($http, citationFormatter, _) {
 
     var cdlaCitation = {};
     var _http = $http;
@@ -69,6 +81,7 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', function
      */
     cdlaCitation.initCitation = function(item) {
       console.log('initCitation using ' + JSON.stringify(item.query) + ' and ' + item.citation);
+      
       var self = this;
       _http.get('http://localhost:3005/citation?' + item.query)
               .success(function(data, status, headers, config) {
@@ -82,14 +95,26 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', function
               });
       return this;
     };
+    
+    /**
+     * Returns true if objArray has any object equal to obj.
+     * 
+     * @param {type} objArray
+     * @param {type} obj
+     * @returns {undefined}
+     */
+    var hasEqualObject = function(objArray, obj) {
+      return true;
+      
+    };
 
     var mergeAuthors = function(authors, newAuthors, overwrite) {
-      if (overwrite) {
-        return newAuthors;
+      for (var author in newAuthors) {
+        if (!hasEqualObject(authors, author)) {
+          authors.push(author);
+        }
       }
-      else {
-        return newAuthors;
-      }
+      return authors;
     };
 
     /**
@@ -102,8 +127,8 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', function
      * TODO: this routine apply to any object, so do we need one for just citations?
      */
     cdlaCitation.mergeCitation = function(citation, newCitation, overwrite) {
+      
       for (var key in newCitation) {
-        console.log('Merging ' + key);
         if (newCitation.hasOwnProperty(key) && newCitation[key]) {
           if (key === 'authors') {
             console.log('merging authors property ' + JSON.stringify(newCitation[key]));
