@@ -72,7 +72,7 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', function
       var self = this;
       _http.get('http://localhost:3005/citation?' + item.query)
               .success(function(data, status, headers, config) {
-                console.log('incoming citation is ' + typeof data + " " + JSON.stringify(data));
+                console.log('incoming citation is ' + typeof data + ' ' + JSON.stringify(data));
                 item.originalCitation = data;
                 self.mergeCitation(item.citation, data, true);
                 item.displayCitation = citationFormatter.toDisplayCitation(item.citation);
@@ -84,7 +84,12 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', function
     };
 
     var mergeAuthors = function(authors, newAuthors, overwrite) {
-      return newAuthors;
+      if (overwrite) {
+        return newAuthors;
+      }
+      else {
+        return newAuthors;
+      }
     };
 
     /**
@@ -98,10 +103,10 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', function
      */
     cdlaCitation.mergeCitation = function(citation, newCitation, overwrite) {
       for (var key in newCitation) {
-        console.log("Merging " + key);
+        console.log('Merging ' + key);
         if (newCitation.hasOwnProperty(key) && newCitation[key]) {
           if (key === 'authors') {
-            console.log("merging authors property " + JSON.stringify(newCitation[key]));
+            console.log('merging authors property ' + JSON.stringify(newCitation[key]));
             citation[key] = mergeAuthors(citation[key], newCitation[key], overwrite);
           } else {
             if (overwrite) {
@@ -136,7 +141,7 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
    * citation formatter methods
    */
   citationFormatter.toDisplayCitation = function(citation) {
-    console.log("Called getModel with citation " + JSON.stringify(citation));
+    console.log('Called getModel with citation ' + JSON.stringify(citation));
     return citationDisplayModel.toDisplayFormat(citation);
   };
 
@@ -187,14 +192,14 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
     if (citation.article_title) {
       return citation.article_title.trim();
     }
-    if (citation.book_title && citation.genre === "series") {
+    if (citation.book_title && citation.genre === 'series') {
       return citation.book_title.trim();
     }
-    return "";
+    return '';
   };
 
   var formatContainerTitle = function(citation) {
-    var result = "";
+    var result = '';
     if (citation.journal_title) {
       result = citation.journal_title;
     }
@@ -225,26 +230,38 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
     var firstName = author.first_name;
     var lastName = author.last_name;
     var initials = author.initials;
-    var middleInitial = author.middle_initial ? author.middle.initial : "";
+    var middleInitial = author.middle_initial ? author.middle.initial : '';
     var fullName = author.full_name;
     var corporateName = author.corporate_author;
-    var formattedName = "";
+    var formattedName = '';
     if (!firstName) {
       if (!initials)
+      {
         formattedName = lastName;
+      }
       else
-        formattedName = lastName + ", " + initials;
+      {
+        formattedName = lastName + ', ' + initials;
+      }
     } else {
       if (!middleInitial)
-        formattedName = lastName + ", " + firstName;
+      {
+        formattedName = lastName + ', ' + firstName;
+      }
       else
-        formattedName = lastName + ", " + firstName + " " + middleInitial;
+      {
+        formattedName = lastName + ', ' + firstName + ' ' + middleInitial;
+      }
     }
     if (!formattedName) {
-      formattedName = corporateName;
+      {
+        formattedName = corporateName;
+      }
     }
     if (!formattedName) {
-      formattedName = fullName;
+      {
+        formattedName = fullName;
+      }
     }
     return formattedName;
   };
@@ -254,20 +271,20 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
       return citation.pages.trim();
     }
     if (!citation.start_page) {
-      return "";
+      return '';
     }
     var end_page = citation.end_page;
     if (!end_page) {
-      end_page = "";
+      end_page = '';
     }
-    return citation.start_page.trim() + "-" + end_page.trim();
+    return citation.start_page.trim() + '-' + end_page.trim();
   };
 
   var formatYear = function(citation) {
     if (citation.publication_date) {
       return citation.publication_date.trim().substring(0, 4);
     }
-    return "";
+    return '';
   };
 
   var formatDate = function(citation) {
@@ -289,18 +306,18 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
     var month = citation.month;
     if (month) {
       if (month.length === 1) {
-        month = "0" + month;
+        month = '0' + month;
       }
-      date += "-" + month;
+      date += '-' + month;
     } else {
       return date;
     }
     var day = citation.day;
     if (day) {
       if (day.length === 1) {
-        day = "0" + day;
+        day = '0' + day;
       }
-      date += "-" + day;
+      date += '-' + day;
     }
     return date;
 
