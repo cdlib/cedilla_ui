@@ -67,8 +67,8 @@ describe('Service: cdlaCitation', function() {
 
   var cdlaCitationService;
 
-  var newCitation = {'author': 'new author name', 'title': 'the new title', 'publisher': 'new publisher'};
-  var oldCitation = {'author': 'author name', 'title': 'the title'};
+  var newCitation = {'authors': [], 'title': 'the new title', 'publisher': 'new publisher'};
+  var oldCitation = {'authors': [], 'title': 'the title'};
 
 
   beforeEach(inject(function(cdlaCitation) {
@@ -79,15 +79,15 @@ describe('Service: cdlaCitation', function() {
     expect(cdlaCitationService.description).toBe('citation service');
   });
 
-  it('should merge citations', function() {
-    var mergedCitation = cdlaCitationService.mergeCitation(oldCitation, newCitation);
-    expect(mergedCitation.publisher).toBe('new publisher');
-    expect(mergedCitation.title).toBe('the title');
+  it('should merge citation string properties', function() {
+    cdlaCitationService.mergeCitation(oldCitation, newCitation);
+    expect(oldCitation.publisher).toBe('new publisher');
+    expect(oldCitation.title).toBe('the title');
     
-    mergedCitation = cdlaCitationService.mergeCitation(oldCitation, newCitation, true);
-    expect(mergedCitation.publisher).toBe('new publisher');
-    expect(mergedCitation.title).toBe('the new title');
+    cdlaCitationService.mergeCitation(oldCitation, newCitation, true);
+    expect(oldCitation.publisher).toBe('new publisher');
+    expect(oldCitation.title).toBe('the new title');
   });
-
+  
 });
 

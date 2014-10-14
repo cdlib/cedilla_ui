@@ -11,7 +11,7 @@ var cdlaServices = angular.module('cdlaServices', []);
  * Socket listener listens on a socket and updates the model.
  *
  */
-cdlaServices.factory('cdlaSocketListener', ['$sce', function($sce) {
+cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', function($sce, cdlaCitationService) {
     var listener = {};
     listener.listen = function(socket, scope) {
       socket.emit('openurl', scope.item.query);
@@ -26,6 +26,7 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', function($sce) {
         var citationUpdate = JSON.parse(data);
         console.log('Updated citation with ' + citationUpdate);
         scope.item.citationEvents.push(citationUpdate);
+        cdlaCitationService.mergeCitation(scope.item.citation, citationUpdate.citation, false);
       });
 
       socket.on('resource', function(data) {
@@ -72,13 +73,18 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', function
       _http.get('http://localhost:3005/citation?' + item.query)
               .success(function(data, status, headers, config) {
                 console.log('incoming citation is ' + typeof data + " " + JSON.stringify(data));
-                item.citation = self.mergeCitation(item.citation, data, true);
+                item.originalCitation = data;
+                self.mergeCitation(item.citation, data, true);
                 item.displayCitation = citationFormatter.toDisplayCitation(item.citation);
               })
               .error(function(data, status, headers, config) {
                 console.log('error is ' + JSON.stringify(data));
               });
       return this;
+    };
+
+    var mergeAuthors = function(authors, newAuthors, overwrite) {
+      return newAuthors;
     };
 
     /**
@@ -91,19 +97,23 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', function
      * TODO: this routine apply to any object, so do we need one for just citations?
      */
     cdlaCitation.mergeCitation = function(citation, newCitation, overwrite) {
-      var _citation = citation;
       for (var key in newCitation) {
+        console.log("Merging " + key);
         if (newCitation.hasOwnProperty(key) && newCitation[key]) {
-          if (overwrite) {
-            _citation[key] = newCitation[key];
+          if (key === 'authors') {
+            console.log("merging authors property " + JSON.stringify(newCitation[key]));
+            citation[key] = mergeAuthors(citation[key], newCitation[key], overwrite);
           } else {
-            if (!citation[key]) {
-              _citation[key] = newCitation[key];
+            if (overwrite) {
+              citation[key] = newCitation[key];
+            } else {
+              if (!citation[key]) {
+                citation[key] = newCitation[key];
+              }
             }
           }
         }
       }
-      return _citation;
     };
 
 
@@ -145,15 +155,15 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
       this.volume = citation.volume;
       this.issue = citation.issue;
       this.publisher = citation.publisher;
-      this.title = format_part_title(citation);
-      this.pages = format_pages(citation);
+      this.title = formatPartTitle(citation);
+      this.pages = formatPages(citation);
       this.container_title = formatContainerTitle(citation);
-      this.authors = format_authors(citation);
-      this.year = format_year(citation);
-      this.date = format_date(citation);
+      this.authors = formatAuthors(citation);
+      this.year = formatYear(citation);
+      this.date = formatDate(citation);
       this.volume = citation.volume;
       this.issue = citation.issue;
-      this.pages = format_pages(citation);
+      this.pages = formatPages(citation);
 
       if (citation.sample_cover_image) {
         this.cover_image = citation.sample_cover_image;
@@ -173,7 +183,7 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
    * For example, if item is a journal article, title is the article title
    * If the item is a book in a monographic series, the title is the book title
    */
-  var format_part_title = function(citation) {
+  var formatPartTitle = function(citation) {
     if (citation.article_title) {
       return citation.article_title.trim();
     }
@@ -200,46 +210,46 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
   /**
    * Return a display string for a single author or list of authors.
    */
-  var format_authors = function(citation) {
+  var formatAuthors = function(citation) {
 
     if (!citation.authors || !citation.authors.length) {
       return null;
     }
-    return format_author_single(citation.authors['0']);
+    return formatAuthorSingle(citation.authors['0']);
   };
 
   /**
    * Return a display string for a single author.
    */
-  var format_author_single = function(author) {
-    var first_name = author.first_name;
-    var last_name = author.last_name;
+  var formatAuthorSingle = function(author) {
+    var firstName = author.first_name;
+    var lastName = author.last_name;
     var initials = author.initials;
-    var middle_initial = author.middle_initial ? author.middle.initial : "";
-    var full_name = author.full_name;
-    var corporate_name = author.corporate_author;
-    var formatted_name = "";
-    if (!first_name) {
+    var middleInitial = author.middle_initial ? author.middle.initial : "";
+    var fullName = author.full_name;
+    var corporateName = author.corporate_author;
+    var formattedName = "";
+    if (!firstName) {
       if (!initials)
-        formatted_name = last_name;
+        formattedName = lastName;
       else
-        formatted_name = last_name + ", " + initials;
+        formattedName = lastName + ", " + initials;
     } else {
-      if (!middle_initial)
-        formatted_name = last_name + ", " + first_name;
+      if (!middleInitial)
+        formattedName = lastName + ", " + firstName;
       else
-        formatted_name = last_name + ", " + first_name + " " + middle_initial;
+        formattedName = lastName + ", " + firstName + " " + middleInitial;
     }
-    if (!formatted_name) {
-      formatted_name = corporate_name;
+    if (!formattedName) {
+      formattedName = corporateName;
     }
-    if (!formatted_name) {
-      formatted_name = full_name;
+    if (!formattedName) {
+      formattedName = fullName;
     }
-    return formatted_name;
+    return formattedName;
   };
 
-  var format_pages = function(citation) {
+  var formatPages = function(citation) {
     if (citation.pages) {
       return citation.pages.trim();
     }
@@ -253,14 +263,14 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
     return citation.start_page.trim() + "-" + end_page.trim();
   };
 
-  var format_year = function(citation) {
+  var formatYear = function(citation) {
     if (citation.publication_date) {
       return citation.publication_date.trim().substring(0, 4);
     }
     return "";
   };
 
-  var format_date = function(citation) {
+  var formatDate = function(citation) {
     // if a whole date is provided in the ourl use that
     var date = citation.publication_date;
     if (date) {
