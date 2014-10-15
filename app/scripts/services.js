@@ -11,7 +11,7 @@ var cdlaServices = angular.module('cdlaServices', ['lodash']);
  * Socket listener listens on a socket and updates the model.
  *
  */
-cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', function($sce, cdlaCitationService) {
+cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitationFormatter', function($sce, cdlaCitationService, citationFormatterService) {
     var listener = {};
     listener.listen = function(socket, scope) {
       socket.emit('openurl', scope.item.query);
@@ -23,10 +23,10 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', function($sc
 
       socket.on('citation', function(data) {
         console.log('Handling citation event, data: ' + data);
-        var citationUpdate = JSON.parse(data);
-        console.log('Updated citation with ' + citationUpdate);
-        scope.item.citationEvents.push(citationUpdate);
-        cdlaCitationService.mergeCitation(scope.item.citation, citationUpdate.citation, false);
+        var citationEvent = JSON.parse(data);
+        console.log('Updated citation with ' + citationEvent);
+        scope.item.citationEvents.push(citationEvent);
+        cdlaCitationService.mergeCitation(scope.item.citation, citationEvent.citation, false);
       });
 
       socket.on('resource', function(data) {
@@ -69,14 +69,16 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
      */
     cdlaCitation.initCitation = function(item) {
       console.log('initCitation using ' + JSON.stringify(item.query) + ' and ' + item.citation);
-      
       var self = this;
+      
       _http.get('http://localhost:3005/citation?' + item.query)
               .success(function(data, status, headers, config) {
                 console.log('incoming citation is ' + typeof data + ' ' + JSON.stringify(data));
                 item.originalCitation = data;
-                //self.mergeCitation(item.citation, data, true);
-                item.displayCitation = citationFormatter.toDisplayCitation(data);
+                self.mergeCitation(item.citation, data, true);
+                console.log('merged citation is ' + typeof data + ' ' + JSON.stringify(item.citation));
+                item.displayCitation = citationFormatter.toDisplayCitation(item.citation);
+                console.log("Display citation is now " + JSON.stringify(item.displayCitation));
               })
               .error(function(data, status, headers, config) {
                 console.log('error: ' + JSON.stringify(data));
@@ -111,10 +113,22 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
      * @returns array of authors
      */
     cdlaCitation.mergeAuthors = function(authors, newAuthors) {
+      console.log("called merge authors authors = " + JSON.stringify(authors) + " and newAuthors = " + JSON.stringify(newAuthors));
+      
+      var i;
+      
+      // if the original author is empty copy in all the new authors
+      if (!authors || authors.length < 1) {
+        authors = [];
+        for (i = 0; i < newAuthors.length; i++) {
+          authors.push(newAuthors[i]);
+        }
+        return authors;
+      }
       
       // copy authors so that we don't iterate over a list that is being modified
       var tmpAuthors = [];
-      var i;
+
       for (i = 0; i < authors.length; i++) {
         tmpAuthors.push(authors[i]);
       }
@@ -137,7 +151,7 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
      * TODO: this routine apply to any object, so do we need one for just citations?
      */
     cdlaCitation.mergeCitation = function(citation, newCitation, overwrite) {
-      
+      console.log("merging " + JSON.stringify(newCitation) + " into " + JSON.stringify(citation));
       for (var key in newCitation) {
         if (newCitation.hasOwnProperty(key) && newCitation[key]) {
           if (key === 'authors') {
@@ -146,18 +160,19 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
           } else {
             if (overwrite) {
               citation[key] = newCitation[key];
+              console.log("added " + JSON.stringify(citation[key]));
             } else {
               if (!citation[key]) {
                 citation[key] = newCitation[key];
+                console.log("added " + JSON.stringify(citation[key]));
               }
             }
           }
         }
       }
+      console.log("citation is now " + JSON.stringify(citation));
     };
     
-
-
     return cdlaCitation;
   }]);
 

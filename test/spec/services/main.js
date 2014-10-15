@@ -57,6 +57,12 @@ describe('Service: cdlaCitation', function() {
     cdlaCitationService.mergeCitation(oldCitation, newCitation);
     expect(oldCitation.authors.length).toBe(2);
   });
+  
+  it ('should merge new authors when old authors is undefined', function () {
+    oldCitation.authors = undefined;
+    cdlaCitationService.mergeCitation(oldCitation, newCitation);
+    expect(oldCitation.authors.length).toBe(1);
+  });
 
 });
 
