@@ -1,4 +1,4 @@
-Cedilla UI is a single-page Angularjs application based on the Yeoman generator-angular scaffolding.
+Cedilla UI is an AngularJS client for the [Cedilla project](https://github.com/cdlib/cedilla).
 
 ### License
 

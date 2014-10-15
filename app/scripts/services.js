@@ -26,7 +26,7 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', function($sc
         var citationUpdate = JSON.parse(data);
         console.log('Updated citation with ' + citationUpdate);
         scope.item.citationEvents.push(citationUpdate);
-        //cdlaCitationService.mergeCitation(scope.item.citation, citationUpdate.citation, false);
+        cdlaCitationService.mergeCitation(scope.item.citation, citationUpdate.citation, false);
       });
 
       socket.on('resource', function(data) {
@@ -63,7 +63,6 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
 
     var cdlaCitation = {};
     var _http = $http;
-    console.log(_.isEqual({},{}));
 
     /*
      * Returns a deferred query result
@@ -80,37 +79,52 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
                 item.displayCitation = citationFormatter.toDisplayCitation(data);
               })
               .error(function(data, status, headers, config) {
-                console.log('error is ' + JSON.stringify(data));
+                console.log('error: ' + JSON.stringify(data));
               });
       return this;
     };
     
     /**
-     * Returns true if objArray has any object equal to obj.
+     * Returns true if authors has any object equal to author.
      * 
-     * @param {type} objArray
-     * @param {type} obj
-     * @returns {undefined}
+     * @param array authors a list of authors
+     * @param Object author
+     * @returns array of authors
+     * 
+     * TODO: this is case sensitive! Maybe lodash has an alternative.
      */
-    cdlaCitation.hasEqualAuthor = function(objArray, obj) {
-      for (var o in objArray) {
-        console.log("o is " + JSON.stringify(o) + " obj is " + JSON.stringify(obj));
-        if (_.isEqual(obj, o)) {
+    cdlaCitation.hasEqualAuthor = function(authors, author) {
+      if (!author) throw "Author is not defined";
+      for (var i = 0; i < authors.length; i++) {
+        if (_.isEqual(authors[i], author)) {
           return true;
         }
       }
       return false;
     };
 
-    cdlaCitation.mergeAuthors = function(authors, newAuthors, overwrite) {
-      for (var i = 0; i >= newAuthors.length; i++) {
-        console.log("author is " + JSON.stringify(newAuthors[i]));
+    /**
+     * Merges the newAuthors list into the authors list.
+     * 
+     * @param array authors
+     * @param array newAuthors
+     * @returns array of authors
+     */
+    cdlaCitation.mergeAuthors = function(authors, newAuthors) {
+      
+      // copy authors so that we don't iterate over a list that is being modified
+      var tmpAuthors = [];
+      var i;
+      for (i = 0; i < authors.length; i++) {
+        tmpAuthors.push(authors[i]);
+      }
+      
+      for (var i = 0; i < newAuthors.length; i++) {
         if (!this.hasEqualAuthor(authors, newAuthors[i])) {
-          console.log("has no equal");
-          authors.push(newAuthors[i]);
+          tmpAuthors.push(newAuthors[i]);
         }
       }
-      return authors;
+      return tmpAuthors;
     };
 
     /**
@@ -127,8 +141,8 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
       for (var key in newCitation) {
         if (newCitation.hasOwnProperty(key) && newCitation[key]) {
           if (key === 'authors') {
-            console.log('merging authors property ' + JSON.stringify(newCitation[key]) + " into " + JSON.stringify(citation[key]));
-            citation.authors = this.mergeAuthors(citation[key], newCitation[key], overwrite);
+            citation.authors = this.mergeAuthors(citation[key], newCitation[key]);
+            console.log('merged authors result is ' + JSON.stringify(citation[key]));
           } else {
             if (overwrite) {
               citation[key] = newCitation[key];
@@ -141,8 +155,8 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
         }
       }
     };
+    
 
-    cdlaCitation.description = 'citation service';
 
     return cdlaCitation;
   }]);

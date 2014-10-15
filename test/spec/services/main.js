@@ -16,10 +16,6 @@ describe('Service: cdlaCitation', function() {
     cdlaCitationService = cdlaCitation;
   }));
 
-  it('should have the correct description', function() {
-    expect(cdlaCitationService.description).toBe('citation service');
-  });
-
   it('should merge citation string properties', function() {
     cdlaCitationService.mergeCitation(oldCitation, newCitation);
     expect(oldCitation.publisher).toBe('new publisher');
@@ -30,11 +26,36 @@ describe('Service: cdlaCitation', function() {
     expect(oldCitation.title).toBe('the new title');
   });
 
-  it('should merge new authors', function() {
+  it('should return true if there is a matching author', function() {
+    var auList = [{'first': 'John', 'last': 'Jones'}, {'first': 'James', 'last': 'Joyce'}];
+    var au = {'first': 'John', 'last': 'Jones'};
+    expect(cdlaCitationService.hasEqualAuthor(auList, au)).toBe(true);
+  });
 
+  it('should return false if there is no matching author', function() {
+    var auList = [{'first': 'John', 'last': 'Jones'}, {'first': 'James', 'last': 'Joyce'}];
+    var au = {'first': 'Jane', 'last': 'Austen'};
+    expect(cdlaCitationService.hasEqualAuthor(auList, au)).toBe(false);
+  });
+
+  it('should throw an exception if author is undefined', function() {
+    var auList = [{'first': 'John', 'last': 'Jones'}, {'first': 'James', 'last': 'Joyce'}];
+    var au = null;
+    var testFunc = function() {
+      return cdlaCitationService.hasEqualAuthor(auList, au);
+    };
+    expect(testFunc).toThrow();
+  });
+
+  it('should return false if the list is empty', function() {
+    var auList = [];
+    var au = {'first': 'Jane', 'last': 'Austen'};
+    expect(cdlaCitationService.hasEqualAuthor(auList, au)).toBe(false);
+  });
+
+  it('should merge new authors', function() {
     cdlaCitationService.mergeCitation(oldCitation, newCitation);
     expect(oldCitation.authors.length).toBe(2);
-
   });
 
 });
