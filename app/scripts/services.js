@@ -11,7 +11,7 @@ var cdlaServices = angular.module('cdlaServices', ['lodash']);
  * Socket listener listens on a socket and updates the model.
  *
  */
-cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitationFormatter', function($sce, cdlaCitationService, citationFormatterService) {
+cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitationFormatter', function($sce, cdlaCitationService, citationFormatter) {
     var listener = {};
     listener.listen = function(socket, scope) {
       socket.emit('openurl', scope.item.query);
@@ -27,6 +27,7 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
         console.log('Updated citation with ' + citationEvent);
         scope.item.citationEvents.push(citationEvent);
         cdlaCitationService.mergeCitation(scope.item.citation, citationEvent.citation, false);
+        scope.item.displayCitation = citationFormatter.toDisplayCitation(scope.item.citation);
       });
 
       socket.on('resource', function(data) {
