@@ -1,18 +1,6 @@
 'use strict';
 
 /**
- * 
- * Third-part dependencies as services
- */
-
-var lodash = angular.module('lodash', []);
-
-lodash.factory('_', function() {
-  return window._;
-});
-
-
-/**
  * Services module. All cdla_ui services go here.
  * Services are injected into controllers or into other services 
  */
@@ -38,7 +26,7 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', function($sc
         var citationUpdate = JSON.parse(data);
         console.log('Updated citation with ' + citationUpdate);
         scope.item.citationEvents.push(citationUpdate);
-        cdlaCitationService.mergeCitation(scope.item.citation, citationUpdate.citation, false);
+        //cdlaCitationService.mergeCitation(scope.item.citation, citationUpdate.citation, false);
       });
 
       socket.on('resource', function(data) {
@@ -75,6 +63,7 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
 
     var cdlaCitation = {};
     var _http = $http;
+    console.log(_.isEqual({},{}));
 
     /*
      * Returns a deferred query result
@@ -87,8 +76,8 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
               .success(function(data, status, headers, config) {
                 console.log('incoming citation is ' + typeof data + ' ' + JSON.stringify(data));
                 item.originalCitation = data;
-                self.mergeCitation(item.citation, data, true);
-                item.displayCitation = citationFormatter.toDisplayCitation(item.citation);
+                //self.mergeCitation(item.citation, data, true);
+                item.displayCitation = citationFormatter.toDisplayCitation(data);
               })
               .error(function(data, status, headers, config) {
                 console.log('error is ' + JSON.stringify(data));
@@ -103,15 +92,22 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
      * @param {type} obj
      * @returns {undefined}
      */
-    var hasEqualObject = function(objArray, obj) {
-      return true;
-      
+    cdlaCitation.hasEqualAuthor = function(objArray, obj) {
+      for (var o in objArray) {
+        console.log("o is " + JSON.stringify(o) + " obj is " + JSON.stringify(obj));
+        if (_.isEqual(obj, o)) {
+          return true;
+        }
+      }
+      return false;
     };
 
-    var mergeAuthors = function(authors, newAuthors, overwrite) {
-      for (var author in newAuthors) {
-        if (!hasEqualObject(authors, author)) {
-          authors.push(author);
+    cdlaCitation.mergeAuthors = function(authors, newAuthors, overwrite) {
+      for (var i = 0; i >= newAuthors.length; i++) {
+        console.log("author is " + JSON.stringify(newAuthors[i]));
+        if (!this.hasEqualAuthor(authors, newAuthors[i])) {
+          console.log("has no equal");
+          authors.push(newAuthors[i]);
         }
       }
       return authors;
@@ -131,8 +127,8 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
       for (var key in newCitation) {
         if (newCitation.hasOwnProperty(key) && newCitation[key]) {
           if (key === 'authors') {
-            console.log('merging authors property ' + JSON.stringify(newCitation[key]));
-            citation[key] = mergeAuthors(citation[key], newCitation[key], overwrite);
+            console.log('merging authors property ' + JSON.stringify(newCitation[key]) + " into " + JSON.stringify(citation[key]));
+            citation.authors = this.mergeAuthors(citation[key], newCitation[key], overwrite);
           } else {
             if (overwrite) {
               citation[key] = newCitation[key];
@@ -145,7 +141,6 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
         }
       }
     };
-
 
     cdlaCitation.description = 'citation service';
 

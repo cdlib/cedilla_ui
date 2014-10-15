@@ -37,3 +37,16 @@ var cdlaApp = angular
         redirectTo: '/'
       });
   });
+  
+   /**
+ * 
+ * Third-part dependencies as modules
+ */
+
+var lodash = angular.module('lodash', []);
+
+lodash.factory('_', function() {
+  return window._;
+});
+
+
