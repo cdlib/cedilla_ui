@@ -8,9 +8,11 @@
             </div>
             <div id='source_display_field' class='cite_field'>
                 <span class='cite_field_label'>Source:</span>
-                <span class='source_val'>{{item.displayCitation.container_title}}.</span>
-                <span class='source_val' ng-show="item.displayCitation.year">{{item.displayCitation.year}},</span>
-                <span class='source_val' ng-show="item.displayCitation.volume">{{item.displayCitation.volume}}({{item.displayCitation.issue}}),</span>
+                <span class='source_val'>{{item.displayCitation.container_title}}{{item.displayCitation.container_title_separator}}</span>
+                <span class='source_val' ng-show="item.displayCitation.year">{{item.displayCitation.year}}{{item.displayCitation.year_separator}}</span>
+                <span class='source_val' ng-show="item.displayCitation.volume">
+                    {{item.displayCitation.volume}}({{item.displayCitation.issue}}){{item.displayCitation.volume_issue_separator}}
+                </span>
                 <span class='source_val' ng-show="item.displayCitation.pages">{{item.displayCitation.pages}}</span>
             </div>
         </div>

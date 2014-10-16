@@ -12,6 +12,11 @@ var initViewState = function () {
   return { showDebug : false, showFullText : false, showOptions : true};
 };
 
+var initItem = function () {
+  return { query : '', originalCitation: {}, citation : {}, citationEvents : [], displayCitation : {}, resources : [], error : '' };
+  
+};
+
 /**
  * Main controller of the application.
  */
@@ -52,7 +57,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     $scope.viewState = initViewState();
     $scope.$parent.navState.viewState = $scope.viewState; 
     
-    $scope.item = { query : '', originalCitation: {}, citation : {}, citationEvents : [], displayCitation : {}, resources : [], error : '' };
+    $scope.item = initItem();
     var url = $window.location.toString();
     $scope.item.query = url.substr(url.indexOf('?') + 1, url.length); 
     citationService.initCitation($scope.item);
