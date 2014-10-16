@@ -38,6 +38,10 @@
 </div>
 
 <div id="debug" ng-show="viewState.showDebug">
+    <div id="original_citation">
+        <h2>Original Citation</h2>
+        <p>{{item.originalCitation}}</p>
+    </div>
     <div id="citation_events">
         <h2>Citation Events</h2>
         <ul>
@@ -45,7 +49,7 @@
         </ul>
     </div>
     <div id="citation">
-        <h2>Citation</h2>
+        <h2>Final Citation</h2>
         <p>{{item.citation}}</p>  
     </div>
     <div>

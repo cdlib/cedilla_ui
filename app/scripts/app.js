@@ -3,7 +3,8 @@
 /**
  * Main module of the application.
  */
-angular
+
+var cdlaApp = angular
   .module('cdlaUiApp', [
     'ngAnimate',
     'ngCookies',
@@ -12,11 +13,13 @@ angular
     'ngSanitize',
     'ngTouch',
     'btford.socket-io',
+    'lodash',
     'cdlaControllers',
     'cdlaServices',
     'cdlaFilters'
-  ])
-  .config(function ($routeProvider) {
+  ]);
+  
+  cdlaApp.config(function ($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/home.html',
@@ -34,3 +37,16 @@ angular
         redirectTo: '/'
       });
   });
+  
+   /**
+ * 
+ * Third-part dependencies as modules
+ */
+
+var lodash = angular.module('lodash', []);
+
+lodash.factory('_', function() {
+  return window._;
+});
+
+
