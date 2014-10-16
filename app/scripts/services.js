@@ -71,7 +71,7 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
     cdlaCitation.initCitation = function(item) {
       console.log('initCitation using ' + JSON.stringify(item.query) + ' and ' + item.citation);
       var self = this;
-      
+
       _http.get('http://localhost:3005/citation?' + item.query)
               .success(function(data, status, headers, config) {
                 console.log('incoming citation is ' + typeof data + ' ' + JSON.stringify(data));
@@ -79,14 +79,14 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
                 self.mergeCitation(item.citation, data, true);
                 console.log('merged citation is ' + typeof data + ' ' + JSON.stringify(item.citation));
                 item.displayCitation = citationFormatter.toDisplayCitation(item.citation);
-                console.log("Display citation is now " + JSON.stringify(item.displayCitation));
+                console.log('Display citation is now ' + JSON.stringify(item.displayCitation));
               })
               .error(function(data, status, headers, config) {
                 console.log('error: ' + JSON.stringify(data));
               });
       return this;
     };
-    
+
     /**
      * Returns true if authors has any object equal to author.
      * 
@@ -97,7 +97,9 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
      * TODO: this is case sensitive! Maybe lodash has an alternative.
      */
     cdlaCitation.hasEqualAuthor = function(authors, author) {
-      if (!author) throw "Author is not defined";
+      if (!author) {
+        throw 'Author is not defined';
+      }
       for (var i = 0; i < authors.length; i++) {
         if (_.isEqual(authors[i], author)) {
           return true;
@@ -109,15 +111,23 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
     /**
      * Merges the newAuthors list into the authors list.
      * 
-     * @param array authors
-     * @param array newAuthors
-     * @returns array of authors
+     * @param authors an array of author objects to merge into
+     * @param newAuthors an array of author objects to merge
+     * @returns of authors the merged array
      */
     cdlaCitation.mergeAuthors = function(authors, newAuthors) {
-      console.log("called merge authors authors = " + JSON.stringify(authors) + " and newAuthors = " + JSON.stringify(newAuthors));
-      
+      console.log('called merge authors authors = ' + JSON.stringify(authors) + ' and newAuthors = ' + JSON.stringify(newAuthors));
+
       var i;
-      
+
+      // if newAuthors is empty or not truthy return authors
+      if (!newAuthors || newAuthors.length < 1) {
+        if (!authors) {
+          authors = [];
+        }
+        return authors;
+      }
+
       // if the original author is empty copy in all the new authors
       if (!authors || authors.length < 1) {
         authors = [];
@@ -126,15 +136,15 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
         }
         return authors;
       }
-      
+
       // copy authors so that we don't iterate over a list that is being modified
       var tmpAuthors = [];
 
       for (i = 0; i < authors.length; i++) {
         tmpAuthors.push(authors[i]);
       }
-      
-      for (var i = 0; i < newAuthors.length; i++) {
+
+      for (i = 0; i < newAuthors.length; i++) {
         if (!this.hasEqualAuthor(authors, newAuthors[i])) {
           tmpAuthors.push(newAuthors[i]);
         }
@@ -152,7 +162,7 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
      * TODO: this routine apply to any object, so do we need one for just citations?
      */
     cdlaCitation.mergeCitation = function(citation, newCitation, overwrite) {
-      console.log("merging " + JSON.stringify(newCitation) + " into " + JSON.stringify(citation));
+      console.log('merging ' + JSON.stringify(newCitation) + ' into ' + JSON.stringify(citation));
       for (var key in newCitation) {
         if (newCitation.hasOwnProperty(key) && newCitation[key]) {
           if (key === 'authors') {
@@ -161,19 +171,19 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
           } else {
             if (overwrite) {
               citation[key] = newCitation[key];
-              console.log("added " + JSON.stringify(citation[key]));
+              console.log('added ' + JSON.stringify(citation[key]));
             } else {
               if (!citation[key]) {
                 citation[key] = newCitation[key];
-                console.log("added " + JSON.stringify(citation[key]));
+                console.log('added ' + JSON.stringify(citation[key]));
               }
             }
           }
         }
       }
-      console.log("citation is now " + JSON.stringify(citation));
+      console.log('citation is now ' + JSON.stringify(citation));
     };
-    
+
     return cdlaCitation;
   }]);
 
@@ -219,6 +229,11 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
       this.volume = citation.volume;
       this.issue = citation.issue;
       this.pages = formatPages(citation);
+
+      // logic for determining whether to add separators after item in the display
+      this.container_title_separator = containerTitleSeparator(this);
+      this.year_separator = yearSeparator(this);
+      this.volume_issue_separator = volumeIssueSeparator(this);
 
       if (citation.sample_cover_image) {
         this.cover_image = citation.sample_cover_image;
@@ -371,6 +386,27 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
     }
     return date;
 
+  };
+
+  var containerTitleSeparator = function(displayCitation) {
+    if ((displayCitation.year || displayCitation.volume || displayCitation.issue || displayCitation.pages)) {
+      return '.';
+    }
+    return '';
+  };
+
+  var yearSeparator = function(displayCitation) {
+    if ((displayCitation.volume || displayCitation.pages || displayCitation.issue)) {
+      return ',';
+    }
+    return '';
+  };
+
+  var volumeIssueSeparator = function(displayCitation) {
+    if ((displayCitation.pages)) {
+      return ',';
+    }
+    return '';
   };
 
   /**
