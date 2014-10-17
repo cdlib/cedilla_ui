@@ -5,7 +5,7 @@
  * Services are injected into controllers or into other services 
  */
 
-var cdlaServices = angular.module('cdlaServices', ['lodash']);
+var cdlaServices = angular.module('cdlaServices', ['lodash', 'handlebars']);
 
 /**
  * Socket listener listens on a socket and updates the model.
@@ -60,10 +60,13 @@ cdlaServices.factory('cdlaSocket', function(socketFactory) {
 });
 
 
-cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', function($http, citationFormatter, _) {
+cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', 'Handlebars', function($http, citationFormatter, _, Handlebars) {
 
     var cdlaCitation = {};
     var _http = $http;
+    var _Handlebars = Handlebars;
+    
+    console.log(typeof _Handlebars);
 
     /*
      * Returns a deferred query result
@@ -72,7 +75,7 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', fun
       console.log('initCitation using ' + JSON.stringify(item.query) + ' and ' + item.citation);
       var self = this;
 
-      _http.get('http://localhost:3005/citation?' + item.query)
+      _http.get('http://cdla-api-stg.cdlib.org:3005/citation?' + item.query)
               .success(function(data, status, headers, config) {
                 console.log('incoming citation is ' + typeof data + ' ' + JSON.stringify(data));
                 item.originalCitation = data;
