@@ -15,6 +15,7 @@ var cdlaApp = angular
     'btford.socket-io',
     'lodash',
     'handlebars',
+    'cdlaConfig',
     'cdlaControllers',
     'cdlaServices',
     'cdlaFilters'

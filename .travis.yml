@@ -5,3 +5,4 @@ before_script:
   - 'gem install compass'
   - 'npm install -g bower grunt-cli'
   - 'bower install'
+  - 'mv app/scripts/config.example app/scripts/config.js'

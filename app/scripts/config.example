@@ -1,0 +1,11 @@
+'use strict';
+
+var cdlaConfig = angular.module('cdlaConfig', []);
+
+cdlaConfig.factory('cdlaProperties', function() {
+  return {
+    'TEST_PROPERTY' : 'test in dev'
+    
+  };
+});
+
