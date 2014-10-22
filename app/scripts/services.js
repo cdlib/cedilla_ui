@@ -5,7 +5,7 @@
  * Services are injected into controllers or into other services 
  */
 
-var cdlaServices = angular.module('cdlaServices', ['lodash', 'handlebars']);
+var cdlaServices = angular.module('cdlaServices', ['lodash', 'handlebars', 'cdlaConfig']);
 
 /**
  * Socket listener listens on a socket and updates the model.
@@ -60,13 +60,11 @@ cdlaServices.factory('cdlaSocket', function(socketFactory) {
 });
 
 
-cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', 'Handlebars', function($http, citationFormatter, _, Handlebars) {
+cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', 'Handlebars', function($http, citationFormatter, _, _Handlebars_) {
 
     var cdlaCitation = {};
     var _http = $http;
-    var _Handlebars = Handlebars;
-    
-    console.log(typeof _Handlebars);
+    var Handlebars = _Handlebars_;
 
     /*
      * Returns a deferred query result
