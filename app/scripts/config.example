@@ -1,11 +1,24 @@
 'use strict';
 
 var cdlaConfig = angular.module('cdlaConfig', []);
+var aggregatorAddress = 'http://cdla-api-stg.cdlib.org:3005/';
+
+var appProperties = {
+  'INSTANCE' : '';
+  'AGGREGATOR_ADDRESS': aggregatorAddress,
+  'CITATION_SERVICE_ADDRESS': aggregatorAddress + 'citation',
+  'MAX_LINK_DISPLAY': 3,
+  'FILTER_FULLTEXT_DISPLAY': [
+    'SpringerLink Books Complete 1',
+    'SpringerLink Books Complete 2',
+    'Synergy Blackwell Premium 1',
+    'Synergy Blackwell Premium 2',
+    'Synergy Blackwell Premium 3'
+  ],
+  NOFRAME_FULLTEXT_DISPLAY: ['Oxford University Press Journals Current']
+
+};
 
 cdlaConfig.factory('cdlaProperties', function() {
-  return {
-    'TEST_PROPERTY' : 'test in dev'
-    
-  };
+  return appProperties;
 });
-
