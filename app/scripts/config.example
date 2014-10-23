@@ -4,7 +4,7 @@ var cdlaConfig = angular.module('cdlaConfig', []);
 var aggregatorAddress = 'http://cdla-api-stg.cdlib.org:3005/';
 
 var appProperties = {
-  'INSTANCE' : '';
+  'INSTANCE' : '',
   'AGGREGATOR_ADDRESS': aggregatorAddress,
   'CITATION_SERVICE_ADDRESS': aggregatorAddress + 'citation',
   'MAX_LINK_DISPLAY': 3,
