@@ -11,8 +11,7 @@ var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
 /**
  * Main controller of the application.
  */
-cdlaControllers.controller('MainCtrl', ['$scope', 'cdlaProperties', function($scope, properties) {
-    console.log(properties.TEST_PROPERTY);
+cdlaControllers.controller('MainCtrl', ['$scope', function($scope) {
     $scope.navState = {'currentPage': 'home'};
     $scope.changeView = function(viewName) {
       this.$broadcast('changeView', viewName);

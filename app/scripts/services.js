@@ -52,15 +52,16 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
     return listener;
   }]);
 
-cdlaServices.factory('cdlaSocket', function(socketFactory) {
+cdlaServices.factory('cdlaSocket', ['socketFactory', 'cdlaProperties', function(socketFactory, properties) {
+  console.log(typeof properties);
   return socketFactory({
     /* global io */
-    ioSocket: io.connect('http://cdla-api-stg.cdlib.org:3005/')
+    ioSocket: io.connect(properties.AGGREGATOR_ADDRESS)
   });
-});
+}]);
 
 
-cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', 'Handlebars', function($http, citationFormatter, _, _Handlebars_) {
+cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', 'Handlebars', 'cdlaProperties', function($http, citationFormatter, _, _Handlebars_, properties) {
 
     var cdlaCitation = {};
     var _http = $http;
@@ -73,7 +74,7 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', 'Ha
       console.log('initCitation using ' + JSON.stringify(item.query) + ' and ' + item.citation);
       var self = this;
 
-      _http.get('http://cdla-api-stg.cdlib.org:3005/citation?' + item.query)
+      _http.get(properties.CITATION_SERVICE_ADDRESS + '?' + item.query)
               .success(function(data, status, headers, config) {
                 console.log('incoming citation is ' + typeof data + ' ' + JSON.stringify(data));
                 item.originalCitation = data;

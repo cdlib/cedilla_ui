@@ -1,5 +1,27 @@
 'use strict';
 
+describe('cdlaConfigTest', function() {
+  
+  beforeEach(module('cdlaConfig'));
+  
+  var cdlaProperties;
+  
+  beforeEach(inject(function(_cdlaProperties_) {
+    cdlaProperties = _cdlaProperties_;
+  }));
+  
+  it('should have properties for dev environment', function() {
+    console.log("Property MAX_LINK_DISPLAY = " + cdlaProperties.MAX_LINK_DISPLAY);
+    expect(cdlaProperties.MAX_LINK_DISPLAY).toBe(3);
+  });
+  
+  it('should should have the correct citation url', function() {
+    
+    expect(cdlaProperties.CITATION_SERVICE_ADDRESS).toBe(cdlaProperties.AGGREGATOR_ADDRESS + 'citation');
+  });
+  
+});
+
 describe('cdlaCitationService', function() {
 
   beforeEach(module('cdlaServices', 'lodash'));
