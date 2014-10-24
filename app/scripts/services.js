@@ -53,12 +53,12 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
   }]);
 
 cdlaServices.factory('cdlaSocket', ['socketFactory', 'cdlaProperties', function(socketFactory, properties) {
-  console.log(typeof properties);
-  return socketFactory({
-    /* global io */
-    ioSocket: io.connect(properties.AGGREGATOR_ADDRESS)
-  });
-}]);
+    console.log(typeof properties);
+    return socketFactory({
+      /* global io */
+      ioSocket: io.connect(properties.AGGREGATOR_ADDRESS)
+    });
+  }]);
 
 
 cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', 'Handlebars', 'cdlaProperties', function($http, citationFormatter, _, _Handlebars_, properties) {
@@ -204,7 +204,9 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
    */
   citationFormatter.toDisplayCitation = function(citation) {
     console.log('Called getModel with citation ' + JSON.stringify(citation));
-    return citationDisplayModel.toDisplayFormat(citation);
+    var display = citationDisplayModel.toDisplayFormat(citation);
+    console.log('Formatted display citation ' + JSON.stringify(display));
+    return display;
   };
 
   /*
@@ -287,38 +289,32 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
     if (!citation.authors || !citation.authors.length) {
       return null;
     }
-    return formatAuthorSingle(citation.authors['0']);
+    var display = formatAuthorSingle(citation.authors['0']) + ', ';
+    if (citation.authors.length > 1) {
+      display = display + 'et al.';
+    } 
+    return display;
   };
 
   /**
    * Return a display string for a single author.
    */
   var formatAuthorSingle = function(author) {
-    var firstName = author.first_name;
+    
+    console.log('Formatting author' + JSON.stringify(author));
     var lastName = author.last_name;
-    var initials = author.initials;
-    var middleInitial = author.middle_initial ? author.middle.initial : '';
+    var initials = formatAuthorInitials(author);
     var fullName = author.full_name;
     var corporateName = author.corporate_author;
     var formattedName = '';
-    if (!firstName) {
-      if (!initials)
-      {
-        formattedName = lastName;
-      }
-      else
-      {
-        formattedName = lastName + ', ' + initials;
-      }
-    } else {
-      if (!middleInitial)
-      {
-        formattedName = lastName + ', ' + firstName;
-      }
-      else
-      {
-        formattedName = lastName + ', ' + firstName + ' ' + middleInitial;
-      }
+
+    if (!initials)
+    {
+      formattedName = lastName;
+    }
+    else
+    {
+      formattedName = lastName + ', ' + initials;
     }
     if (!formattedName) {
       {
@@ -331,6 +327,40 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
       }
     }
     return formattedName;
+  };
+  
+  var initializeAuthor = function(author) {
+    if (!author.last_name) {
+      author.last_name = '';
+    }
+    if (!author.first_name) {
+      author.first_name = '';
+    }
+    if (!author.full_name) {
+      author.full_name = '';
+    }
+    if (!author.first_initial) {
+      author.first_initial = '';
+    }
+    if (!author.middle_initial) {
+      author.middle_initial = '';
+    }
+    if (!author.corporate_name) {
+      author.corporate_name = '';
+    }
+  };
+
+  var formatAuthorInitials = function(author) {
+    if (author.initials) {
+      return author.initials;
+    }
+    if (author.first_initial || author.middle_initial) {
+      return author.first_initial + author.last_initial;
+    }
+    if (author.last_name || author.first_name) {
+      return (author.first_name.substr(0, 1));
+    }
+    return '';
   };
 
   var formatPages = function(citation) {
@@ -391,8 +421,9 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
   };
 
   var containerTitleSeparator = function(displayCitation) {
-    if ((displayCitation.year || displayCitation.volume || displayCitation.issue || displayCitation.pages)) {
-      return '.';
+    console.log('displayCitation is ' + JSON.stringify(displayCitation));
+    if ((displayCitation.volume || displayCitation.issue || displayCitation.pages)) {
+      return ',';
     }
     return '';
   };
