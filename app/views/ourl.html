@@ -26,7 +26,7 @@
 <div id="resources" class="container-fluid" ng-class="{'hidden': !viewState.showOptions}">
     <div class="well">
         <p><strong>Available digitally from</strong></p>
-        <ul>
+        <ul class="list-unstyled">
             <li ng-repeat="resource in item.resources| digitalLinks">
                 <a href="{{resource.target}}"><span ng-bind-html="resource.source"></span></a>
             </li>
@@ -35,13 +35,12 @@
 
     <div id="your_library_display" class="well">
         <p><strong>Copies in your library</strong></p>
-        <ul>
-            <li ng-repeat="resource in item.resources| printHoldings">
-                <span ng-show="resource.location"><strong>Location: </strong>{{resource.location}}</span>
-                <span ng-show="resource.location"><strong>Location info: </strong>{{resource.locEntry}}</span>
-                <span ng-show="resource.local_id"><strong>Call number: </strong>{{resource.local_id}}</span>
-                <span ng-show="resource.description"><strong>Holdings: </strong>{{resource.description}}</span>
-            </li>
+        <ul class="list-unstyled">
+            <ul ng-repeat="resource in item.resources| printHoldings" class="list-inline">
+                <li ng-show="resource.location"><strong>Location: </strong>{{resource.location}}</li>
+                <li ng-show="resource.local_id"><strong>Call number: </strong>{{resource.local_id}}</li>
+                <li ng-show="resource.description"><strong>Holdings: </strong>{{resource.description}}</li>
+            </ul>
         </ul>
     </div>
 </div>
