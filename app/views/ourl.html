@@ -6,12 +6,15 @@
                 <span class='cite_field_val'>{{item.displayCitation.title}}</span>
             </div>
             <div id='source_display_field' class='col-md-12'>
+                <span class='source_val'>{{item.displayCitation.authors}}</span>
                 <span class='source_val'>{{item.displayCitation.container_title}}{{item.displayCitation.container_title_separator}}</span>
+                <!--
                 <span class='source_val' ng-show="item.displayCitation.year">{{item.displayCitation.year}}{{item.displayCitation.year_separator}}</span>
+                -->
                 <span class='source_val' ng-show="item.displayCitation.volume">
-                    {{item.displayCitation.volume}}({{item.displayCitation.issue}}){{item.displayCitation.volume_issue_separator}}
+                    vol. {{item.displayCitation.volume}} issue {{item.displayCitation.issue}}{{item.displayCitation.volume_issue_separator}}
                 </span>
-                <span class='source_val' ng-show="item.displayCitation.pages">{{item.displayCitation.pages}}</span>
+                <span class='source_val' ng-show="item.displayCitation.pages">pp. {{item.displayCitation.pages}}</span>
             </div>
         </div>
     </div>
@@ -37,9 +40,9 @@
         <p><strong>Copies in your library</strong></p>
         <ul class="list-unstyled">
             <ul ng-repeat="resource in item.resources| printHoldings" class="list-inline">
-                <li ng-show="resource.location"><strong>Location: </strong>{{resource.location}}</li>
-                <li ng-show="resource.local_id"><strong>Call number: </strong>{{resource.local_id}}</li>
-                <li ng-show="resource.description"><strong>Holdings: </strong>{{resource.description}}</li>
+                <li ng-show="resource.location && resource.local_id"><strong>Location: </strong>{{resource.location}}</li>
+                <li ng-show="resource.local_id && resource.location"><strong>Call number: </strong>{{resource.local_id}}</li>
+                <li ng-show="resource.description && resource.local_id && resource.location"><strong>Holdings: </strong>{{resource.description}}</li>
             </ul>
         </ul>
     </div>
