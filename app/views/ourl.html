@@ -40,9 +40,9 @@
         <p><strong>Copies in your library</strong></p>
         <ul class="list-unstyled">
             <ul ng-repeat="resource in item.resources| printHoldings" class="list-inline">
-                <li ng-show="resource.location && resource.local_id"><strong>Location: </strong>{{resource.location}}</li>
-                <li ng-show="resource.local_id && resource.location"><strong>Call number: </strong>{{resource.local_id}}</li>
-                <li ng-show="resource.description && resource.local_id && resource.location"><strong>Holdings: </strong>{{resource.description}}</li>
+                <li ng-show="resource.location"><strong>Location: </strong>{{resource.location}}</li>
+                <li ng-show="resource.local_id"><strong>Call number: </strong>{{resource.local_id}}</li>
+                <li ng-show="resource.description"><strong>Holdings: </strong>{{resource.description}}</li>
             </ul>
         </ul>
     </div>
