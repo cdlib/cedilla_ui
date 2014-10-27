@@ -28,7 +28,7 @@ cdlaFilters.filter('printHoldings', function() {
     var i;
     for (i = 0; i < items.length; i++) {
       console.log('checking item ' + i + JSON.stringify(items[i]));
-      if (items[i].format === 'print' && items[i].source) {
+      if (items[i].format === 'print' && items[i].location && items[i].local_id) {
         filterItems.push(items[i]);
       }
     }
