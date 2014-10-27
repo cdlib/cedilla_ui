@@ -1,5 +1,7 @@
 'use strict';
 
+describe('ourl services', function() {
+
 beforeEach(module('cdlaServices', 'lodash', 'cdlaConfig'));
 
 describe('configuration', function() {
@@ -142,6 +144,8 @@ describe('author merge behaviors', function() {
     });
 
   });
+
+});
 
 });
 
