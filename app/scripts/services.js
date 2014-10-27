@@ -227,7 +227,7 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
       this.title = formatPartTitle(citation);
       this.pages = formatPages(citation);
       this.container_title = formatContainerTitle(citation);
-      this.authors = formatAuthors(citation);
+      this.authors = citationFormatter.formatAuthors(citation.authors);
       this.year = formatYear(citation);
       this.date = formatDate(citation);
       this.volume = citation.volume;
@@ -284,13 +284,13 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
   /**
    * Return a display string for a single author or list of authors.
    */
-  var formatAuthors = function(citation) {
+  citationFormatter.formatAuthors = function(authors) {
 
-    if (!citation.authors || !citation.authors.length) {
-      return null;
+    if (!authors || !authors.length) {
+      return '';
     }
-    var display = formatAuthorSingle(citation.authors['0']) + ', ';
-    if (citation.authors.length > 1) {
+    var display = citationFormatter.formatAuthorSingle(authors['0']) + ', ';
+    if (authors.length > 1) {
       display = display + 'et al.';
     } 
     return display;
@@ -299,31 +299,26 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
   /**
    * Return a display string for a single author.
    */
-  var formatAuthorSingle = function(author) {
-    
+  citationFormatter.formatAuthorSingle = function(author) {
+       
+    initializeAuthor(author);
     console.log('Formatting author' + JSON.stringify(author));
-    var lastName = author.last_name;
-    var initials = formatAuthorInitials(author);
-    var fullName = author.full_name;
-    var corporateName = author.corporate_author;
     var formattedName = '';
-
-    if (!initials)
+    
+    if (author.corporate_author) {
+      return author.corporate_author;
+    }
+    if (!author.initials)
     {
-      formattedName = lastName;
+      formattedName = author.last_name;
     }
     else
     {
-      formattedName = lastName + ', ' + initials;
+      formattedName = author.last_name + ', ' + author.initials;
     }
     if (!formattedName) {
       {
-        formattedName = corporateName;
-      }
-    }
-    if (!formattedName) {
-      {
-        formattedName = fullName;
+        formattedName = author.full_name;
       }
     }
     return formattedName;
@@ -348,17 +343,18 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
     if (!author.corporate_name) {
       author.corporate_name = '';
     }
+    author.initials = formatAuthorInitials(author);
   };
 
   var formatAuthorInitials = function(author) {
     if (author.initials) {
       return author.initials;
     }
-    if (author.first_initial || author.middle_initial) {
-      return author.first_initial + author.last_initial;
+    if (author.first_initial && author.middle_initial) {
+      return author.first_initial + author.middle_initial;
     }
-    if (author.last_name || author.first_name) {
-      return (author.first_name.substr(0, 1));
+    if (author.first_name) {
+      return (author.first_name.substr(0, 1) + author.middle_initial);
     }
     return '';
   };

@@ -125,27 +125,93 @@ describe('ourl services', function() {
       expect(oldCitation.authors.length).toBe(1);
     });
 
-    describe('citation formatting', function() {
-
-      var cdlaCitationFormatterService;
-
-      // instance variable for lodash
-      var _;
+  });
 
 
-      beforeEach(inject(function(cdlaCitationFormatter, ___) {
-        cdlaCitationFormatterService = cdlaCitationFormatter;
-        _ = ___;
-      }));
+  describe('citation formatting behaviors', function() {
 
-      it('formatter should be an object', function() {
+    var cdlaCitationFormatterService;
 
-        expect(typeof cdlaCitationFormatterService).toBe('object');
-      });
+    // instance variable for lodash
+    var _;
 
+
+    beforeEach(inject(function(cdlaCitationFormatter, ___) {
+      cdlaCitationFormatterService = cdlaCitationFormatter;
+      _ = ___;
+    }));
+
+    it('formatter should be an object', function() {
+
+      expect(typeof cdlaCitationFormatterService).toBe('object');
     });
 
   });
 
+  describe('single author formatting behaviors', function() {
+
+    var cdlaCitationFormatterService;
+
+    // instance variable for lodash
+    var _;
+    var author;
+    var authors;
+
+
+    beforeEach(inject(function(cdlaCitationFormatter, ___) {
+      cdlaCitationFormatterService = cdlaCitationFormatter;
+      _ = ___;
+      author = {last_name: 'Jones', first_name: 'John', initials: 'JP', first_initial: 'J', middle_initial: 'P', full_name: 'John Paul Jones'};
+      authors = [];
+      authors.push(author);
+    }));
+
+    it('should display lastname, initials if lastname and initials are present, ', function() {
+      author.first_name = '';
+      author.first_initial = '';
+      author.full_name = '';
+      author.middle_initial = '';
+      expect(cdlaCitationFormatterService.formatAuthorSingle(author)).toBe('Jones, JP');
+    });
+
+    it('should use first and middle initial if available and if no initials field is present', function() {
+      author.initials = '';
+      author.first_name = '';
+      author.full_name = '';
+      expect(cdlaCitationFormatterService.formatAuthorSingle(author)).toBe('Jones, JP');
+    });
+
+    it('should use first letter of first name if no initial fields at all are present', function() {
+      author.initials = '';
+      author.first_initial;
+      author.middle_initial = '';
+      author.full_name = '';
+      expect(cdlaCitationFormatterService.formatAuthorSingle(author)).toBe('Jones, J');
+    });
+
+    it('should prefer corporate author if present', function() {
+      author.corporate_author = "IBM";
+      expect(cdlaCitationFormatterService.formatAuthorSingle(author)).toBe('IBM');
+    });
+
+    it('use full name if no other name fields are present', function() {
+      author.initials = '';
+      author.first_initial;
+      author.middle_initial = '';
+      author.first_name = '';
+      author.last_name = '';
+      expect(cdlaCitationFormatterService.formatAuthorSingle(author)).toBe('John Paul Jones');
+    });
+
+    it('should return just the single author if it is the only author', function() {
+      expect(cdlaCitationFormatterService.formatAuthors(authors)).toBe('Jones, JP, ');
+    });
+
+    it('should return the author plus et al. if there are multiple authors', function() {
+      authors.push({ full_name : 'Jane Austen', last_name : 'Austen', first_name : 'Jane'});
+      expect(cdlaCitationFormatterService.formatAuthors(authors)).toBe('Jones, JP, et al.');
+    });
+
+  });
 });
 
