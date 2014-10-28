@@ -31,6 +31,7 @@ cdlaControllers.controller('HomeCtrl', ['$scope', function($scope) {
  */
 cdlaControllers.controller('TestCtrl', ['$scope', function($scope) {
     $scope.$parent.navState.currentPage = 'test';
+    $scope.campus = 'ucb';
   }]);
 
 /**
