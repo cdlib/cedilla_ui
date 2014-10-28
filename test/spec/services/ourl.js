@@ -24,7 +24,7 @@ describe('ourl services', function() {
 
   });
 
-  describe('author merge behaviors', function() {
+  describe('merge authors ', function() {
 
     var cdlaCitationService;
 
@@ -68,43 +68,61 @@ describe('ourl services', function() {
       expect(cdlaCitationService.hasEqualAuthor(auList, au)).toBe(false);
     });
 
-    it('mergeAuthors should merge two arrays of authors into first passed', function() {
+    it('should merge two arrays of authors into first passed', function() {
       var mergedAuthors = cdlaCitationService.mergeAuthors(oldCitation.authors, newCitation.authors);
       expect(_.isEqual(mergedAuthors, [{'first': 'j', 'last': 'f'}, {'first': 'j1', 'last': 'f2'}])).toBe(true);
     });
 
-    it('mergeAuthors should merge two arrays of authors into first passed when the first is empty', function() {
+    it('should merge two arrays of authors into first passed when the first is empty', function() {
       var auList = [];
       var mergedAuthors = cdlaCitationService.mergeAuthors(auList, newCitation.authors);
       expect(_.isEqual(mergedAuthors, [{'first': 'j1', 'last': 'f2'}])).toBe(true);
     });
 
-    it('mergeAuthors should merge two arrays of authors into first passed when the first is not truthy', function() {
+    it('should merge two arrays of authors into first passed when the first is not truthy', function() {
       var auList = undefined;
       var mergedAuthors = cdlaCitationService.mergeAuthors(auList, newCitation.authors);
       expect(_.isEqual(mergedAuthors, [{'first': 'j1', 'last': 'f2'}])).toBe(true);
     });
 
-    it('mergeAuthors should return the first list unchanged if the second is not truthy', function() {
+    it('should return the first list unchanged if the second is not truthy', function() {
       var newAuList = undefined;
       var mergedAuthors = cdlaCitationService.mergeAuthors(oldCitation.authors, newAuList);
       expect(_.isEqual(mergedAuthors, [{'first': 'j', 'last': 'f'}])).toBe(true);
     });
 
-    it('mergeAuthors should merge two arrays of authors into first passed when the first is empty or not truthy', function() {
+    it('should merge two arrays of authors into first passed when the first is empty or not truthy', function() {
       var auList = [];
       var mergedAuthors = cdlaCitationService.mergeAuthors(auList, newCitation.authors);
       expect(_.isEqual(mergedAuthors, [{'first': 'j1', 'last': 'f2'}])).toBe(true);
     });
 
-    it('mergeAuthors should return an empty array if neither value is truthy', function() {
+    it('should return an empty array if neither value is truthy', function() {
       var auList = undefined;
       var newAuList = null;
       var mergedAuthors = cdlaCitationService.mergeAuthors(auList, newAuList);
       expect(_.isEqual(mergedAuthors, [])).toBe(true);
     });
+  });
+  
+  describe('merge citation ', function() {
 
-    it('mergeCitation should merge citation string properties', function() {
+    var cdlaCitationService;
+
+    // instance variable for lodash
+    var _;
+
+    var newCitation = {'authors': [], 'title': 'the new title', 'publisher': 'new publisher'};
+    var oldCitation = {'authors': [], 'title': 'the title'};
+    newCitation.authors.push({'first': 'j1', 'last': 'f2'});
+    oldCitation.authors.push({'first': 'j', 'last': 'f'});
+
+    beforeEach(inject(function(cdlaCitation, ___) {
+      cdlaCitationService = cdlaCitation;
+      _ = ___;
+    })); 
+
+    it('should merge citation string properties', function() {
       cdlaCitationService.mergeCitation(oldCitation, newCitation);
       expect(oldCitation.publisher).toBe('new publisher');
       expect(oldCitation.title).toBe('the title');
@@ -114,12 +132,12 @@ describe('ourl services', function() {
       expect(oldCitation.title).toBe('the new title');
     });
 
-    it('mergeCitation should merge new authors', function() {
+    it('should merge new authors', function() {
       cdlaCitationService.mergeCitation(oldCitation, newCitation);
       expect(oldCitation.authors.length).toBe(2);
     });
 
-    it('mergeCitation should merge new authors when old authors is undefined', function() {
+    it('should merge new authors when old authors is undefined', function() {
       oldCitation.authors = undefined;
       cdlaCitationService.mergeCitation(oldCitation, newCitation);
       expect(oldCitation.authors.length).toBe(1);

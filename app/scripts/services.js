@@ -161,7 +161,6 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', 'Ha
      * @param newCitation a new citation coming in
      * @param overwrite whether to overwrite citation data if it is already there
      * 
-     * TODO: this routine apply to any object, so do we need one for just citations?
      */
     cdlaCitation.mergeCitation = function(citation, newCitation, overwrite) {
       console.log('merging ' + JSON.stringify(newCitation) + ' into ' + JSON.stringify(citation));
@@ -203,10 +202,51 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
    * citation formatter methods
    */
   citationFormatter.toDisplayCitation = function(citation) {
-    console.log('Called getModel with citation ' + JSON.stringify(citation));
     var display = citationDisplayModel.toDisplayFormat(citation);
-    console.log('Formatted display citation ' + JSON.stringify(display));
     return display;
+  };
+  
+    /**
+   * Return a display string for a single author or list of authors.
+   */
+  citationFormatter.formatAuthors = function(authors) {
+
+    if (!authors || !authors.length) {
+      return '';
+    }
+    var display = citationFormatter.formatAuthorSingle(authors['0']) + ', ';
+    if (authors.length > 1) {
+      display = display + 'et al.';
+    } 
+    return display;
+  };
+
+  /**
+   * Return a display string for a single author.
+   */
+  citationFormatter.formatAuthorSingle = function(author) {
+       
+    initializeAuthor(author);
+    console.log('Formatting author' + JSON.stringify(author));
+    var formattedName = '';
+    
+    if (author.corporate_author) {
+      return author.corporate_author;
+    }
+    if (!author.initials)
+    {
+      formattedName = author.last_name;
+    }
+    else
+    {
+      formattedName = author.last_name + ', ' + author.initials;
+    }
+    if (!formattedName) {
+      {
+        formattedName = author.full_name;
+      }
+    }
+    return formattedName;
   };
 
   /*
@@ -279,49 +319,6 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
       result = citation.short_title;
     }
     return result.trim();
-  };
-
-  /**
-   * Return a display string for a single author or list of authors.
-   */
-  citationFormatter.formatAuthors = function(authors) {
-
-    if (!authors || !authors.length) {
-      return '';
-    }
-    var display = citationFormatter.formatAuthorSingle(authors['0']) + ', ';
-    if (authors.length > 1) {
-      display = display + 'et al.';
-    } 
-    return display;
-  };
-
-  /**
-   * Return a display string for a single author.
-   */
-  citationFormatter.formatAuthorSingle = function(author) {
-       
-    initializeAuthor(author);
-    console.log('Formatting author' + JSON.stringify(author));
-    var formattedName = '';
-    
-    if (author.corporate_author) {
-      return author.corporate_author;
-    }
-    if (!author.initials)
-    {
-      formattedName = author.last_name;
-    }
-    else
-    {
-      formattedName = author.last_name + ', ' + author.initials;
-    }
-    if (!formattedName) {
-      {
-        formattedName = author.full_name;
-      }
-    }
-    return formattedName;
   };
   
   var initializeAuthor = function(author) {
