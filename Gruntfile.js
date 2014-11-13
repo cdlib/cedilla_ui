@@ -66,7 +66,7 @@ module.exports = function (grunt) {
     // The actual grunt server settings
     connect: {
       options: {
-        port: 9000,
+        port: 18880,
         // Change this to 'localhost' to prevent access to the server from outside.
         hostname: '0.0.0.0',
         livereload: 35729
@@ -410,9 +410,9 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', [
     'clean:server',
-    'concurrent:test',
-    'autoprefixer',
-    'connect:test',
+    //'concurrent:test',
+    //'autoprefixer',
+    //'connect:test',
     'karma'
   ]);
 
