@@ -38,8 +38,6 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
         if (!scope.item.fullTextTarget && newResource.resource.format === 'electronic') {
           console.log('Setting fullTextTarget = ' + newResource.resource.target);
           scope.item.fullTextTarget = $sce.trustAsResourceUrl(newResource.resource.target);
-          scope.viewState.showOptions = false;
-          scope.viewState.showFullText = true;
         }
       });
 

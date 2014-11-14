@@ -42,8 +42,23 @@ cdlaControllers.controller('TestCtrl', ['$scope', function($scope) {
 cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdlaSocketListener', 'cdlaCitation',
   function($scope, $window, socket, listener, citationService) {
 
+    var loadCounter = 0;
+
+    // the load event is fired twice by the iframe
+    // in which the fulltext is display
+    // incrementing the value seems crude, but it works
+    // in Safari, Chrome, and Firefox
+    window.displayFulltext = function() {
+      if (loadCounter > 0) {
+        changeView("fullText");
+        loadCounter = 0;
+      } else {
+        loadCounter = loadCounter + 1;
+      }
+    };
+
     var initViewState = function() {
-      return {showDebug: false, showFullText: false, showOptions: true};
+      return {showDebug: false, showFullText: false, showOptions: false, showWait: true};
     };
 
     var initItem = function() {
@@ -62,20 +77,28 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
 
     listener.listen(socket, $scope);
 
-    // handle changeView event broadcast from the parent scope
-    $scope.$on('changeView', function(event, data) {
-      switch (data) {
+
+    var changeView = function(toView) {
+      $scope.viewState.showFullText = false;
+      $scope.viewState.showOptions = false;
+      $scope.viewState.showWait = false;
+      switch (toView) {
         case 'fullText':
           $scope.viewState.showFullText = true;
-          $scope.viewState.showOptions = false;
           break;
         case 'options':
           $scope.viewState.showOptions = true;
-          $scope.viewState.showFullText = false;
           break;
+        case 'wait':
+          $scope.viewState.showWait = true;
         case 'debug':
           $scope.viewState.showDebug = true;
           break;
       }
+    };
+
+    // handle changeView event broadcast from the parent scope
+    $scope.$on('changeView', function(event, data) {
+      changeView(data);
     });
   }]);
