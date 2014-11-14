@@ -49,6 +49,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     // incrementing the value seems crude, but it works
     // in Safari, Chrome, and Firefox
     window.displayFulltext = function() {
+      $scope.viewState.fullTextFound = true;
       if (loadCounter > 0) {
         changeView("fullText");
         loadCounter = 0;
@@ -58,7 +59,11 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     };
 
     var initViewState = function() {
-      return {showDebug: false, showFullText: false, showOptions: false, showWait: true};
+      return {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextFound : false};
+    };
+    
+    var initProgressBar = function () {
+      return { percent: 10, text: 'Finding your item...' }
     };
 
     var initItem = function() {
@@ -69,8 +74,8 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     $scope.$parent.navState.currentPage = 'ourl';
     $scope.viewState = initViewState();
     $scope.$parent.navState.viewState = $scope.viewState;
-
     $scope.item = initItem();
+    $scope.progressBar = initProgressBar();
     var url = $window.location.toString();
     $scope.item.query = url.substr(url.indexOf('?') + 1, url.length);
     citationService.initCitation($scope.item);

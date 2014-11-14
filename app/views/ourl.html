@@ -24,8 +24,15 @@
 
 <div id="error_panel"><div id="error_message" class="col-md-12"></div></div>
 
+
+
 <div id ="wait_page" class="container-fluid" ng-class="{'hidden': !viewState.showWait}">
     <h1>An interstitial in time saves nine.</h1>
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="{{progressBar.percent}}" aria-valuemin="10" aria-valuemax="100" style="width: {{progressBar.percent}}%;">
+            {{progressBar.text}}
+        </div>
+    </div>
 </div>
 
 <div id='fulltext' class="ft_frame" ng-class="{'hidden': !viewState.showFullText}">

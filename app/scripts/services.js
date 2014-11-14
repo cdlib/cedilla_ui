@@ -18,11 +18,14 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
       console.log('emitted openurl client event with params ' + scope.item.query);
 
       socket.on('complete', function() {
-        console.log('data stream is complete');
+        if (!scope.viewState.fullTextFound) {
+          scope.changeView("options");
+        }
       });
 
       socket.on('citation', function(data) {
-        console.log('Handling citation event, data: ' + data);
+        scope.progressBar.percent += 5;
+        scope.text = "Enhancing citation";
         var citationEvent = JSON.parse(data);
         console.log('Updated citation with ' + citationEvent);
         scope.item.citationEvents.push(citationEvent);
@@ -35,8 +38,12 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
         var newResource = JSON.parse(data);
         console.log('Adding new resource: ' + newResource);
         scope.item.resources.push(newResource.resource);
+        scope.progressBar.text = "Found " + scope.item.resources.length + " resources";
+        scope.progressBar.percent += 10;
         if (!scope.item.fullTextTarget && newResource.resource.format === 'electronic') {
           console.log('Setting fullTextTarget = ' + newResource.resource.target);
+          scope.progressBar.text = "Found electronic resource";
+          scope.progressBar.percent = 100;
           scope.item.fullTextTarget = $sce.trustAsResourceUrl(newResource.resource.target);
         }
       });
@@ -161,26 +168,26 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', 'Ha
      * 
      */
     cdlaCitation.mergeCitation = function(citation, newCitation, overwrite) {
-      console.log('merging ' + JSON.stringify(newCitation) + ' into ' + JSON.stringify(citation));
+      //console.log('merging ' + JSON.stringify(newCitation) + ' into ' + JSON.stringify(citation));
       for (var key in newCitation) {
         if (newCitation.hasOwnProperty(key) && newCitation[key]) {
           if (key === 'authors') {
             citation.authors = this.mergeAuthors(citation[key], newCitation[key]);
-            console.log('merged authors result is ' + JSON.stringify(citation[key]));
+            //console.log('merged authors result is ' + JSON.stringify(citation[key]));
           } else {
             if (overwrite) {
               citation[key] = newCitation[key];
-              console.log('added ' + JSON.stringify(citation[key]));
+              //console.log('added ' + JSON.stringify(citation[key]));
             } else {
               if (!citation[key]) {
                 citation[key] = newCitation[key];
-                console.log('added ' + JSON.stringify(citation[key]));
+                //console.log('added ' + JSON.stringify(citation[key]));
               }
             }
           }
         }
       }
-      console.log('citation is now ' + JSON.stringify(citation));
+      //console.log('citation is now ' + JSON.stringify(citation));
     };
 
     return cdlaCitation;
@@ -203,8 +210,8 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
     var display = citationDisplayModel.toDisplayFormat(citation);
     return display;
   };
-  
-    /**
+
+  /**
    * Return a display string for a single author or list of authors.
    */
   citationFormatter.formatAuthors = function(authors) {
@@ -215,7 +222,7 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
     var display = citationFormatter.formatAuthorSingle(authors['0']) + ', ';
     if (authors.length > 1) {
       display = display + 'et al.';
-    } 
+    }
     return display;
   };
 
@@ -223,11 +230,11 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
    * Return a display string for a single author.
    */
   citationFormatter.formatAuthorSingle = function(author) {
-       
+
     initializeAuthor(author);
     console.log('Formatting author' + JSON.stringify(author));
     var formattedName = '';
-    
+
     if (author.corporate_author) {
       return author.corporate_author;
     }
@@ -318,7 +325,7 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
     }
     return result.trim();
   };
-  
+
   var initializeAuthor = function(author) {
     if (!author.last_name) {
       author.last_name = '';
