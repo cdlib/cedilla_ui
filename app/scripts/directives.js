@@ -19,8 +19,7 @@ cdlaDirectives.directive('cdlaLoad', ['$parse', function($parse) {
     return {
       restrict: 'A',
       compile: function($element, attr) {
-        alert(attr['cdlaLoad']);
-        var fn = $parse(attr['cdlaLoad']);
+        var fn = $parse(attr['ngLoad']);
         return function(scope, element, attr) {
           element.on('load', function(event) {
             scope.$apply(function() {
@@ -31,6 +30,7 @@ cdlaDirectives.directive('cdlaLoad', ['$parse', function($parse) {
       }
     };
   }]);
+
 
 
 
