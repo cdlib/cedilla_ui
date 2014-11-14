@@ -16,6 +16,7 @@ var cdlaApp = angular
     'lodash',
     'handlebars',
     'cdlaConfig',
+    'cdlaQuotes',
     'cdlaDirectives',
     'cdlaControllers',
     'cdlaServices',

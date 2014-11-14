@@ -39,8 +39,8 @@ cdlaControllers.controller('TestCtrl', ['$scope', function($scope) {
  * Connects to the cedilla aggregator and gets
  * Streaming resources via socket.io
  */
-cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdlaSocketListener', 'cdlaCitation',
-  function($scope, $window, socket, listener, citationService) {
+cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdlaSocketListener', 'cdlaCitation', 'cdlaQuoter',
+  function($scope, $window, socket, listener, citationService, cdlaQuoter) {
 
     var loadCounter = 0;
 
@@ -49,6 +49,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     // incrementing the value seems crude, but it works
     // in Safari, Chrome, and Firefox
     window.displayFulltext = function() {
+      alert("fulltext! loadCounter = " + loadCounter);
       $scope.viewState.fullTextFound = true;
       if (loadCounter > 0) {
         changeView("fullText");
@@ -58,12 +59,14 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
       }
     };
 
+    $scope.quote = cdlaQuoter.getRandomQuote();
+
     var initViewState = function() {
-      return {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextFound : false};
+      return {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextFound: false};
     };
-    
-    var initProgressBar = function () {
-      return { percent: 10, text: 'Finding your item...' }
+
+    var initProgressBar = function() {
+      return {percent: 10, text: 'Finding your item...'}
     };
 
     var initItem = function() {
@@ -84,18 +87,22 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
 
 
     var changeView = function(toView) {
-      $scope.viewState.showFullText = false;
-      $scope.viewState.showOptions = false;
-      $scope.viewState.showWait = false;
+
       switch (toView) {
         case 'fullText':
           $scope.viewState.showFullText = true;
+          $scope.viewState.showOptions = false;
+          $scope.viewState.showWait = false;
           break;
         case 'options':
           $scope.viewState.showOptions = true;
+          $scope.viewState.showFullText = false;
+          $scope.viewState.showWait = false;
           break;
         case 'wait':
           $scope.viewState.showWait = true;
+          $scope.viewState.showOptions = false;
+          $scope.viewState.showFullText = false;
         case 'debug':
           $scope.viewState.showDebug = true;
           break;
