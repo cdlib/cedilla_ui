@@ -20,12 +20,14 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
       socket.on('complete', function() {
         if (!scope.viewState.fullTextFound) {
           scope.changeView("options");
+        } else {
+          scope.changeView("fullText");
         }
       });
 
       socket.on('citation', function(data) {
         scope.progressBar.percent += 5;
-        scope.text = "Enhancing citation";
+        scope.progressBar.text = "Enhancing citation";
         var citationEvent = JSON.parse(data);
         console.log('Updated citation with ' + citationEvent);
         scope.item.citationEvents.push(citationEvent);

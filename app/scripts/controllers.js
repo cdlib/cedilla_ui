@@ -11,10 +11,10 @@ var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
 /**
  * Main controller of the application.
  */
-cdlaControllers.controller('MainCtrl', ['$scope', function($scope) {
+cdlaControllers.controller('MainCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
     $scope.navState = {'currentPage': 'home'};
     $scope.changeView = function(viewName) {
-      this.$broadcast('changeView', viewName);
+      $rootScope.$broadcast('changeView', viewName);
     };
   }]);
 
@@ -39,8 +39,8 @@ cdlaControllers.controller('TestCtrl', ['$scope', function($scope) {
  * Connects to the cedilla aggregator and gets
  * Streaming resources via socket.io
  */
-cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdlaSocketListener', 'cdlaCitation',
-  function($scope, $window, socket, listener, citationService) {
+cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdlaSocketListener', 'cdlaCitation', 'cdlaQuoter',
+  function($scope, $window, socket, listener, citationService, cdlaQuoter) {
 
     var loadCounter = 0;
 
@@ -51,19 +51,22 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     window.displayFulltext = function() {
       $scope.viewState.fullTextFound = true;
       if (loadCounter > 0) {
-        changeView("fullText");
+        $scope.changeView("fullText");
+        $scope.digest();
         loadCounter = 0;
       } else {
         loadCounter = loadCounter + 1;
       }
     };
 
+    $scope.quote = cdlaQuoter.getRandomQuote();
+
     var initViewState = function() {
-      return {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextFound : false};
+      return {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextFound: false};
     };
-    
-    var initProgressBar = function () {
-      return { percent: 10, text: 'Finding your item...' }
+
+    var initProgressBar = function() {
+      return {percent: 10, text: 'Finding your item...'}
     };
 
     var initItem = function() {
@@ -84,18 +87,22 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
 
 
     var changeView = function(toView) {
-      $scope.viewState.showFullText = false;
-      $scope.viewState.showOptions = false;
-      $scope.viewState.showWait = false;
+
       switch (toView) {
         case 'fullText':
           $scope.viewState.showFullText = true;
+          $scope.viewState.showOptions = false;
+          $scope.viewState.showWait = false;
           break;
         case 'options':
           $scope.viewState.showOptions = true;
+          $scope.viewState.showFullText = false;
+          $scope.viewState.showWait = false;
           break;
         case 'wait':
           $scope.viewState.showWait = true;
+          $scope.viewState.showOptions = false;
+          $scope.viewState.showFullText = false;
         case 'debug':
           $scope.viewState.showDebug = true;
           break;
