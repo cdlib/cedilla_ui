@@ -11,10 +11,10 @@ var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
 /**
  * Main controller of the application.
  */
-cdlaControllers.controller('MainCtrl', ['$scope', function($scope) {
+cdlaControllers.controller('MainCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
     $scope.navState = {'currentPage': 'home'};
     $scope.changeView = function(viewName) {
-      this.$broadcast('changeView', viewName);
+      $rootScope.$broadcast('changeView', viewName);
     };
   }]);
 
@@ -49,10 +49,10 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     // incrementing the value seems crude, but it works
     // in Safari, Chrome, and Firefox
     window.displayFulltext = function() {
-      alert("fulltext! loadCounter = " + loadCounter);
       $scope.viewState.fullTextFound = true;
       if (loadCounter > 0) {
-        changeView("fullText");
+        $scope.changeView("fullText");
+        $scope.digest();
         loadCounter = 0;
       } else {
         loadCounter = loadCounter + 1;
