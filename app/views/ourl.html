@@ -3,23 +3,41 @@
 
 <div id="citation_panel" class="container-fluid" ng-show="item.displayCitation">
     <div class="panel panel_default" ng-show="item.displayCitation.container_title">
-        <div class="row citation_display">
-            <div id='title_display_field' class='col-md-12' ng-show="item.displayCitation.title">
+        <div class="row">
+            <div id='title_display_field' class='col-md-8' ng-show="item.displayCitation.title">
                 <span class='cite_field_val'>{{item.displayCitation.title}}</span>
             </div>
-            <div id='source_display_field' class='col-md-12'>
-                <span class='source_val'>{{item.displayCitation.authors}}</span>
-                <span class='source_val'>{{item.displayCitation.container_title}}{{item.displayCitation.container_title_separator}}</span>
-                <!--
-                <span class='source_val' ng-show="item.displayCitation.year">{{item.displayCitation.year}}{{item.displayCitation.year_separator}}</span>
-                -->
-                <span class='source_val' ng-show="item.displayCitation.volume">
-                    vol. {{item.displayCitation.volume}} issue {{item.displayCitation.issue}}{{item.displayCitation.volume_issue_separator}}
-                </span>
-                <span class='source_val' ng-show="item.displayCitation.pages">pp. {{item.displayCitation.pages}}</span>
+            <div class="col-md-4"></div>
+        </div>
+        <div id='source_display_field' class='row'>
+            <div class="col-md-8">
+                <span>{{item.displayCitation.authors}}</span>
+                <span>{{item.displayCitation.container_title}}</span>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <div id="citation_details">
+            <div class="row" ng-show="item.displayCitation.volume">
+                <div class='col-md-8'>
+                    <strong>Volume:&nbsp;</strong>{{item.displayCitation.volume}}
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <div class ="row" ng-show="item.displayCitation.issue">
+                <div class='col-md-8'>
+                    <strong>Issue:&nbsp;</strong>{{item.displayCitation.issue}}
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <div class ="row" ng-show="item.displayCitation.pages">
+                <div class='col-md-8'>
+                    <strong>Pages:&nbsp;</strong>{{item.displayCitation.pages}}
+                </div>
+                <div class="col-md-4"></div>
             </div>
         </div>
     </div>
+
 </div>  
 
 <div id="error_panel"><div id="error_message" class="col-md-12"></div></div>
@@ -34,7 +52,7 @@
     </div>
     <div class="panel panel-info">
         <div class="panel-heading">
-            <h3 class="panel-title">Waiting room reading...</h3>
+            <h3 class="panel-title">Waiting room reading</h3>
         </div>
         <div class="panel-body">
             <div class="text">{{quote.quote}}</div>
@@ -43,11 +61,11 @@
     </div>
 </div>
 
-<div id='fulltext' class="ft_frame" ng-class="{'hidden': !viewState.showFullText}">
+<div id='fulltext' class="ft_frame" ng-show="viewState.showFullText">
     <iframe src="{{item.fullTextTarget}}" class="ft_frame" onLoad="displayFulltext()"></iframe>
 </div>
 
-<div id="resources" class="container-fluid" ng-class="{'hidden': !viewState.showOptions}">
+<div id="resources" class="container-fluid" ng-show="viewState.showOptions">
     <div class="well">
         <p><strong>Available digitally from</strong></p>
         <ul class="list-unstyled">

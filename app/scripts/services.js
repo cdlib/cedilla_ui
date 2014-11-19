@@ -221,9 +221,12 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
     if (!authors || !authors.length) {
       return '';
     }
-    var display = citationFormatter.formatAuthorSingle(authors['0']) + ', ';
+    var display = citationFormatter.formatAuthorSingle(authors['0']);
+    if (authors.length === 1) {
+      display = display + '. ';
+    }
     if (authors.length > 1) {
-      display = display + 'et al.';
+      display = display + ', et al.';
     }
     return display;
   };
@@ -280,11 +283,6 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
       this.volume = citation.volume;
       this.issue = citation.issue;
       this.pages = formatPages(citation);
-
-      // logic for determining whether to add separators after item in the display
-      this.container_title_separator = containerTitleSeparator(this);
-      this.year_separator = yearSeparator(this);
-      this.volume_issue_separator = volumeIssueSeparator(this);
 
       if (citation.sample_cover_image) {
         this.cover_image = citation.sample_cover_image;
@@ -418,28 +416,6 @@ cdlaServices.factory('cdlaCitationFormatter', function() {
     }
     return date;
 
-  };
-
-  var containerTitleSeparator = function(displayCitation) {
-    console.log('displayCitation is ' + JSON.stringify(displayCitation));
-    if ((displayCitation.volume || displayCitation.issue || displayCitation.pages)) {
-      return ',';
-    }
-    return '';
-  };
-
-  var yearSeparator = function(displayCitation) {
-    if ((displayCitation.volume || displayCitation.pages || displayCitation.issue)) {
-      return ',';
-    }
-    return '';
-  };
-
-  var volumeIssueSeparator = function(displayCitation) {
-    if ((displayCitation.pages)) {
-      return ',';
-    }
-    return '';
   };
 
   /**

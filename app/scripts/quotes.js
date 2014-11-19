@@ -21,7 +21,6 @@ quotes.push({quote: 'The cure for boredom is curiosity. There is no cure for cur
 quotes.push({quote: 'This is not a novel to be tossed aside lightly. It should be thrown with great force.', author: 'Dorothy Parker'});
 quotes.push({quote: 'Heterosexuality is not normal, it\'s just common.', author: 'Dorothy Parker'});
 
-
 var randomInt = function(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
