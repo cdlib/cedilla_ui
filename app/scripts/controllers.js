@@ -70,7 +70,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     };
 
     var initItem = function() {
-      return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], error: ''};
+      return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], error: ''};
     };
 
 

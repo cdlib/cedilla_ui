@@ -36,10 +36,11 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
       });
 
       socket.on('resource', function(data) {
-        //console.log('Handling resource event, data: ' + data);
         var newResource = JSON.parse(data);
-        //console.log('Adding new resource: ' + newResource);
         scope.item.resources.push(newResource.resource);
+        if (newResource.resource.format === 'electronic') {
+          scope.item.eResources.push(newResource.resource);
+        }
         scope.progressBar.text = "Found " + scope.item.resources.length + " resources";
         scope.progressBar.percent += 10;
         if (!scope.item.fullTextTarget && newResource.resource.format === 'electronic') {
