@@ -222,7 +222,7 @@ describe('ourl services', function() {
     });
 
     it('should return just the single author if it is the only author', function() {
-      expect(cdlaCitationFormatterService.formatAuthors(authors)).toBe('Jones, JP, ');
+      expect(cdlaCitationFormatterService.formatAuthors(authors)).toBe('Jones, JP. ');
     });
 
     it('should return the author plus et al. if there are multiple authors', function() {

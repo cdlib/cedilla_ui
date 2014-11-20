@@ -36,16 +36,15 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
       });
 
       socket.on('resource', function(data) {
-        console.log('Handling resource event, data: ' + data);
+        //console.log('Handling resource event, data: ' + data);
         var newResource = JSON.parse(data);
-        console.log('Adding new resource: ' + newResource);
+        //console.log('Adding new resource: ' + newResource);
         scope.item.resources.push(newResource.resource);
         scope.progressBar.text = "Found " + scope.item.resources.length + " resources";
         scope.progressBar.percent += 10;
         if (!scope.item.fullTextTarget && newResource.resource.format === 'electronic') {
-          console.log('Setting fullTextTarget = ' + newResource.resource.target);
-          scope.progressBar.text = "Found electronic resource";
-          scope.progressBar.percent = 100;
+          scope.progressBar.text = "Loading electronic resource";
+          scope.progressBar.percent = 95;
           scope.item.fullTextTarget = $sce.trustAsResourceUrl(newResource.resource.target);
         }
       });

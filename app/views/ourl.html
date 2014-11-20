@@ -33,7 +33,28 @@
                 <div class='col-md-8'>
                     <strong>Pages:&nbsp;</strong>{{item.displayCitation.pages}}
                 </div>
-                <div class="col-md-4"></div>
+                <div class="col-md-4">
+
+                </div>
+            </div>
+            <div class="row">
+                <ul class="nav nav-pills pull-left">
+                    <li id="display_controls" class="dropdown" ng-show="navState.currentPage === 'ourl'">
+                        <a href class="dropdown-toggle" data-toggle="dropdown">Options ({{item.resources.length}}) <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li id="display_fulltext_item">
+                                <a id="display_fulltext" href ng-click="changeView('fullText')" ng-show="!navState.viewState.showFullText">Full Text</a>
+                            </li>
+                            <li id="display_links_item">
+                                <a id="display_options" href ng-click="changeView('options')" ng-show="!navState.viewState.showOptions">Options</a>
+                            </li>
+                            <li id="display_debug_item">
+                                <a id="display_debug" href ng-click="changeView('debug')" ng-show="!navState.viewState.showDebug">Debug</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href ng-show="!navState.viewState.showOptions" ng-click="changeView('options')">Show All</a></li>
+                </ul>
             </div>
         </div>
     </div>
@@ -41,8 +62,6 @@
 </div>  
 
 <div id="error_panel"><div id="error_message" class="col-md-12"></div></div>
-
-
 
 <div id ="wait_page" class="container-fluid" ng-class="{'hidden': !viewState.showWait}">
     <div class="progress">
