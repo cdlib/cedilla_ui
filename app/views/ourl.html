@@ -40,11 +40,9 @@
             <div class="row">
                 <ul class="nav nav-pills pull-left">
                     <li id="display_controls" class="dropdown" ng-show="navState.currentPage === 'ourl'">
-                        <a href class="dropdown-toggle" data-toggle="dropdown" ng-show="!navState.viewState.showOptions">Options ({{item.eResources.length}}) <b class="caret"></b></a>
+                        <a href class="dropdown-toggle" data-toggle="dropdown" ng-show="!navState.viewState.showOptions">Online versions ({{item.eResources.length}}) <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li ng-repeat="resource in item.eResources">
-                                <a href="{{resource.target}}"><span ng-bind-html="resource.source"></span></a>
-                            </li>
+                            <li ng-repeat="resource in item.eResources"><a href ng-bind-html="resource.source" ng-click="viewState.fullTextIndex = $index"></a></li>
                         </ul>
                     </li>
                     <li><a href ng-show="!navState.viewState.showOptions" ng-click="changeView('options')">Show All</a></li>
@@ -69,13 +67,13 @@
         </div>
         <div class="panel-body">
             <div class="text">{{quote.quote}}</div>
-            <div class="author">--{{quote.author}}</div>
+            <div class="author">-- {{quote.author}}</div>
         </div>
     </div>
 </div>
 
-<div id='fulltext' class="ft_frame" ng-show="viewState.showFullText">
-    <iframe src="{{item.fullTextTarget}}" class="ft_frame" onLoad="displayFulltext()"></iframe>
+<div id='fulltext' ng-show="viewState.showFullText" ng-repeat="resource in item.eResources">
+    <iframe class="ft_frame" src="{{resource.target}}" onLoad="displayFulltext()" ng-show="viewState.fullTextIndex === $index"></iframe>
 </div>
 
 <div id="resources" class="container-fluid" ng-show="viewState.showOptions">

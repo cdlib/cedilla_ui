@@ -49,7 +49,6 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     // incrementing the value seems crude, but it works
     // in Safari, Chrome, and Firefox
     $window.displayFulltext = function() {
-      $scope.viewState.fullTextFound = true;
       if (loadCounter > 0) {
         $scope.changeView("fullText");
         loadCounter = 0;
@@ -61,7 +60,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     $scope.quote = cdlaQuoter.getRandomQuote();
 
     var initViewState = function() {
-      return {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextFound: false};
+      return {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextIndex: 0};
     };
 
     var initProgressBar = function() {
@@ -69,7 +68,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     };
 
     var initItem = function() {
-      return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], fullTextTarget: '', error: ''};
+      return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], error: '', fullTextFound: false};
     };
 
 
