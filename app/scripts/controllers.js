@@ -48,11 +48,10 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     // in which the fulltext is display
     // incrementing the value seems crude, but it works
     // in Safari, Chrome, and Firefox
-    window.displayFulltext = function() {
+    $window.displayFulltext = function() {
       $scope.viewState.fullTextFound = true;
       if (loadCounter > 0) {
         $scope.changeView("fullText");
-        $scope.digest();
         loadCounter = 0;
       } else {
         loadCounter = loadCounter + 1;
@@ -66,11 +65,11 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     };
 
     var initProgressBar = function() {
-      return {percent: 10, text: 'Finding your item...'}
+      return {percent: 10, text: 'Finding your item...'};
     };
 
     var initItem = function() {
-      return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], error: ''};
+      return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], fullTextTarget: '', error: ''};
     };
 
 
@@ -87,7 +86,6 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
 
 
     var changeView = function(toView) {
-
       switch (toView) {
         case 'fullText':
           $scope.viewState.showFullText = true;
@@ -103,6 +101,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
           $scope.viewState.showWait = true;
           $scope.viewState.showOptions = false;
           $scope.viewState.showFullText = false;
+          break;
         case 'debug':
           $scope.viewState.showDebug = true;
           break;

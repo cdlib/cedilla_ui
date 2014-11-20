@@ -29,7 +29,7 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
         scope.progressBar.percent += 5;
         scope.progressBar.text = "Enhancing citation";
         var citationEvent = JSON.parse(data);
-        console.log('Updated citation with ' + citationEvent);
+        //console.log('Updated citation with ' + citationEvent);
         scope.item.citationEvents.push(citationEvent);
         cdlaCitationService.mergeCitation(scope.item.citation, citationEvent.citation, false);
         scope.item.displayCitation = citationFormatter.toDisplayCitation(scope.item.citation);
@@ -67,12 +67,10 @@ cdlaServices.factory('cdlaSocket', ['socketFactory', 'cdlaProperties', function(
     });
   }]);
 
-
-cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', 'Handlebars', 'cdlaProperties', function($http, citationFormatter, _, _Handlebars_, properties) {
+cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', 'cdlaProperties', function($http, citationFormatter, _, properties) {
 
     var cdlaCitation = {};
     var _http = $http;
-    var Handlebars = _Handlebars_;
 
     /*
      * Returns a deferred query result
@@ -82,15 +80,17 @@ cdlaServices.factory('cdlaCitation', ['$http', 'cdlaCitationFormatter', '_', 'Ha
       var self = this;
 
       _http.get(properties.CITATION_SERVICE_ADDRESS + '?' + item.query)
-              .success(function(data, status, headers, config) {
-                console.log('incoming citation is ' + typeof data + ' ' + JSON.stringify(data));
+              //.success(function(data, status, headers, config) { // documents available params on callback
+              .success(function(data) {
+                //console.log('incoming citation is ' + typeof data + ' ' + JSON.stringify(data));
                 item.originalCitation = data;
                 self.mergeCitation(item.citation, data, true);
-                console.log('merged citation is ' + typeof data + ' ' + JSON.stringify(item.citation));
+                //console.log('merged citation is ' + typeof data + ' ' + JSON.stringify(item.citation));
                 item.displayCitation = citationFormatter.toDisplayCitation(item.citation);
-                console.log('Display citation is now ' + JSON.stringify(item.displayCitation));
+                //console.log('Display citation is now ' + JSON.stringify(item.displayCitation));
               })
-              .error(function(data, status, headers, config) {
+              //.error(function(data, status, headers, config) { // documents available params on callback
+              .error(function(data) {
                 console.log('error: ' + JSON.stringify(data));
               });
       return this;

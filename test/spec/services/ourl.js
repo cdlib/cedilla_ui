@@ -13,7 +13,7 @@ describe('ourl services', function() {
     }));
 
     it('should have properties for dev environment', function() {
-      console.log("Property MAX_LINK_DISPLAY = " + cdlaProperties.MAX_LINK_DISPLAY);
+      console.log('Property MAX_LINK_DISPLAY = ' + cdlaProperties.MAX_LINK_DISPLAY);
       expect(cdlaProperties.MAX_LINK_DISPLAY).toBe(3);
     });
 
@@ -80,13 +80,13 @@ describe('ourl services', function() {
     });
 
     it('should merge two arrays of authors into first passed when the first is not truthy', function() {
-      var auList = undefined;
+      var auList;
       var mergedAuthors = cdlaCitationService.mergeAuthors(auList, newCitation.authors);
       expect(_.isEqual(mergedAuthors, [{'first': 'j1', 'last': 'f2'}])).toBe(true);
     });
 
     it('should return the first list unchanged if the second is not truthy', function() {
-      var newAuList = undefined;
+      var newAuList;
       var mergedAuthors = cdlaCitationService.mergeAuthors(oldCitation.authors, newAuList);
       expect(_.isEqual(mergedAuthors, [{'first': 'j', 'last': 'f'}])).toBe(true);
     });
@@ -98,7 +98,7 @@ describe('ourl services', function() {
     });
 
     it('should return an empty array if neither value is truthy', function() {
-      var auList = undefined;
+      var auList;
       var newAuList = null;
       var mergedAuthors = cdlaCitationService.mergeAuthors(auList, newAuList);
       expect(_.isEqual(mergedAuthors, [])).toBe(true);
@@ -201,20 +201,20 @@ describe('ourl services', function() {
 
     it('should use first letter of first name if no initial fields at all are present', function() {
       author.initials = '';
-      author.first_initial;
+      author.first_initial = '';
       author.middle_initial = '';
       author.full_name = '';
       expect(cdlaCitationFormatterService.formatAuthorSingle(author)).toBe('Jones, J');
     });
 
     it('should prefer corporate author if present', function() {
-      author.corporate_author = "IBM";
+      author.corporate_author = 'IBM';
       expect(cdlaCitationFormatterService.formatAuthorSingle(author)).toBe('IBM');
     });
 
     it('use full name if no other name fields are present', function() {
       author.initials = '';
-      author.first_initial;
+      author.first_initial = '';
       author.middle_initial = '';
       author.first_name = '';
       author.last_name = '';
