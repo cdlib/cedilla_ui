@@ -49,10 +49,6 @@ body {
 }
 
 /*  CDLA added  */
- 
-.hidden {
-  display: none;
-}
 
 .ft_frame {
   height: 700px;
@@ -66,6 +62,16 @@ body {
 .cite_field_label {
     margin-right : 6px;
     font-weight : bold;
+}
+
+#citation_details {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+#uc_libs {
+    padding-bottom: 12px;
+    color: #007FD2;
 }
 
 /* end CDLA added */
