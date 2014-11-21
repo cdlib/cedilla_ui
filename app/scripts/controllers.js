@@ -14,6 +14,7 @@ var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
 cdlaControllers.controller('MainCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
     $scope.navState = {'currentPage': 'home'};
     $scope.changeView = function(viewName) {
+      console.log("changing view to " + viewName);
       $rootScope.$broadcast('changeView', viewName);
     };
   }]);
@@ -48,11 +49,9 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     // in which the fulltext is display
     // incrementing the value seems crude, but it works
     // in Safari, Chrome, and Firefox
-    window.displayFulltext = function() {
-      $scope.viewState.fullTextFound = true;
+    $window.displayFulltext = function() {
       if (loadCounter > 0) {
         $scope.changeView("fullText");
-        $scope.digest();
         loadCounter = 0;
       } else {
         loadCounter = loadCounter + 1;
@@ -62,15 +61,15 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     $scope.quote = cdlaQuoter.getRandomQuote();
 
     var initViewState = function() {
-      return {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextFound: false};
+      return {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextIndex: 0, displayTargets: []};
     };
 
     var initProgressBar = function() {
-      return {percent: 10, text: 'Finding your item...'}
+      return {percent: 10, text: 'Finding your item...'};
     };
 
     var initItem = function() {
-      return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], error: ''};
+      return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], error: '', fullTextFound: false};
     };
 
 
@@ -83,11 +82,21 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     $scope.item.query = url.substr(url.indexOf('?') + 1, url.length);
     citationService.initCitation($scope.item);
 
+    /*
+     * Switch the fulltext display to another source.
+     * 
+     */
+    $scope.switchFullTextDisplay = function(index) {
+      if (index > $scope.viewState.displayTargets.length - 1) {
+        $scope.viewState.displayTargets[index] = $scope.item.eResources[index];     
+      }
+      $scope.viewState.fullTextIndex = index;
+    };
+
     listener.listen(socket, $scope);
 
 
     var changeView = function(toView) {
-
       switch (toView) {
         case 'fullText':
           $scope.viewState.showFullText = true;
@@ -103,6 +112,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
           $scope.viewState.showWait = true;
           $scope.viewState.showOptions = false;
           $scope.viewState.showFullText = false;
+          break;
         case 'debug':
           $scope.viewState.showDebug = true;
           break;
