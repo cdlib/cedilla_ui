@@ -9,6 +9,8 @@ var cdlaServices = angular.module('cdlaServices', ['lodash', 'handlebars', 'cdla
 
 /**
  * Socket listener listens on a socket and updates the model.
+ * 
+ * TODO: Separate display code into its own service.
  *
  */
 cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitationFormatter', function($sce, cdlaCitationService, citationFormatter) {
@@ -28,12 +30,14 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
       });
 
       socket.on('citation', function(data) {
-        scope.progressBar.percent += 5;
-        scope.progressBar.text = "Enhancing citation";
         var citationEvent = JSON.parse(data);
-        scope.item.citationEvents.push(citationEvent);
         cdlaCitationService.mergeCitation(scope.item.citation, citationEvent.citation, false);
         scope.item.displayCitation = citationFormatter.toDisplayCitation(scope.item.citation);
+        scope.item.citationEvents.push(citationEvent);
+        if (scope.progressBar.percent <= 90 && !scope.item.fullTextFound) {
+          scope.progressBar.percent += 5;
+          scope.progressBar.text = "Enhancing citation";
+        }
       });
 
       socket.on('resource', function(data) {
@@ -49,12 +53,11 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
             scope.item.fullTextFound = true;
           }
         } else {
-            console.log("non electronic resource, progressbar is at " + scope.progressBar.percent);
-            if (scope.progressBar.percent < 90) {
-              scope.progressBar.percent = scope.progressBar.percent + 10;
-              scope.progressBar.text = "Found copy in library";
-            }
-         
+          if (scope.progressBar.percent <= 90 && !scope.item.fullTextFound) {
+            scope.progressBar.percent = scope.progressBar.percent + 10;
+            scope.progressBar.text = "Found copy in library";
+          }
+
         }
       });
 
