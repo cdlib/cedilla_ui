@@ -65,7 +65,23 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     };
 
     var initProgressBar = function() {
-      return {percent: 10, text: 'Finding your item...'};
+      return {percent: 15, text: 'Looking...', clearVar: undefined,
+        'lastInch': function() {
+          var self = this;
+          console.log("progressbar: " + JSON.stringify(self));
+          var INTERVAL = 1000;
+          this.percent = 90;
+          window.clearVar = setInterval(function() {
+            if (self.percent < 100) {
+              self.percent += 1;
+              $scope.$digest();
+            } else {
+              clearInterval(window.clearVar);
+            }
+            console.log("incremented to " + self.percent);
+          }, INTERVAL);
+        }
+      };
     };
 
     var initItem = function() {
@@ -88,7 +104,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
      */
     $scope.switchFullTextDisplay = function(index) {
       if (index > $scope.viewState.displayTargets.length - 1) {
-        $scope.viewState.displayTargets[index] = $scope.item.eResources[index];     
+        $scope.viewState.displayTargets[index] = $scope.item.eResources[index];
       }
       $scope.viewState.fullTextIndex = index;
     };

@@ -31,7 +31,6 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
         scope.progressBar.percent += 5;
         scope.progressBar.text = "Enhancing citation";
         var citationEvent = JSON.parse(data);
-        //console.log('Updated citation with ' + citationEvent);
         scope.item.citationEvents.push(citationEvent);
         cdlaCitationService.mergeCitation(scope.item.citation, citationEvent.citation, false);
         scope.item.displayCitation = citationFormatter.toDisplayCitation(scope.item.citation);
@@ -40,21 +39,23 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
       socket.on('resource', function(data) {
         var newResource = JSON.parse(data);
         scope.item.resources.push(newResource.resource);
-        scope.progressBar.text = "Found " + scope.item.resources.length + " resources";
-        scope.progressBar.percent += 10;
-
         if (newResource.resource.format === 'electronic') {
           newResource.resource.target = $sce.trustAsResourceUrl(newResource.resource.target);
           scope.item.eResources.push(newResource.resource);
           if (!scope.item.fullTextFound) {
             scope.progressBar.text = "Loading electronic resource";
-            scope.progressBar.percent = 95;
+            scope.progressBar.lastInch();
             scope.viewState.displayTargets.push(newResource.resource);
             scope.item.fullTextFound = true;
           }
+        } else {
+            console.log("non electronic resource, progressbar is at " + scope.progressBar.percent);
+            if (scope.progressBar.percent < 90) {
+              scope.progressBar.percent = scope.progressBar.percent + 10;
+              scope.progressBar.text = "Found copy in library";
+            }
+         
         }
-
-
       });
 
       socket.on('error', function(data) {
@@ -67,7 +68,6 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
   }]);
 
 cdlaServices.factory('cdlaSocket', ['socketFactory', 'cdlaProperties', function(socketFactory, properties) {
-    console.log(typeof properties);
     return socketFactory({
       /* global io */
       ioSocket: io.connect(properties.AGGREGATOR_ADDRESS)
