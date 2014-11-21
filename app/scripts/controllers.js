@@ -5,7 +5,6 @@
  *
  */
 
-
 var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
 
 /**
@@ -61,7 +60,15 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     $scope.quote = cdlaQuoter.getRandomQuote();
 
     var initViewState = function() {
-      return {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextIndex: 0, displayTargets: []};
+      return {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextIndex: 0, displayTargets: [],
+        switchFullTextDisplay: function(index) {
+          if (index > this.displayTargets.length - 1) {
+            this.displayTargets[index] = $scope.item.eResources[index];
+          }
+          this.fullTextIndex = index;
+          $scope.changeView('fullText');
+        }
+      };
     };
 
     var initProgressBar = function() {
@@ -85,7 +92,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     };
 
     var initItem = function() {
-      return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], error: '', fullTextFound: false};
+      return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], error: '', fullTextFound: false, };
     };
 
 
@@ -107,13 +114,14 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
         $scope.viewState.displayTargets[index] = $scope.item.eResources[index];
       }
       $scope.viewState.fullTextIndex = index;
+      $scope.changeView('fullText');
     };
-
+    
     listener.listen(socket, $scope);
 
-
-    var changeView = function(toView) {
-      switch (toView) {
+    // handle changeView event broadcast from the parent scope
+    $scope.$on('changeView', function(event, data) {
+      switch (data) {
         case 'fullText':
           $scope.viewState.showFullText = true;
           $scope.viewState.showOptions = false;
@@ -133,10 +141,5 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
           $scope.viewState.showDebug = true;
           break;
       }
-    };
-
-    // handle changeView event broadcast from the parent scope
-    $scope.$on('changeView', function(event, data) {
-      changeView(data);
     });
   }]);

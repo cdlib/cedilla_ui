@@ -43,7 +43,7 @@
                         <a href class="dropdown-toggle" data-toggle="dropdown" ng-show="!navState.viewState.showOptions && item.eResources.length > 1">Online versions ({{item.eResources.length}}) <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li ng-repeat="resource in item.eResources">
-                                <a href ng-bind-html="resource.source" ng-click="switchFullTextDisplay($index)"></a>   
+                                <a href ng-bind-html="resource.source" ng-click="viewState.switchFullTextDisplay($index)"></a>   
                             </li>
                         </ul>
                     </li>
@@ -86,8 +86,8 @@
     <div class="well">
         <p><strong>Available digitally from</strong></p>
         <ul class="list-unstyled">
-            <li ng-repeat="resource in item.resources| digitalLinks">
-                <a href="{{resource.target}}"><span ng-bind-html="resource.source"></span></a>
+            <li ng-repeat="resource in item.eResources">
+                <a href ng-bind-html="resource.source" ng-click="viewState.switchFullTextDisplay($index)"></a> 
             </li>
         </ul>
     </div>
