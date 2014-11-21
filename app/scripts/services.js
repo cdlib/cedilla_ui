@@ -19,8 +19,10 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
 
       socket.on('complete', function() {
         if (!scope.item.fullTextFound) {
+          console.log("complete event, changing to options");
           scope.changeView("options");
         } else {
+          console.log("complete event, changing to fulltext");
           scope.changeView("fullText");
         }
       });
@@ -38,17 +40,21 @@ cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitatio
       socket.on('resource', function(data) {
         var newResource = JSON.parse(data);
         scope.item.resources.push(newResource.resource);
-        if (newResource.resource.format === 'electronic') {
-          scope.item.eResources.push(newResource.resource);
-          scope.item.eResources[scope.item.eResources.length - 1].target = $sce.trustAsResourceUrl(newResource.resource.target);
-        }
         scope.progressBar.text = "Found " + scope.item.resources.length + " resources";
         scope.progressBar.percent += 10;
-        if (!scope.item.fullTextFound && newResource.resource.format === 'electronic') {
-          scope.progressBar.text = "Loading electronic resource";
-          scope.progressBar.percent = 95;
-          scope.item.fullTextFound = true;
+
+        if (newResource.resource.format === 'electronic') {
+          newResource.resource.target = $sce.trustAsResourceUrl(newResource.resource.target);
+          scope.item.eResources.push(newResource.resource);
+          if (!scope.item.fullTextFound) {
+            scope.progressBar.text = "Loading electronic resource";
+            scope.progressBar.percent = 95;
+            scope.viewState.displayTargets.push(newResource.resource);
+            scope.item.fullTextFound = true;
+          }
         }
+
+
       });
 
       socket.on('error', function(data) {

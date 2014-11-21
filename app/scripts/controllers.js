@@ -14,6 +14,7 @@ var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
 cdlaControllers.controller('MainCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
     $scope.navState = {'currentPage': 'home'};
     $scope.changeView = function(viewName) {
+      console.log("changing view to " + viewName);
       $rootScope.$broadcast('changeView', viewName);
     };
   }]);
@@ -60,7 +61,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     $scope.quote = cdlaQuoter.getRandomQuote();
 
     var initViewState = function() {
-      return {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextIndex: 0};
+      return {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextIndex: 0, displayTargets: []};
     };
 
     var initProgressBar = function() {
@@ -80,6 +81,17 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     var url = $window.location.toString();
     $scope.item.query = url.substr(url.indexOf('?') + 1, url.length);
     citationService.initCitation($scope.item);
+
+    /*
+     * Switch the fulltext display to another source.
+     * 
+     */
+    $scope.switchFullTextDisplay = function(index) {
+      if (index > $scope.viewState.displayTargets.length - 1) {
+        $scope.viewState.displayTargets[index] = $scope.item.eResources[index];     
+      }
+      $scope.viewState.fullTextIndex = index;
+    };
 
     listener.listen(socket, $scope);
 

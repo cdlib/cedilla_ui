@@ -40,9 +40,11 @@
             <div class="row">
                 <ul class="nav nav-pills pull-left">
                     <li id="display_controls" class="dropdown" ng-show="navState.currentPage === 'ourl'">
-                        <a href class="dropdown-toggle" data-toggle="dropdown" ng-show="!navState.viewState.showOptions">Online versions ({{item.eResources.length}}) <b class="caret"></b></a>
+                        <a href class="dropdown-toggle" data-toggle="dropdown" ng-show="!navState.viewState.showOptions && item.eResources.length > 1">Online versions ({{item.eResources.length}}) <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li ng-repeat="resource in item.eResources"><a href ng-bind-html="resource.source" ng-click="viewState.fullTextIndex = $index"></a></li>
+                            <li ng-repeat="resource in item.eResources">
+                                <a href ng-bind-html="resource.source" ng-click="switchFullTextDisplay($index)"></a>   
+                            </li>
                         </ul>
                     </li>
                     <li><a href ng-show="!navState.viewState.showOptions" ng-click="changeView('options')">Show All</a></li>
@@ -72,7 +74,7 @@
     </div>
 </div>
 
-<div id='fulltext' ng-show="viewState.showFullText" ng-repeat="resource in item.eResources">
+<div id='fulltext' ng-show="viewState.showFullText" ng-repeat="resource in viewState.displayTargets">
     <iframe class="ft_frame" src="{{resource.target}}" onLoad="displayFulltext()" ng-show="viewState.fullTextIndex === $index"></iframe>
 </div>
 
