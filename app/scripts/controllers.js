@@ -115,7 +115,9 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
 
     $scope.$parent.navState.currentPage = 'ourl';
     $scope.viewState = initViewState();
-    //$scope.$parent.navState.viewState = $scope.viewState;
+    // TODO -- give the parent scope only the data it needs
+    // not the whole viewState for this page
+    $scope.$parent.navState.viewState = $scope.viewState;
     $scope.item = initItem();
     $scope.progressBar = initProgressBar();
     var url = $window.location.toString();
