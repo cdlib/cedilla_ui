@@ -4,7 +4,7 @@ var cdlaQuotes = angular.module('cdlaQuotes', []);
 var quotes = [];
 quotes.push({quote: 'We are asleep. Our Life is a dream. But we wake up sometimes, just enough to know that we are dreaming.', author: 'Ludwig Wittgenstein'});
 quotes.push({quote: 'At the core of all well-founded belief lies belief that is unfounded.', author: 'Ludwig Wittgenstein'});
-quotes.push({quote: 'When we can\'t think for ourselves, we can always quote', author: 'Ludwig Wittgenstein'});
+quotes.push({quote: 'When we can\'t think for ourselves, we can always quote.', author: 'Ludwig Wittgenstein'});
 quotes.push({quote: '"Google" is not a synonym for "research".', author: 'Dan Brown'});
 quotes.push({quote: 'You\'d be amazed how much research you can get done when you have no life whatsoever.', author: 'Ernest Cline'});
 quotes.push({quote: 'Knowledge is power.', author: 'Francis Bacon'});
@@ -19,7 +19,17 @@ quotes.push({quote: 'It is not the strongest or the most intelligent who will su
 quotes.push({quote: 'The love for all living creatures is the most noble attribute of man.', author: 'Charles Darwin'});
 quotes.push({quote: 'The cure for boredom is curiosity. There is no cure for curiosity.', author: 'Dorothy Parker'});
 quotes.push({quote: 'This is not a novel to be tossed aside lightly. It should be thrown with great force.', author: 'Dorothy Parker'});
-quotes.push({quote: 'Heterosexuality is not normal, it\'s just common.', author: 'Dorothy Parker'});
+quotes.push({quote: 'In a good bookroom you feel in some mysterious way that you are absorbing the wisdom contained in all the books through your skin, without even opening them.', author: 'Mark Twain'});
+quotes.push({quote: 'Whatever the cost of our libraries, the price is cheap compared to that of an ignorant nation.', author: 'Walter Cronkite'});
+quotes.push({quote: 'People can lose their lives in libraries. They ought to be warned.', author: 'Saul Bellow'});
+quotes.push({quote: 'A library is a place where you can lose your innocence without losing your virginity.', author: 'Germaine Greer'});
+quotes.push({quote: 'I don\'t believe in colleges and universities. I believe in libraries because most students don\'t have any money. When I graduated from high school, it was during the Depression and we had no money. I couldn\'t go to college, so I went to the library three days a week for 10 years.', author: 'Ray Bradbury'});
+quotes.push({quote: 'Don\'t join the book burners. Don\'t think you\'re going to conceal faults by concealing evidence that they ever existed. Don\'t be afraid to go in your library and read every book..', author: 'Dwight D. Eisenhower'});
+quotes.push({quote: 'An original idea. That can\'t be too hard. The library must be full of them.', author: 'Stephen Fry'});
+quotes.push({quote: 'When I got [my] library card, that was when my life began.', author: 'Rita Mae Brown'});
+quotes.push({quote: 'Libraries should be open to all - except the censor.', author: 'John F. Kennedy'});
+quotes.push({quote: 'You see, I don\'t belive that libraries should be drab places where people sit in silence, that has been the main reason for our policy of employing wild animals as librarians.', author: 'Graham Chapman'});
+quotes.push({quote: 'In my opinion, libraries and librarians are needed more than ever, and the literature is noting this more often. In the development of MARC, it was clear to me that we needed two talents, i.e., computer expertise and library expertise. Neither talent could have succeeded alone. We need this more than ever today. Librarians must become computer literate so that they can understand the relationship between the technology applied and the discipline of their profession.', author: 'Henriette Avram'});
 
 var randomInt = function(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);

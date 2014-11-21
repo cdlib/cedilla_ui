@@ -57,10 +57,19 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
       }
     };
 
-    $scope.quote = cdlaQuoter.getRandomQuote();
-
+    /**
+     * 
+     * Factory method for the viewState object
+     */
     var initViewState = function() {
-      return {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextIndex: 0, displayTargets: [],
+      return {
+        showDebug: false, 
+        showFullText: false, 
+        showOptions: false, 
+        showWait: true, 
+        fullTextIndex: 0, 
+        displayTargets: [],
+        quote: cdlaQuoter.getRandomQuote(),
         switchFullTextDisplay: function(index) {
           if (index > this.displayTargets.length - 1) {
             this.displayTargets[index] = $scope.item.eResources[index];
@@ -71,6 +80,10 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
       };
     };
 
+    /*
+     * 
+     * Factory method for the progressBar object.
+     */
     var initProgressBar = function() {
       return {percent: 15, text: 'Looking...', clearVar: undefined,
         'lastInch': function() {
@@ -91,6 +104,10 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
       };
     };
 
+    /**
+     * 
+     * Factory method for the item object.
+     */
     var initItem = function() {
       return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], error: '', fullTextFound: false, };
     };
@@ -98,28 +115,18 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
 
     $scope.$parent.navState.currentPage = 'ourl';
     $scope.viewState = initViewState();
-    $scope.$parent.navState.viewState = $scope.viewState;
+    //$scope.$parent.navState.viewState = $scope.viewState;
     $scope.item = initItem();
     $scope.progressBar = initProgressBar();
     var url = $window.location.toString();
     $scope.item.query = url.substr(url.indexOf('?') + 1, url.length);
     citationService.initCitation($scope.item);
-
-    /*
-     * Switch the fulltext display to another source.
-     * 
-     */
-    $scope.switchFullTextDisplay = function(index) {
-      if (index > $scope.viewState.displayTargets.length - 1) {
-        $scope.viewState.displayTargets[index] = $scope.item.eResources[index];
-      }
-      $scope.viewState.fullTextIndex = index;
-      $scope.changeView('fullText');
-    };
     
     listener.listen(socket, $scope);
 
-    // handle changeView event broadcast from the parent scope
+    /**
+     * Handle changeView event broadcast from the root scope
+     */ 
     $scope.$on('changeView', function(event, data) {
       switch (data) {
         case 'fullText':
