@@ -43,7 +43,7 @@
                         <a href class="dropdown-toggle" data-toggle="dropdown" ng-show="!navState.viewState.showOptions && item.eResources.length > 1">Online versions ({{item.eResources.length}}) <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li ng-repeat="resource in item.eResources">
-                                <a href ng-bind-html="resource.source" ng-click="switchFullTextDisplay($index)"></a>   
+                                <a href ng-bind-html="resource.source" ng-click="viewState.switchFullTextDisplay($index)"></a>   
                             </li>
                         </ul>
                     </li>
@@ -58,9 +58,13 @@
 <div id="error_panel"><div id="error_message" class="col-md-12"></div></div>
 
 <div id ="wait_page" class="container-fluid" ng-class="{'hidden': !viewState.showWait}">
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="{{progressBar.percent}}" aria-valuemin="10" aria-valuemax="100" style="width: {{progressBar.percent}}%;">
-            {{progressBar.text}}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="{{progressBar.percent}}" aria-valuemin="10" aria-valuemax="100" style="width: {{progressBar.percent}}%;">
+                    {{progressBar.text}}
+                </div>
+            </div>
         </div>
     </div>
     <div class="panel panel-info">
@@ -68,8 +72,8 @@
             <h3 class="panel-title">Waiting room reading</h3>
         </div>
         <div class="panel-body">
-            <div class="text">{{quote.quote}}</div>
-            <div class="author">-- {{quote.author}}</div>
+            <div class="text">{{viewState.quote.quote}}</div>
+            <div class="author">-- {{viewState.quote.author}}</div>
         </div>
     </div>
 </div>
@@ -82,8 +86,8 @@
     <div class="well">
         <p><strong>Available digitally from</strong></p>
         <ul class="list-unstyled">
-            <li ng-repeat="resource in item.resources| digitalLinks">
-                <a href="{{resource.target}}"><span ng-bind-html="resource.source"></span></a>
+            <li ng-repeat="resource in item.eResources">
+                <a href ng-bind-html="resource.source" ng-click="viewState.switchFullTextDisplay($index)"></a> 
             </li>
         </ul>
     </div>
