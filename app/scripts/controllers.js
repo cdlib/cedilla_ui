@@ -13,7 +13,7 @@ var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
 cdlaControllers.controller('MainCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
     $scope.navState = {'currentPage': 'home'};
     $scope.changeView = function(viewName) {
-      console.log("changing view to " + viewName);
+      //console.log("changing view to " + viewName);
       $rootScope.$broadcast('changeView', viewName);
     };
   }]);
@@ -22,7 +22,7 @@ cdlaControllers.controller('MainCtrl', ['$scope', '$rootScope', function($scope,
  * Controller of the home page.
  */
 cdlaControllers.controller('HomeCtrl', ['$scope', function($scope) {
-    console.log('Home controller');
+    //console.log('Home controller');
     $scope.$parent.navState.currentPage = 'home';
   }]);
 
@@ -39,8 +39,8 @@ cdlaControllers.controller('TestCtrl', ['$scope', function($scope) {
  * Connects to the cedilla aggregator and gets
  * Streaming resources via socket.io
  */
-cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdlaSocketListener', 'cdlaCitation', 'cdlaQuoter',
-  function($scope, $window, socket, listener, citationService, cdlaQuoter) {
+cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdlaSocketListener', 'cdlaCitation', 'cdlaCitationFormatter', '$sce', 'cdlaQuoter',
+  function($scope, $window, socket, listener, citationService, citationFormatter, $sce, cdlaQuoter) {
 
     var loadCounter = 0;
 
@@ -88,7 +88,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
       return {percent: 15, text: 'Looking...', clearVar: undefined,
         'lastInch': function() {
           var self = this;
-          console.log("progressbar: " + JSON.stringify(self));
+          //console.log("progressbar: " + JSON.stringify(self));
           var INTERVAL = 1000;
           this.percent = 90;
           window.clearVar = setInterval(function() {
@@ -98,7 +98,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
             } else {
               clearInterval(window.clearVar);
             }
-            console.log("incremented to " + self.percent);
+            //console.log("incremented to " + self.percent);
           }, INTERVAL);
         }
       };
@@ -111,6 +111,61 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     var initItem = function() {
       return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], error: '', fullTextFound: false, };
     };
+    
+/**
+ * Responder changes the model based on events in the EventListener.
+ */
+var initEventResponder = function() {
+    var responder = {};
+
+    responder.handleComplete = function() {
+      if (!$scope.item.fullTextFound) {
+        console.log("complete event, changing to options");
+        $scope.changeView("options");
+      } else {
+        console.log("complete event, changing to fulltext");
+        $scope.changeView("fullText");
+      }
+    };
+
+    responder.handleCitation = function(data) {
+      var citationEvent = JSON.parse(data);
+      citationService.mergeCitation($scope.item.citation, citationEvent.citation, false);
+      $scope.item.displayCitation = citationFormatter.toDisplayCitation($scope.item.citation);
+      $scope.item.citationEvents.push(citationEvent);
+      if ($scope.progressBar.percent <= 90 && !$scope.item.fullTextFound) {
+        $scope.progressBar.percent += 5;
+        $scope.progressBar.text = "Enhancing citation";
+      }
+    };
+
+    responder.handleResource = function(data) {
+      var newResource = JSON.parse(data);
+      $scope.item.resources.push(newResource.resource);
+      if (newResource.resource.format === 'electronic') {
+        newResource.resource.target = $sce.trustAsResourceUrl(newResource.resource.target);
+        $scope.item.eResources.push(newResource.resource);
+        if (!$scope.item.fullTextFound) {
+          $scope.progressBar.text = "Loading electronic resource";
+          $scope.progressBar.lastInch();
+          $scope.viewState.displayTargets.push(newResource.resource);
+          $scope.item.fullTextFound = true;
+        }
+      } else {
+        if ($scope.progressBar.percent <= 90 && !$scope.item.fullTextFound) {
+          $scope.progressBar.percent = $scope.progressBar.percent + 10;
+          $scope.progressBar.text = "Found copy in library";
+        }
+
+      }
+    };
+
+    responder.handleError = function(data) {
+      console.log('Handling error event, data: ' + data);
+    };
+
+    return responder;
+  };
 
 
     $scope.$parent.navState.currentPage = 'ourl';
@@ -124,7 +179,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     $scope.item.query = url.substr(url.indexOf('?') + 1, url.length);
     citationService.initCitation($scope.item);
     
-    listener.listen(socket, $scope);
+    listener.listen(socket, initEventResponder(), $scope.item.query);
 
     /**
      * Handle changeView event broadcast from the root scope
