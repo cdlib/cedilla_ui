@@ -13,7 +13,7 @@ var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
 cdlaControllers.controller('MainCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
     $scope.navState = {'currentPage': 'home'};
     $scope.changeView = function(viewName) {
-      //console.log("changing view to " + viewName);
+      // console.log("changing view to " + viewName);
       $rootScope.$broadcast('changeView', viewName);
     };
   }]);
@@ -59,7 +59,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
 
     /**
      * 
-     * Factory method for the viewState object
+     * Factory function for the viewState object
      */
     var initViewState = function() {
       return {
@@ -82,7 +82,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
 
     /*
      * 
-     * Factory method for the progressBar object.
+     * Factory function for the progressBar object.
      */
     var initProgressBar = function() {
       return {percent: 15, text: 'Looking...', clearVar: undefined,
@@ -106,24 +106,24 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
 
     /**
      * 
-     * Factory method for the item object.
+     * Factory function for the item object.
      */
     var initItem = function() {
       return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], error: '', fullTextFound: false, };
     };
     
 /**
- * Responder changes the model based on events in the EventListener.
+ * Responder changes the model based on events in the cdlaSocketListener.
  */
 var initEventResponder = function() {
     var responder = {};
 
     responder.handleComplete = function() {
       if (!$scope.item.fullTextFound) {
-        console.log("complete event, changing to options");
+        //console.log("complete event, changing to options");
         $scope.changeView("options");
       } else {
-        console.log("complete event, changing to fulltext");
+        //console.log("complete event, changing to fulltext");
         $scope.changeView("fullText");
       }
     };
