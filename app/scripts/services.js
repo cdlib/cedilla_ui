@@ -9,66 +9,34 @@ var cdlaServices = angular.module('cdlaServices', ['lodash', 'handlebars', 'cdla
 
 /**
  * Socket listener listens on a socket and updates the model.
- * 
- * TODO: Separate display code into its own service.
  *
  */
-cdlaServices.factory('cdlaSocketListener', ['$sce', 'cdlaCitation', 'cdlaCitationFormatter', function($sce, cdlaCitationService, citationFormatter) {
+cdlaServices.factory('cdlaSocketListener', [function() {
     var listener = {};
-    listener.listen = function(socket, scope) {
-      socket.emit('openurl', scope.item.query);
-      console.log('emitted openurl client event with params ' + scope.item.query);
+    listener.listen = function(socket, responder, query) {
+      socket.emit('openurl', query);
+      console.log('emitted openurl client event with params ' + query);
 
       socket.on('complete', function() {
-        if (!scope.item.fullTextFound) {
-          console.log("complete event, changing to options");
-          scope.changeView("options");
-        } else {
-          console.log("complete event, changing to fulltext");
-          scope.changeView("fullText");
-        }
+        responder.handleComplete();
       });
 
       socket.on('citation', function(data) {
-        var citationEvent = JSON.parse(data);
-        cdlaCitationService.mergeCitation(scope.item.citation, citationEvent.citation, false);
-        scope.item.displayCitation = citationFormatter.toDisplayCitation(scope.item.citation);
-        scope.item.citationEvents.push(citationEvent);
-        if (scope.progressBar.percent <= 90 && !scope.item.fullTextFound) {
-          scope.progressBar.percent += 5;
-          scope.progressBar.text = "Enhancing citation";
-        }
+        responder.handleCitation(data);
       });
 
       socket.on('resource', function(data) {
-        var newResource = JSON.parse(data);
-        scope.item.resources.push(newResource.resource);
-        if (newResource.resource.format === 'electronic') {
-          newResource.resource.target = $sce.trustAsResourceUrl(newResource.resource.target);
-          scope.item.eResources.push(newResource.resource);
-          if (!scope.item.fullTextFound) {
-            scope.progressBar.text = "Loading electronic resource";
-            scope.progressBar.lastInch();
-            scope.viewState.displayTargets.push(newResource.resource);
-            scope.item.fullTextFound = true;
-          }
-        } else {
-          if (scope.progressBar.percent <= 90 && !scope.item.fullTextFound) {
-            scope.progressBar.percent = scope.progressBar.percent + 10;
-            scope.progressBar.text = "Found copy in library";
-          }
-
-        }
+        responder.handleResource(data);
       });
 
       socket.on('error', function(data) {
-        console.log('Handling error event, data: ' + data);
-        scope.error = data;
+        responder.handleError(data);
       });
     };
 
     return listener;
   }]);
+
 
 cdlaServices.factory('cdlaSocket', ['socketFactory', 'cdlaProperties', function(socketFactory, properties) {
     return socketFactory({
