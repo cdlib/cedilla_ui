@@ -61,12 +61,13 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
      */
     var initViewState = function() {
       var vwState = {};
-      var currentState = {showDebug: false, showFullText: false, showOptions: false, showWait: true, fullTextIndex: 0, displayTargets: []};
-      vwState.showDebug = currentState.showDebug;
-      vwState.showOptions = currentState.showOptions;
-      vwState.showWait = currentState.showWait;
-      vwState.fullTextIndex = currentState.fullTextIndex;
-      vwState.displayTargets = currentState.displayTargets;
+      
+      vwState.showDebug = false;
+      vwState.showFullText = false;
+      vwState.showOptions = false;
+      vwState.showWait = true;
+      vwState.fullTextIndex = 0;
+      vwState.displayTargets = [];
       vwState.quote = cdlaQuoter.getRandomQuote();
 
       vwState.changeView = function(viewName) {
