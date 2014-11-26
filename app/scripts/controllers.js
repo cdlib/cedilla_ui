@@ -10,12 +10,8 @@ var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
 /**
  * Main controller of the application.
  */
-cdlaControllers.controller('MainCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
+cdlaControllers.controller('MainCtrl', ['$scope', function($scope) {
     $scope.navState = {'currentPage': 'home'};
-    $scope.changeView = function(viewName) {
-      // console.log("changing view to " + viewName);
-      $rootScope.$broadcast('changeView', viewName);
-    };
   }]);
 
 /**
@@ -52,7 +48,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
     // in Safari, Chrome, and Firefox
     $window.displayFulltext = function() {
       if (loadCounter > 0) {
-        $scope.changeView("fullText");
+        $scope.viewState.changeView("fullText");
         loadCounter = 0;
       } else {
         loadCounter = loadCounter + 1;
@@ -147,11 +143,9 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
 
       responder.handleComplete = function() {
         if (!$scope.item.fullTextFound) {
-          //console.log("complete event, changing to options");
-          $scope.changeView("options");
+          $scope.viewState.changeView("options");
         } else {
-          //console.log("complete event, changing to fulltext");
-          $scope.changeView("fullText");
+          $scope.viewState.changeView("fullText");
         }
       };
 
@@ -197,21 +191,13 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
 
     $scope.$parent.navState.currentPage = 'ourl';
     $scope.viewState = initViewState();
-    // TODO -- give the parent scope only the data it needs
-    // not the whole viewState for this page
-    $scope.$parent.navState.viewState = $scope.viewState;
     $scope.item = initItem();
     $scope.progressBar = initProgressBar();
     var url = $window.location.toString();
     $scope.item.query = url.substr(url.indexOf('?') + 1, url.length);
+    // TODO -- remove initial & in query?
     citationService.initCitation($scope.item);
 
     listener.listen(initEventResponder(), $scope.item.query);
 
-    /**
-     * Handle changeView event broadcast from the root scope
-     */
-    $scope.$on('changeView', function(event, viewName) {
-      $scope.viewState.changeView(viewName);
-    });
   }]);
