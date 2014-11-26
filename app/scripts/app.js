@@ -14,7 +14,6 @@ var cdlaApp = angular
     'ngTouch',
     'btford.socket-io',
     'lodash',
-    'handlebars',
     'cdlaConfig',
     'cdlaQuotes',
     'cdlaDirectives',
@@ -51,12 +50,6 @@ var lodash = angular.module('lodash', []);
 
 lodash.factory('_', function() {
   return window._;
-});
-
-var handlebars = angular.module('handlebars', []);
-
-handlebars.factory('Handlebars', function() {
-  return window.Handlebars;
 });
 
 

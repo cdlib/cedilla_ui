@@ -61,3 +61,29 @@ describe('Controller: TestCtrl', function() {
 
 });
 
+
+describe('Controller: OurlCtrl', function() {
+
+  beforeEach(module('cdlaControllers'));
+  beforeEach(module('btford.socket-io'));
+  beforeEach(module('cdlaServices'));
+  beforeEach(module('cdlaQuotes'));
+
+
+  var OurlCtrl, MainCtrl;
+  var mainScope, childScope;
+
+  beforeEach(inject(function($controller, $rootScope) {
+    mainScope = $rootScope.$new();
+    MainCtrl = $controller('MainCtrl', {$scope: mainScope});
+    childScope = mainScope.$new();
+    OurlCtrl = $controller('OurlCtrl', {$scope: childScope});
+  }));
+
+  it('should be on the ourl page', function() {
+    expect(childScope.$parent.navState.currentPage).toBe('ourl');
+  });
+
+});
+
+
