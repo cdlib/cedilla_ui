@@ -55,7 +55,7 @@ describe('Controller: TestCtrl', function() {
     TestCtrl = $controller('TestCtrl', {$scope: childScope});
   }));
 
-  it('should be on the test', function() {
+  it('should be on the test page', function() {
     expect(childScope.$parent.navState.currentPage).toBe('test');
   });
 
