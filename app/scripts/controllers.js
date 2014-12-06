@@ -175,7 +175,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
       responder.handleResource = function(data) {
         var newResource = JSON.parse(data);
         $scope.item.resources.push(newResource.resource);
-        if (newResource.resource.format === 'electronic') {
+        if (newResource.resource.format === 'electronic' && newResource.resource.source) {
           newResource.resource.target = $sce.trustAsResourceUrl(newResource.resource.target);
           $scope.item.eResources.push(newResource.resource);
           if (!$scope.item.fullTextFound) {
@@ -192,7 +192,6 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
             $scope.progressBar.percent = $scope.progressBar.percent + 10;
             $scope.progressBar.text = "Found copy in library";
           }
-
         }
       };
 
