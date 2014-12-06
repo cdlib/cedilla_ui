@@ -61,7 +61,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
      */
     var initViewState = function() {
       var vwState = {};
-      
+
       vwState.showDebug = false;
       vwState.showFullText = false;
       vwState.showOptions = false;
@@ -93,13 +93,24 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
         }
       };
 
+      /**
+       * When there are multiple options for displaying fulltext,
+       * changes which fulltext window is displayed.
+       * 
+       * If the fulltext is not in the displayTargets array yet, then 
+       * insert it in the array at the position occupied by the placeholder.
+       */
       vwState.switchFullTextDisplay = function(index) {
-        if (index > this.displayTargets.length - 1) {
+        if (!(this.displayTargets[index].target)) {
           this.displayTargets[index] = $scope.item.eResources[index];
         }
         this.fullTextIndex = index;
         this.changeView('fullText');
+        
+        console.log("Switching fulltext eResources = " + JSON.stringify($scope.item.eResources));
+        console.log("displayTargets = " + JSON.stringify(this.displayTargets));
       };
+
 
       return vwState;
     };
@@ -172,6 +183,9 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
             $scope.progressBar.lastInch();
             $scope.viewState.displayTargets.push(newResource.resource);
             $scope.item.fullTextFound = true;
+          } else {
+            // add a placeholder to keep the two lists in synch
+            $scope.viewState.displayTargets.push({target: ''});
           }
         } else {
           if ($scope.progressBar.percent <= 90 && !$scope.item.fullTextFound) {

@@ -18,7 +18,6 @@ cdlaFilters.filter('digitalLinks', function() {
     }
     return filterItems;
   };
-
 });
 
 cdlaFilters.filter('printHoldings', function() {
@@ -34,5 +33,19 @@ cdlaFilters.filter('printHoldings', function() {
     }
     return filterItems;
   };
+});
 
+cdlaFilters.filter('hasValue', function() {
+  return function(items) {
+    //console.log('got list of length ' + items.length);
+    var filterItems = [];
+    var i;
+    for (i = 0; i < items.length; i++) {
+      //console.log('checking item ' + i + JSON.stringify(items[i]));
+      if (!(typeof items[i] == 'undefined')) {
+        filterItems.push(items[i]);
+      }
+    }
+    return filterItems;
+  };
 });
