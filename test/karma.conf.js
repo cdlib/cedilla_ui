@@ -10,6 +10,9 @@ module.exports = function(config) {
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
 
+    // timeout
+    browserNoActivityTimeout: 100000,
+
     // base path, that will be used to resolve files and exclude
     basePath: '../',
 

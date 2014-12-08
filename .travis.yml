@@ -6,7 +6,3 @@ before_script:
   - 'npm install -g bower grunt-cli'
   - 'bower install'
   - 'mv app/scripts/config.example app/scripts/config.js'
-  - 'sudo rm -rf /usr/local/phantomjs'
-  - 'curl -L -O https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2'
-  - 'tar xjf phantomjs-1.9.7-linux-x86_64.tar.bz2'
-  - 'sudo mv phantomjs-1.9.7-linux-x86_64 /usr/local/phantomjs'
