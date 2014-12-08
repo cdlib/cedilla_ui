@@ -5,15 +5,15 @@
  * Services are injected into controllers or into other services 
  */
 
-var cdlaServices = angular.module('cdlaServices', ['lodash', 'handlebars', 'cdlaConfig']);
+var cdlaServices = angular.module('cdlaServices', ['lodash', 'cdlaConfig']);
 
 /**
  * Socket listener listens on a socket and updates the model.
  *
  */
-cdlaServices.factory('cdlaSocketListener', [function() {
+cdlaServices.factory('cdlaSocketListener', ['cdlaSocket', function(socket) {
     var listener = {};
-    listener.listen = function(socket, responder, query) {
+    listener.listen = function(responder, query) {
       socket.emit('openurl', query);
       console.log('emitted openurl client event with params ' + query);
 

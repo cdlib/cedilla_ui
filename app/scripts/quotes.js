@@ -28,7 +28,7 @@ quotes.push({quote: 'Don\'t join the book burners. Don\'t think you\'re going to
 quotes.push({quote: 'An original idea. That can\'t be too hard. The library must be full of them.', author: 'Stephen Fry'});
 quotes.push({quote: 'When I got [my] library card, that was when my life began.', author: 'Rita Mae Brown'});
 quotes.push({quote: 'Libraries should be open to all - except the censor.', author: 'John F. Kennedy'});
-quotes.push({quote: 'You see, I don\'t belive that libraries should be drab places where people sit in silence, that has been the main reason for our policy of employing wild animals as librarians.', author: 'Graham Chapman'});
+quotes.push({quote: 'You see, I don\'t believe that libraries should be drab places where people sit in silence, that has been the main reason for our policy of employing wild animals as librarians.', author: 'Graham Chapman'});
 quotes.push({quote: 'In my opinion, libraries and librarians are needed more than ever, and the literature is noting this more often. In the development of MARC, it was clear to me that we needed two talents, i.e., computer expertise and library expertise. Neither talent could have succeeded alone. We need this more than ever today. Librarians must become computer literate so that they can understand the relationship between the technology applied and the discipline of their profession.', author: 'Henriette Avram'});
 
 var randomInt = function(min, max) {

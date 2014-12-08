@@ -55,9 +55,35 @@ describe('Controller: TestCtrl', function() {
     TestCtrl = $controller('TestCtrl', {$scope: childScope});
   }));
 
-  it('should be on the test', function() {
+  it('should be on the test page', function() {
     expect(childScope.$parent.navState.currentPage).toBe('test');
   });
 
 });
+
+
+describe('Controller: OurlCtrl', function() {
+
+  beforeEach(module('cdlaControllers'));
+  beforeEach(module('btford.socket-io'));
+  beforeEach(module('cdlaServices'));
+  beforeEach(module('cdlaQuotes'));
+
+
+  var OurlCtrl, MainCtrl;
+  var mainScope, childScope;
+
+  beforeEach(inject(function($controller, $rootScope) {
+    mainScope = $rootScope.$new();
+    MainCtrl = $controller('MainCtrl', {$scope: mainScope});
+    childScope = mainScope.$new();
+    OurlCtrl = $controller('OurlCtrl', {$scope: childScope});
+  }));
+
+  it('should be on the ourl page', function() {
+    expect(childScope.$parent.navState.currentPage).toBe('ourl');
+  });
+
+});
+
 

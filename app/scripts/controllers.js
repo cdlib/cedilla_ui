@@ -10,12 +10,8 @@ var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
 /**
  * Main controller of the application.
  */
-cdlaControllers.controller('MainCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
+cdlaControllers.controller('MainCtrl', ['$scope', function($scope) {
     $scope.navState = {'currentPage': 'home'};
-    $scope.changeView = function(viewName) {
-      // console.log("changing view to " + viewName);
-      $rootScope.$broadcast('changeView', viewName);
-    };
   }]);
 
 /**
@@ -39,8 +35,10 @@ cdlaControllers.controller('TestCtrl', ['$scope', function($scope) {
  * Connects to the cedilla aggregator and gets
  * Streaming resources via socket.io
  */
-cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdlaSocketListener', 'cdlaCitation', 'cdlaCitationFormatter', '$sce', 'cdlaQuoter',
-  function($scope, $window, socket, listener, citationService, citationFormatter, $sce, cdlaQuoter) {
+cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener', 'cdlaCitation', 'cdlaCitationFormatter', '$sce', 'cdlaQuoter',
+  function($scope, $window, listener, citationService, citationFormatter, $sce, cdlaQuoter) {
+
+    $scope.$parent.navState.currentPage = 'ourl';
 
     var loadCounter = 0;
 
@@ -50,7 +48,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     // in Safari, Chrome, and Firefox
     $window.displayFulltext = function() {
       if (loadCounter > 0) {
-        $scope.changeView("fullText");
+        $scope.viewState.changeView("fullText");
         loadCounter = 0;
       } else {
         loadCounter = loadCounter + 1;
@@ -62,22 +60,59 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
      * Factory function for the viewState object
      */
     var initViewState = function() {
-      return {
-        showDebug: false, 
-        showFullText: false, 
-        showOptions: false, 
-        showWait: true, 
-        fullTextIndex: 0, 
-        displayTargets: [],
-        quote: cdlaQuoter.getRandomQuote(),
-        switchFullTextDisplay: function(index) {
-          if (index > this.displayTargets.length - 1) {
-            this.displayTargets[index] = $scope.item.eResources[index];
-          }
-          this.fullTextIndex = index;
-          $scope.changeView('fullText');
+      var vwState = {};
+
+      vwState.showDebug = false;
+      vwState.showFullText = false;
+      vwState.showOptions = false;
+      vwState.showWait = true;
+      vwState.fullTextIndex = 0;
+      vwState.displayTargets = [];
+      vwState.quote = cdlaQuoter.getRandomQuote();
+
+      vwState.changeView = function(viewName) {
+        switch (viewName) {
+          case 'fullText':
+            this.showFullText = true;
+            this.showOptions = false;
+            this.showWait = false;
+            break;
+          case 'options':
+            this.showOptions = true;
+            this.showFullText = false;
+            this.showWait = false;
+            break;
+          case 'wait':
+            this.showWait = true;
+            this.showOptions = false;
+            this.showFullText = false;
+            break;
+          case 'debug':
+            this.showDebug = true;
+            break;
         }
       };
+
+      /**
+       * When there are multiple options for displaying fulltext,
+       * changes which fulltext window is displayed.
+       * 
+       * If the fulltext is not in the displayTargets array yet, then 
+       * insert it in the array at the position occupied by the placeholder.
+       */
+      vwState.switchFullTextDisplay = function(index) {
+        if (!(this.displayTargets[index].target)) {
+          this.displayTargets[index] = $scope.item.eResources[index];
+        }
+        this.fullTextIndex = index;
+        this.changeView('fullText');
+        
+        console.log("Switching fulltext eResources = " + JSON.stringify($scope.item.eResources));
+        console.log("displayTargets = " + JSON.stringify(this.displayTargets));
+      };
+
+
+      return vwState;
     };
 
     /*
@@ -111,99 +146,72 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocket', 'cdla
     var initItem = function() {
       return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], error: '', fullTextFound: false, };
     };
-    
-/**
- * Responder changes the model based on events in the cdlaSocketListener.
- */
-var initEventResponder = function() {
-    var responder = {};
 
-    responder.handleComplete = function() {
-      if (!$scope.item.fullTextFound) {
-        //console.log("complete event, changing to options");
-        $scope.changeView("options");
-      } else {
-        //console.log("complete event, changing to fulltext");
-        $scope.changeView("fullText");
-      }
-    };
+    /**
+     * Responder changes the model based on events in the cdlaSocketListener.
+     */
+    var initEventResponder = function() {
+      var responder = {};
 
-    responder.handleCitation = function(data) {
-      var citationEvent = JSON.parse(data);
-      citationService.mergeCitation($scope.item.citation, citationEvent.citation, false);
-      $scope.item.displayCitation = citationFormatter.toDisplayCitation($scope.item.citation);
-      $scope.item.citationEvents.push(citationEvent);
-      if ($scope.progressBar.percent <= 90 && !$scope.item.fullTextFound) {
-        $scope.progressBar.percent += 5;
-        $scope.progressBar.text = "Enhancing citation";
-      }
-    };
-
-    responder.handleResource = function(data) {
-      var newResource = JSON.parse(data);
-      $scope.item.resources.push(newResource.resource);
-      if (newResource.resource.format === 'electronic') {
-        newResource.resource.target = $sce.trustAsResourceUrl(newResource.resource.target);
-        $scope.item.eResources.push(newResource.resource);
+      responder.handleComplete = function() {
         if (!$scope.item.fullTextFound) {
-          $scope.progressBar.text = "Loading electronic resource";
-          $scope.progressBar.lastInch();
-          $scope.viewState.displayTargets.push(newResource.resource);
-          $scope.item.fullTextFound = true;
+          $scope.viewState.changeView("options");
+        } else {
+          $scope.viewState.changeView("fullText");
         }
-      } else {
+      };
+
+      responder.handleCitation = function(data) {
+        var citationEvent = JSON.parse(data);
+        citationService.mergeCitation($scope.item.citation, citationEvent.citation, false);
+        $scope.item.displayCitation = citationFormatter.toDisplayCitation($scope.item.citation);
+        $scope.item.citationEvents.push(citationEvent);
         if ($scope.progressBar.percent <= 90 && !$scope.item.fullTextFound) {
-          $scope.progressBar.percent = $scope.progressBar.percent + 10;
-          $scope.progressBar.text = "Found copy in library";
+          $scope.progressBar.percent += 5;
+          $scope.progressBar.text = "Enhancing citation";
         }
+      };
 
-      }
+      responder.handleResource = function(data) {
+        var newResource = JSON.parse(data);
+        $scope.item.resources.push(newResource.resource);
+        if (newResource.resource.format === 'electronic' && newResource.resource.source) {
+          newResource.resource.target = $sce.trustAsResourceUrl(newResource.resource.target);
+          $scope.item.eResources.push(newResource.resource);
+          if (!$scope.item.fullTextFound) {
+            $scope.progressBar.text = "Loading electronic resource";
+            $scope.progressBar.lastInch();
+            $scope.viewState.displayTargets.push(newResource.resource);
+            $scope.item.fullTextFound = true;
+          } else {
+            // add a placeholder to keep the two lists in synch
+            $scope.viewState.displayTargets.push({target: ''});
+          }
+        } else {
+          if ($scope.progressBar.percent <= 90 && !$scope.item.fullTextFound) {
+            $scope.progressBar.percent = $scope.progressBar.percent + 10;
+            $scope.progressBar.text = "Found copy in library";
+          }
+        }
+      };
+
+      responder.handleError = function(data) {
+        console.log('Handling error event, data: ' + data);
+      };
+
+      return responder;
     };
-
-    responder.handleError = function(data) {
-      console.log('Handling error event, data: ' + data);
-    };
-
-    return responder;
-  };
 
 
     $scope.$parent.navState.currentPage = 'ourl';
     $scope.viewState = initViewState();
-    // TODO -- give the parent scope only the data it needs
-    // not the whole viewState for this page
-    $scope.$parent.navState.viewState = $scope.viewState;
     $scope.item = initItem();
     $scope.progressBar = initProgressBar();
     var url = $window.location.toString();
     $scope.item.query = url.substr(url.indexOf('?') + 1, url.length);
+    // TODO -- remove initial & in query?
     citationService.initCitation($scope.item);
-    
-    listener.listen(socket, initEventResponder(), $scope.item.query);
 
-    /**
-     * Handle changeView event broadcast from the root scope
-     */ 
-    $scope.$on('changeView', function(event, data) {
-      switch (data) {
-        case 'fullText':
-          $scope.viewState.showFullText = true;
-          $scope.viewState.showOptions = false;
-          $scope.viewState.showWait = false;
-          break;
-        case 'options':
-          $scope.viewState.showOptions = true;
-          $scope.viewState.showFullText = false;
-          $scope.viewState.showWait = false;
-          break;
-        case 'wait':
-          $scope.viewState.showWait = true;
-          $scope.viewState.showOptions = false;
-          $scope.viewState.showFullText = false;
-          break;
-        case 'debug':
-          $scope.viewState.showDebug = true;
-          break;
-      }
-    });
+    listener.listen(initEventResponder(), $scope.item.query);
+
   }]);

@@ -10,6 +10,9 @@ module.exports = function(config) {
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
 
+    // timeout
+    browserNoActivityTimeout: 100000,
+
     // base path, that will be used to resolve files and exclude
     basePath: '../',
 
@@ -18,6 +21,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'test/lib/socket.io.js',
       'bower_components/jquery/dist/jquery.js',
       'bower_components/angular/angular.js',
       'bower_components/lodash/dist/lodash.compat.js',
