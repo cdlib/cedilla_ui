@@ -29,6 +29,13 @@ Cedilla UI depends on node.js (for package management using npm), Bower, Grunt, 
 1. grunt test
 1. grunt serve
 
+#### Protractor tests
+
+Because the webdriver server running the Protractor (Selenium) tests would need to connect to an aggregator 
+it is impractical to run the tests in Travis.
+
+The protractor tests can be run from the Cedilla UI project using the command 'grunt protractor:run'.
+
 ### License
 
 The Cedilla UI project adheres to the [BSD 3 Clause](./LICENSE.md) license agreement.
