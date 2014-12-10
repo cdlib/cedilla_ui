@@ -1,5 +1,5 @@
 exports.config = {
-//  seleniumAddress: 'http://localhost:4444/wd/hub',
+  //  seleniumAddress: 'http://localhost:4444/wd/hub',
   specs: ['protractor-spec/*_spec.js'],
-  baseUrl: 'http://localhost:9001'
+  baseUrl: 'http://localhost:18880/#'
 };
