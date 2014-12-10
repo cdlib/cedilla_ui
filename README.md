@@ -34,7 +34,10 @@ Cedilla UI depends on node.js (for package management using npm), Bower, Grunt, 
 Because the webdriver server running the Protractor (Selenium) tests would need to connect to an aggregator 
 it is impractical to run the tests in Travis.
 
-The protractor tests can be run from the Cedilla UI project using the command 'grunt protractor:run'.
+The protractor tests can be run from the Cedilla UI project using the commands:
+
+grunt serve
+grunt protractor:run
 
 ### License
 
