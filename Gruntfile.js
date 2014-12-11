@@ -384,7 +384,16 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    protractor: {
+      options: {
+        keepAlive: true,
+        configFile: 'test/protractor.conf.js'
+      },
+      run: {}
     }
+
   });
 
 
