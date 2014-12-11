@@ -391,7 +391,11 @@ module.exports = function (grunt) {
         keepAlive: true,
         configFile: 'test/protractor.conf.js'
       },
-      run: {}
+      run: {
+      },
+      test: {
+        configFile: 'test/protractor-test.conf.js'
+      }
     }
 
   });
@@ -422,7 +426,8 @@ module.exports = function (grunt) {
     //'concurrent:test',
     //'autoprefixer',
     //'connect:test',
-    'karma'
+    'karma',
+    'protractor:test'
   ]);
 
   grunt.registerTask('build', [
