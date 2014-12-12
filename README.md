@@ -36,7 +36,7 @@ it is impractical to run the tests in Travis.
 
 The protractor tests can be run from the Cedilla UI project using the commands:
 
-grunt serve
+grunt serve &
 grunt protractor:run
 
 ### License
