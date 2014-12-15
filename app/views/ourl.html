@@ -12,11 +12,16 @@
         <div id='source_display_field' class='row'>
             <div class="col-md-8">
                 <span>{{item.displayCitation.authors}}</span>
-                <span>{{item.displayCitation.container_title}}</span>
             </div>
             <div class="col-md-4"></div>
         </div>
         <div id="citation_details">
+            <div class="row" ng-show="item.displayCitation.container_title">
+                <div class='col-md-8'>
+                    {{item.displayCitation.container_title}}
+                </div>
+                <div class="col-md-4"></div>
+            </div>
             <div class="row" ng-show="item.displayCitation.volume">
                 <div class='col-md-8'>
                     <strong>Volume:&nbsp;</strong>{{item.displayCitation.volume}}
@@ -48,7 +53,7 @@
                         </ul>
                     </li>
                 </ul>
-                <ul class="nav nav-pills pull-right">
+                <ul class="nav nav-pills pull-right pull_right_adjust">
                     <li><a href ng-show="viewState.showFullText" ng-click="viewState.changeView('options')">Show All</a></li>
                 </ul>
             </div>
