@@ -388,10 +388,11 @@ module.exports = function (grunt) {
 
     protractor: {
       options: {
-        keepAlive: true,
+        keepAlive: false,
         configFile: 'test/protractor.conf.js'
       },
-      run: {}
+      // run locally using a browser window
+      local: {}
     }
 
   });
@@ -423,6 +424,15 @@ module.exports = function (grunt) {
     //'autoprefixer',
     //'connect:test',
     'karma'
+  ]);
+
+  grunt.registerTask('test-local', [
+    'clean:server',
+    //'concurrent:test',
+    //'autoprefixer',
+    //'connect:test',
+    'karma',
+    'protractor:local'
   ]);
 
   grunt.registerTask('build', [
