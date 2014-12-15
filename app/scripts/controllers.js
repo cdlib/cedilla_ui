@@ -12,6 +12,16 @@ var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
  */
 cdlaControllers.controller('MainCtrl', ['$scope', function($scope) {
     $scope.navState = {'currentPage': 'home'};
+    $scope.bodyClass = '';
+    $scope.$on('changeView', function(event, data) {
+      // console.log(event);
+      if (data === 'fullText') {
+        $scope.bodyClass = 'noscroll';
+      } else {
+        $scope.bodyClass = '';
+      }
+    });
+
   }]);
 
 /**
@@ -91,6 +101,8 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
             this.showDebug = true;
             break;
         }
+        // emit an event so that the main controller can react
+        $scope.$emit('changeView', viewName);
       };
 
       /**
@@ -106,7 +118,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
         }
         this.fullTextIndex = index;
         this.changeView('fullText');
-        
+
         console.log("Switching fulltext eResources = " + JSON.stringify($scope.item.eResources));
         console.log("displayTargets = " + JSON.stringify(this.displayTargets));
       };
