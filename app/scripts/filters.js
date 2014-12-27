@@ -42,7 +42,7 @@ cdlaFilters.filter('hasValue', function() {
     var i;
     for (i = 0; i < items.length; i++) {
       //console.log('checking item ' + i + JSON.stringify(items[i]));
-      if (!(typeof items[i] == 'undefined')) {
+      if (typeof items[i] !== 'undefined') {
         filterItems.push(items[i]);
       }
     }

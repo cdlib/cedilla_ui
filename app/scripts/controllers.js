@@ -10,9 +10,10 @@ var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
 /**
  * Main controller of the application.
  */
-cdlaControllers.controller('MainCtrl', ['$scope', function($scope) {
+cdlaControllers.controller('MainCtrl', ['$scope', '$sce', 'cdlaProperties', function($scope, $sce, cdlaProperties) {
     $scope.navState = {'currentPage': 'home'};
     $scope.bodyClass = '';
+    $scope.socketIOAddress = $sce.trustAsResourceUrl(cdlaProperties.SOCKETIO_ADDRESS);
     $scope.$on('changeView', function(event, data) {
       // console.log(event);
       if (data === 'fullText') {
