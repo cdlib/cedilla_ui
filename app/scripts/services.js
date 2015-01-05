@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Services module. All cdla_ui services go here.
+ * Services module. Most cdla_ui services go here.
  * Services are injected into controllers or into other services 
  */
 
