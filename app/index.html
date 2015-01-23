@@ -14,12 +14,11 @@
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
     </head>
-    <body ng-app="cdlaUiApp" ng-controller = "MainCtrl"     ng-class="bodyClass">
+    <body ng-app="cdlaUiApp" ng-controller = "MainCtrl" ng-class="bodyClass">
         <!---[if lt IE 7]>
           <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <!-- Add your site or application content here -->
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-10"></div>
@@ -34,8 +33,9 @@
                 <ul id="footer_buttons" class="nav nav-pills pull-right">
                     <li id="home_button" ng-class="{'active': navState.currentPage === 'home'}" ng-click="navState.currentPage = 'home'"><a id="home_linkl" role="button" ng-href="#/main">Home</a></li>
                     <li id="test_links_button" ng-class="{'active': navState.currentPage === 'test'}" ng-click="navState.currentPage = 'test'"><a id="test_links_link" role="button" ng-href="#/test">Test Links</a></li>
+                    <li id="about_button" ng-class="{'active': navState.currentPage === 'about'}" ng-click="navState.currentPage = 'about'"><a id="about_link" role="button" ng-href="#/about">About</a></li>
                 </ul>
-                <p class="text-muted">Çedilla Abominable Release</p>
+                <p class="text-muted">Çedilla {{sprint_name}}</p>
             </div>
         </div>
 
@@ -45,9 +45,6 @@
         <script src="bower_components/json3/lib/json3.js"></script>
         <![endif]-->
         <!-- endbuild -->
-
-
-        <script src="http://cdla-api-stg.cdlib.org:3005/socket.io/socket.io.js"></script>
 
         <!-- build:js(.) scripts/vendor.js -->
         <!-- bower:js -->
@@ -85,5 +82,7 @@
         <script src="scripts/services.js"></script>
         <script src="scripts/filters.js"></script>
         <!-- endbuild -->
+        
+        <script src="http://cdla-api-stg.cdlib.org:3005/socket.io/socket.io.js"></script>
     </body>
 </html>
