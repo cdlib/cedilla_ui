@@ -14,6 +14,7 @@ cdlaControllers.controller('MainCtrl', ['$scope', '$sce', 'cdlaProperties', func
     $scope.navState = {'currentPage': 'home'};
     $scope.bodyClass = '';
     $scope.socketIOAddress = $sce.trustAsResourceUrl(cdlaProperties.SOCKETIO_ADDRESS);
+    $scope.sprint_name = cdlaProperties.SPRINT_NAME;
     $scope.$on('changeView', function(event, data) {
       // console.log(event);
       if (data === 'fullText') {
@@ -31,6 +32,18 @@ cdlaControllers.controller('MainCtrl', ['$scope', '$sce', 'cdlaProperties', func
 cdlaControllers.controller('HomeCtrl', ['$scope', function($scope) {
     //console.log('Home controller');
     $scope.$parent.navState.currentPage = 'home';
+  }]);
+
+/**
+ * Controller for the About page
+ */
+cdlaControllers.controller('AboutCtrl', ['$scope', 'cdlaProperties', function($scope, properties) {
+    console.log('About controller');
+    $scope.$parent.navState.currentPage = 'about';
+    $scope.version = properties.VERSION;
+    $scope.image = properties.SPRINT_IMAGE;
+    $scope.sprint_name = properties.SPRINT_NAME;
+    $scope.release_date = properties.RELEASE_DATE;
   }]);
 
 /**

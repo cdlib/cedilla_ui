@@ -36,6 +36,10 @@ var cdlaApp = angular
         templateUrl: 'views/ourl.html',
         controller: 'OurlCtrl'
       })
+      .when('/about', {
+        templateUrl: 'views/about.html',
+        controller: 'AboutCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
