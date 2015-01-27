@@ -170,7 +170,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
      * Factory function for the item object.
      */
     var initItem = function() {
-      return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], error: '', fullTextFound: false, };
+      return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], error: '', fullTextFound: false, holdingsFound: false};
     };
 
     /**
@@ -180,6 +180,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
       var responder = {};
 
       responder.handleComplete = function() {
+        $scope.complete = true;
         if (!$scope.item.fullTextFound) {
           $scope.viewState.changeView("options");
         } else {
@@ -214,6 +215,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
             $scope.viewState.displayTargets.push({target: ''});
           }
         } else {
+          $scope.holdingsFound = true;
           if ($scope.progressBar.percent <= 90 && !$scope.item.fullTextFound) {
             $scope.progressBar.percent = $scope.progressBar.percent + 10;
             $scope.progressBar.text = "Found copy in library";

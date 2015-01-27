@@ -71,11 +71,38 @@ body {
 
 #uc_libs {
     padding-bottom: 12px;
-    color: #007FD2;
+    //color: #007FD2;
 }
 
 .pull_right_adjust {
     padding-right: 24px;
+}
+
+.glyph_green {
+    color: #009900;
+    padding-right: 6pt;
+}
+
+.glyph_red {
+    color: #FF0000;
+    padding-right: 6pt;
+}
+
+.citation_title {
+    font-style: italic;
+}
+
+.button_list > li {
+    padding-bottom: 10pt;
+}
+
+.left_separated {
+    border-left: 1px solid #F6F6F6;
+}
+
+.top_separated {
+    border-top: 1px solid #F6F6F6;
+    padding-top: 6px;
 }
 
 /* end CDLA added */
