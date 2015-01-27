@@ -215,7 +215,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
             $scope.viewState.displayTargets.push({target: ''});
           }
         } else {
-          $scope.holdingsFound = true;
+          $scope.item.holdingsFound = true;
           if ($scope.progressBar.percent <= 90 && !$scope.item.fullTextFound) {
             $scope.progressBar.percent = $scope.progressBar.percent + 10;
             $scope.progressBar.text = "Found copy in library";

@@ -37,14 +37,14 @@
             </div>
         </div>
 
-        <div class="row" ng-show="viewState.showFullText">
-            <div class="col-md-9">
+        <div class="row" ng-show="complete">
+            <div class="col-md-9 col-sm-8">
                 <ul class="list-unstyled">
                     <li id="display_controls" class="dropdown" ng-show="navState.currentPage === 'ourl'">
                         <a href class="dropdown-toggle" data-toggle="dropdown" ng-show="!navState.viewState.showOptions && item.eResources.length > 1">
                             <span class="glyphicon glyphicon-ok-sign glyph_green"></span><span>Online versions ({{item.eResources.length}}) <b class="caret"></b></span>
                         </a>
-                        <span ng-show="!navState.viewState.showOptions && item.eResources.length === 0 && complete">
+                        <span ng-show="!navState.viewState.showOptions && !item.fullTextFound && complete">
                             <span class="glyphicon glyphicon-remove-sign glyph_red"></span><span>No online version found<b class="caret"></b></span>
                         </span>
                         <span ng-show="!navState.viewState.showOptions && item.eResources.length === 1 && complete">
@@ -59,16 +59,23 @@
                 </ul>
             </div>
 
-            <div class="col-md-3 left_separated">
+            <div class="col-md-3 col-sm-4 left_separated">
                 <ul class="list-unstyled button_list">
-                    <li ng-show = "holdingsFound">
+                    <li ng-show = "item.holdingsFound">
                         <span class="glyphicon glyphicon-ok-sign glyph_green"></span><span>Available on campus</span>
                     </li>
-                    <li ng-show = "!holdingsFound && complete">
+                    <li ng-show = "!item.holdingsFound">
                         <span class="glyphicon glyphicon-remove-sign glyph_red"></span><span>Not available on campus</span>
                     </li>
                     <li>
-                        <button id="show_all_button" type="button" class="btn btn-info" href ng-click="viewState.changeView('options')">Other options</button>
+                        <button id="show_all_button" type="button" class="btn btn-primary" href ng-click="viewState.changeView('options')" ng-show="viewState.showFullText">
+                            <span class="glyphicon glyphicon-list-alt">&nbsp;</span>
+                            Show other options
+                        </button>
+                        <button id="hide_options_button" type="button" class="btn btn-primary" href ng-click="viewState.changeView('fullText')" ng-show="viewState.showOptions">
+                            <span class="glyphicon glyphicon-remove">&nbsp;</span>
+                            Hide other options
+                        </button>
                     </li>
                 </ul>
             </div>
