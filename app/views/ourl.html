@@ -3,10 +3,10 @@
 
 <div id="citation_panel" class="container-fluid" ng-show="item.displayCitation">
 
-    <div class="panel panel_default" ng-show="item.displayCitation.container_title">
+    <div ng-show="item.displayCitation.container_title">
 
         <div class="row" id="citation_author_title">
-            <div class="col-lg-8 col-md-7 col-sm-6">
+            <div class="col-lg-8 col-md-7 col-sm-6 col-xs-10">
                 <ul class="list-unstyled">
                     <li id='title_display_field' class='citation_title' ng-show="item.displayCitation.title">
                         <span class='cite_field_val'>{{item.displayCitation.title}}</span>
@@ -89,7 +89,7 @@
 
 <div id ="wait_page" class="container-fluid" ng-class="{'hidden': !viewState.showWait}">
     <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+        <div class="col-lg-4 col-md-6 col-sm-8 col-xs-10./">
             <div class="progress">
                 <div id="progress_bar" class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="{{progressBar.percent}}" aria-valuemin="10" aria-valuemax="100" style="width: {{progressBar.percent}}%;">
                     {{progressBar.text}}
@@ -108,7 +108,7 @@
     </div>
 </div>
 
-<div id='fulltext' class="col-md-12 col-sm-12 col-lg-12" ng-show="viewState.showFullText" ng-repeat="resource in viewState.displayTargets">
+<div id='fulltext' class="container_full" ng-show="viewState.showFullText" ng-repeat="resource in viewState.displayTargets">
     <iframe class="ft_frame" src="{{resource.target}}" onLoad="displayFulltext()" ng-show="viewState.fullTextIndex === $index"></iframe>
 </div>
 

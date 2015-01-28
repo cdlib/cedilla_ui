@@ -25,18 +25,18 @@
                     <span id="uc_libs_name"><span class="glyphicon glyphicon-heart-empty"></span>&nbsp;UC Libraries</span>
                 </div>
             </div>
+        </div>
 
-            <div ng-view=""></div>
+        <div ng-view=""></div>
 
-            <div class="row footer">
-                <ul id="footer_buttons" class="nav nav-pills pull-right">
+        <div class="container-fluid">
+            <div class="footer nav ">
+                <ul id="footer_buttons" class="nav nav-pills pull-right pull_right_adjust">
                     <li id="home_button" ng-class="{'active': navState.currentPage === 'home'}" ng-click="navState.currentPage = 'home'"><a id="home_linkl" role="button" ng-href="#/main">Home</a></li>
                     <li id="test_links_button" ng-class="{'active': navState.currentPage === 'test'}" ng-click="navState.currentPage = 'test'"><a id="test_links_link" role="button" ng-href="#/test">Test Links</a></li>
                     <li id="about_button" ng-class="{'active': navState.currentPage === 'about'}" ng-click="navState.currentPage = 'about'"><a id="about_link" role="button" ng-href="#/about">About</a></li>
                 </ul>
-            </div>
-            <div class="row footer">
-                <span class="text-muted">Çedilla {{sprint_name}}</span>
+                <div class="text-muted nav pull-left pull_left_adjust">Çedilla {{sprint_name}}</div>
             </div>
         </div>
 
