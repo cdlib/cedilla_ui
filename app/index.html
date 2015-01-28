@@ -21,21 +21,22 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-9 col-sm-8"></div>
-                <div id="uc_libs" class="col-md-3 col-sm-4">
+                <div id="uc_libs" class="col-lg-2 col-lg-offset-10 col-md-3 col-md-offset-9 col-sm-4 col-sm-offset-8">
                     <span id="uc_libs_name"><span class="glyphicon glyphicon-heart-empty"></span>&nbsp;UC Libraries</span>
                 </div>
             </div>
 
             <div ng-view=""></div>
 
-            <div class="footer">
+            <div class="row footer">
                 <ul id="footer_buttons" class="nav nav-pills pull-right">
                     <li id="home_button" ng-class="{'active': navState.currentPage === 'home'}" ng-click="navState.currentPage = 'home'"><a id="home_linkl" role="button" ng-href="#/main">Home</a></li>
                     <li id="test_links_button" ng-class="{'active': navState.currentPage === 'test'}" ng-click="navState.currentPage = 'test'"><a id="test_links_link" role="button" ng-href="#/test">Test Links</a></li>
                     <li id="about_button" ng-class="{'active': navState.currentPage === 'about'}" ng-click="navState.currentPage = 'about'"><a id="about_link" role="button" ng-href="#/about">About</a></li>
                 </ul>
-                <p class="text-muted">Çedilla {{sprint_name}}</p>
+            </div>
+            <div class="row footer">
+                <span class="text-muted">Çedilla {{sprint_name}}</span>
             </div>
         </div>
 
@@ -82,7 +83,7 @@
         <script src="scripts/services.js"></script>
         <script src="scripts/filters.js"></script>
         <!-- endbuild -->
-        
+
         <script src="http://localhost:3005/socket.io/socket.io.js"></script>
     </body>
 </html>
