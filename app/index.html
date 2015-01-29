@@ -13,34 +13,8 @@
         <!-- build:css(.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
-    </head>
-    <body ng-app="cdlaUiApp" ng-controller = "MainCtrl" ng-class="bodyClass">
-        <!---[if lt IE 7]>
-          <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-
-        <div class="container-fluid">
-            <div class="row">
-                <div id="uc_libs" class="col-lg-2 col-lg-offset-10 col-md-3 col-md-offset-9 col-sm-4 col-sm-offset-8">
-                    <span id="uc_libs_name"><span class="glyphicon glyphicon-heart-empty"></span>&nbsp;UC Libraries</span>
-                </div>
-            </div>
-        </div>
-
-        <div ng-view=""></div>
-
-        <div class="container-fluid">
-            <div class="footer nav ">
-                <ul id="footer_buttons" class="nav nav-pills pull-right pull_right_adjust">
-                    <li id="home_button" ng-class="{'active': navState.currentPage === 'home'}" ng-click="navState.currentPage = 'home'"><a id="home_linkl" role="button" ng-href="#/main">Home</a></li>
-                    <li id="test_links_button" ng-class="{'active': navState.currentPage === 'test'}" ng-click="navState.currentPage = 'test'"><a id="test_links_link" role="button" ng-href="#/test">Test Links</a></li>
-                    <li id="about_button" ng-class="{'active': navState.currentPage === 'about'}" ng-click="navState.currentPage = 'about'"><a id="about_link" role="button" ng-href="#/about">About</a></li>
-                </ul>
-                <div class="text-muted nav pull-left pull_left_adjust">Çedilla {{sprint_name}}</div>
-            </div>
-        </div>
-
-        <!-- build:js(.) scripts/oldieshim.js -->
+        
+               <!-- build:js(.) scripts/oldieshim.js -->
         <!--[if lt IE 9]>
         <script src="bower_components/es5-shim/es5-shim.js"></script>
         <script src="bower_components/json3/lib/json3.js"></script>
@@ -49,8 +23,6 @@
         
 
         <!-- build:js(.) scripts/vendor.js -->
-        
-        <script src="http://localhost:3005/socket.io/socket.io.js"></script>
         
         <!-- bower:js -->
         <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -86,7 +58,34 @@
         <script src="scripts/quotes.js"></script>
         <script src="scripts/services.js"></script>
         <script src="scripts/filters.js"></script>
+        <script src="scripts/lib/socket.io.js"></script>
         <!-- endbuild -->
+    </head>
+    <body ng-app="cdlaUiApp" ng-controller = "MainCtrl" ng-class="bodyClass">
+        <!---[if lt IE 7]>
+          <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row">
+                <div id="uc_libs" class="col-lg-2 col-lg-offset-10 col-md-3 col-md-offset-9 col-sm-4 col-sm-offset-8">
+                    <span id="uc_libs_name"><span class="glyphicon glyphicon-heart-empty"></span>&nbsp;UC Libraries</span>
+                </div>
+            </div>
+        </div>
+
+        <div ng-view=""></div>
+
+        <div class="container-fluid">
+            <div class="footer nav ">
+                <ul id="footer_buttons" class="nav nav-pills pull-right pull_right_adjust">
+                    <li id="home_button" ng-class="{'active': navState.currentPage === 'home'}" ng-click="navState.currentPage = 'home'"><a id="home_linkl" role="button" ng-href="#/main">Home</a></li>
+                    <li id="test_links_button" ng-class="{'active': navState.currentPage === 'test'}" ng-click="navState.currentPage = 'test'"><a id="test_links_link" role="button" ng-href="#/test">Test Links</a></li>
+                    <li id="about_button" ng-class="{'active': navState.currentPage === 'about'}" ng-click="navState.currentPage = 'about'"><a id="about_link" role="button" ng-href="#/about">About</a></li>
+                </ul>
+                <div class="text-muted nav pull-left pull_left_adjust">Çedilla {{sprint_name}}</div>
+            </div>
+        </div>
 
     </body>
 </html>
