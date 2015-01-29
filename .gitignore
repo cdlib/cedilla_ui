@@ -5,4 +5,5 @@ dist
 bower_components
 tmpscripts
 app/scripts/config.js
+app/scripts/vendor
 .DS_Store
