@@ -13,14 +13,20 @@ var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
 cdlaControllers.controller('MainCtrl', ['$scope', '$sce', 'cdlaProperties', function($scope, $sce, cdlaProperties) {
     $scope.navState = {'currentPage': 'home'};
     $scope.bodyClass = '';
+    $scope.showHeader = true;
     $scope.socketIOAddress = $sce.trustAsResourceUrl(cdlaProperties.SOCKETIO_ADDRESS);
     $scope.sprint_name = cdlaProperties.SPRINT_NAME;
     $scope.$on('changeView', function(event, data) {
       // console.log(event);
-      if (data === 'fullText') {
+      if (data === 'fullText' || data === 'fullTextMax') {
         $scope.bodyClass = 'noscroll';
       } else {
         $scope.bodyClass = '';
+      }
+      if (data === 'fullTextMax') {
+        $scope.showHeader = false;
+      } else {
+        $scope.showHeader = true;
       }
     });
 
@@ -88,9 +94,11 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
 
       vwState.showDebug = false;
       vwState.showFullText = false;
+      vwState.showFullTextMax = false;
       vwState.showOptions = false;
       vwState.showWait = true;
       vwState.fullTextIndex = 0;
+      vwState.displayCitationPanel = true;
       vwState.displayTargets = [];
       vwState.quote = cdlaQuoter.getRandomQuote();
 
@@ -98,8 +106,17 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
         switch (viewName) {
           case 'fullText':
             this.showFullText = true;
+            this.showFullTextMax = false;
             this.showOptions = false;
             this.showWait = false;
+            this.displayCitationPanel = true;
+            break;
+          case 'fullTextMax':
+            this.showFullText = false;
+            this.showFullTextMax = true;
+            this.showOptions = false;
+            this.showWait = false;
+            this.displayCitationPanel = false;
             break;
           case 'options':
             this.showOptions = true;
@@ -117,6 +134,15 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
         }
         // emit an event so that the main controller can react
         $scope.$emit('changeView', viewName);
+      };
+      
+      vwState.toggleCitationPanelDisplay = function() {
+        if (vwState.displayCitationPanel) {
+          
+        } else {
+          
+        }
+        vwState.displayCitationPanel = !vwState.displayCitationPanel;
       };
 
       /**
