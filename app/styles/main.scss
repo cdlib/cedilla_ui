@@ -12,11 +12,13 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 
 /* Space out content a bit */
 .body_base {
+  height: 100%;
   padding-top: 12px;
   padding-bottom: 12px;
-}ß
+}
 
 .body_nopad {
+    height: 100%;
     padding-top: 0px;
     padding-bottom: 0px;
 }
@@ -55,9 +57,21 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 
 /*  CDLA added  */
 
-.ft_frame {
-  min-height: 1000px;
+.container_full {
+  margin: 0 auto;
   width: 100%;
+  position: relative;
+  height: 600px;
+}
+
+.ft_frame {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  right: 0px;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
 }
 
 .noscroll {
@@ -121,13 +135,6 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 .top_separated {
     border-top: 1px solid #F6F6F6;
     padding-top: 6px;
-}
-
-/* Custom container */
-.container_full {
-  margin: 0 auto;
-  width: 100%;
-  position: relative;
 }
 
 .btn_float_over {
