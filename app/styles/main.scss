@@ -11,9 +11,14 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 }
 
 /* Space out content a bit */
-body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+.body_base {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.body_nopad {
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -51,7 +56,7 @@ body {
 /*  CDLA added  */
 
 .ft_frame {
-  height: 700px;
+  min-height: 1000px;
   width: 100%;
 }
 
@@ -64,6 +69,10 @@ body {
     font-weight : bold;
 }
 
+.narrative_text {
+    margin-left: 20px;
+}
+
 #citation_details {
     padding-top: 12px;
     padding-bottom: 12px;
@@ -71,11 +80,75 @@ body {
 
 #uc_libs {
     padding-bottom: 12px;
-    color: #007FD2;
+    //color: #007FD2;
+}
+
+.pull_left_adjust {
+    margin-left: 24 px;
 }
 
 .pull_right_adjust {
-    padding-right: 24px;
+    margin-right: 24 px;
+}
+
+.glyph_green {
+    color: #009900;
+    padding-right: 6pt;
+}
+
+.glyph_red {
+    color: #FF0000;
+    padding-right: 6pt;
+}
+
+.glyph_black {
+    color: black;
+    padding-right: 6pt;
+}
+
+.citation_title {
+    font-style: italic;
+}
+
+.button_list > li {
+    padding-bottom: 10pt;
+}
+
+.left_separated {
+    border-left: 1px solid #F6F6F6;
+}
+
+.top_separated {
+    border-top: 1px solid #F6F6F6;
+    padding-top: 6px;
+}
+
+/* Custom container */
+.container_full {
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+}
+
+.btn_float_over {
+    position: absolute;
+    padding-bottom: 12px;
+    margin-top: -20px;
+    left: 50%;
+    right: 50%;
+    width: 10px;
+    height: 10px;
+    z-index: 999;
+}
+
+.btn_float {
+    position: absolute;
+    padding-top: 12px;
+    left: 50%;
+    right: 50%;
+    width: 10px;
+    height: 10px;
+    z-index: 999;
 }
 
 /* end CDLA added */

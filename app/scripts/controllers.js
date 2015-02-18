@@ -12,15 +12,21 @@ var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
  */
 cdlaControllers.controller('MainCtrl', ['$scope', '$sce', 'cdlaProperties', function($scope, $sce, cdlaProperties) {
     $scope.navState = {'currentPage': 'home'};
-    $scope.bodyClass = '';
+    $scope.bodyClass = 'bodyBase';
+    $scope.showHeaderFooter = true;
     $scope.socketIOAddress = $sce.trustAsResourceUrl(cdlaProperties.SOCKETIO_ADDRESS);
     $scope.sprint_name = cdlaProperties.SPRINT_NAME;
     $scope.$on('changeView', function(event, data) {
       // console.log(event);
       if (data === 'fullText') {
-        $scope.bodyClass = 'noscroll';
+        $scope.bodyClass = 'bodyBase noscroll';
+        $scope.showHeaderFooter = true;
+      } else if (data === 'fullTextMax') {
+        $scope.bodyClass = 'bodyNopad noscroll';
+        $scope.showHeaderFooter = false;
       } else {
-        $scope.bodyClass = '';
+        $scope.bodyClass = 'bodyBase';
+        $scope.showHeaderFooter = true;
       }
     });
 
@@ -88,9 +94,11 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
 
       vwState.showDebug = false;
       vwState.showFullText = false;
+      vwState.showFullTextMax = false;
       vwState.showOptions = false;
       vwState.showWait = true;
       vwState.fullTextIndex = 0;
+      vwState.displayCitationPanel = true;
       vwState.displayTargets = [];
       vwState.quote = cdlaQuoter.getRandomQuote();
 
@@ -98,8 +106,17 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
         switch (viewName) {
           case 'fullText':
             this.showFullText = true;
+            this.showFullTextMax = false;
             this.showOptions = false;
             this.showWait = false;
+            this.displayCitationPanel = true;
+            break;
+          case 'fullTextMax':
+            this.showFullText = false;
+            this.showFullTextMax = true;
+            this.showOptions = false;
+            this.showWait = false;
+            this.displayCitationPanel = false;
             break;
           case 'options':
             this.showOptions = true;
@@ -117,6 +134,15 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
         }
         // emit an event so that the main controller can react
         $scope.$emit('changeView', viewName);
+      };
+      
+      vwState.toggleCitationPanelDisplay = function() {
+        if (vwState.displayCitationPanel) {
+          
+        } else {
+          
+        }
+        vwState.displayCitationPanel = !vwState.displayCitationPanel;
       };
 
       /**
@@ -170,7 +196,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
      * Factory function for the item object.
      */
     var initItem = function() {
-      return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], error: '', fullTextFound: false, };
+      return {query: '', originalCitation: {}, citation: {}, citationEvents: [], displayCitation: {}, resources: [], eResources: [], error: '', fullTextFound: false, holdingsFound: false};
     };
 
     /**
@@ -180,6 +206,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
       var responder = {};
 
       responder.handleComplete = function() {
+        $scope.complete = true;
         if (!$scope.item.fullTextFound) {
           $scope.viewState.changeView("options");
         } else {
@@ -214,6 +241,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
             $scope.viewState.displayTargets.push({target: ''});
           }
         } else {
+          $scope.item.holdingsFound = true;
           if ($scope.progressBar.percent <= 90 && !$scope.item.fullTextFound) {
             $scope.progressBar.percent = $scope.progressBar.percent + 10;
             $scope.progressBar.text = "Found copy in library";
