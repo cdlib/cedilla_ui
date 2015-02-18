@@ -67,9 +67,9 @@
           <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <div class="container-fluid" ng-show="showHeader">
+        <div class="container-fluid" ng-show="showHeaderFooter">
             <div class="row">
-                <div class="col-lg-2 col-lg-offset-8 col-md-3 col-md-offset-6 col-sm-4 col-sm-offset-4">
+                <div class="col-lg-2 col-lg-offset-8 col-md-2 col-md-offset-7 col-sm-3 col-sm-offset-5">
                     <a id="chat_link" href="http://ucelinks.cdlib.org:8888/sfx_local/img/docs/Ask.html"><span class="glyphicon glyphicon-comment"></span>&nbsp;Chat with a librarian</a>
                 </div>
                      
@@ -81,7 +81,7 @@
 
         <div ng-view=""></div>
 
-        <div class="container-fluid">
+        <div class="container-fluid" ng-show="showHeaderFooter">
             <div class="footer nav ">
                 <ul id="footer_buttons" class="nav nav-pills pull-right pull_right_adjust">
                     <li id="home_button" ng-class="{'active': navState.currentPage === 'home'}" ng-click="navState.currentPage = 'home'"><a id="home_linkl" role="button" ng-href="#/main">Home</a></li>

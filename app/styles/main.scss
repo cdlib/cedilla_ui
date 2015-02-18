@@ -11,9 +11,14 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 }
 
 /* Space out content a bit */
-body {
+.body_base {
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+.body_nopad {
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -51,7 +56,7 @@ body {
 /*  CDLA added  */
 
 .ft_frame {
-  height: 700px;
+  min-height: 1000px;
   width: 100%;
 }
 
@@ -62,6 +67,10 @@ body {
 .cite_field_label {
     margin-right : 6px;
     font-weight : bold;
+}
+
+.narrative_text {
+    margin-left: 20px;
 }
 
 #citation_details {
@@ -89,6 +98,11 @@ body {
 
 .glyph_red {
     color: #FF0000;
+    padding-right: 6pt;
+}
+
+.glyph_black {
+    color: black;
     padding-right: 6pt;
 }
 

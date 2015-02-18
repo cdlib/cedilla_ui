@@ -12,21 +12,21 @@ var cdlaControllers = angular.module('cdlaControllers', ['cdlaConfig']);
  */
 cdlaControllers.controller('MainCtrl', ['$scope', '$sce', 'cdlaProperties', function($scope, $sce, cdlaProperties) {
     $scope.navState = {'currentPage': 'home'};
-    $scope.bodyClass = '';
-    $scope.showHeader = true;
+    $scope.bodyClass = 'bodyBase';
+    $scope.showHeaderFooter = true;
     $scope.socketIOAddress = $sce.trustAsResourceUrl(cdlaProperties.SOCKETIO_ADDRESS);
     $scope.sprint_name = cdlaProperties.SPRINT_NAME;
     $scope.$on('changeView', function(event, data) {
       // console.log(event);
-      if (data === 'fullText' || data === 'fullTextMax') {
-        $scope.bodyClass = 'noscroll';
+      if (data === 'fullText') {
+        $scope.bodyClass = 'bodyBase noscroll';
+        $scope.showHeaderFooter = true;
+      } else if (data === 'fullTextMax') {
+        $scope.bodyClass = 'bodyNopad noscroll';
+        $scope.showHeaderFooter = false;
       } else {
-        $scope.bodyClass = '';
-      }
-      if (data === 'fullTextMax') {
-        $scope.showHeader = false;
-      } else {
-        $scope.showHeader = true;
+        $scope.bodyClass = 'bodyBase';
+        $scope.showHeaderFooter = true;
       }
     });
 
