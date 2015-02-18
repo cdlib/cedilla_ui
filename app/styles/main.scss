@@ -12,8 +12,8 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 
 /* Space out content a bit */
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -113,6 +113,28 @@ body {
 .container_full {
   margin: 0 auto;
   width: 100%;
+  position: relative;
+}
+
+.btn_float_over {
+    position: absolute;
+    padding-bottom: 12px;
+    margin-top: -20px;
+    left: 50%;
+    right: 50%;
+    width: 10px;
+    height: 10px;
+    z-index: 999;
+}
+
+.btn_float {
+    position: absolute;
+    padding-top: 12px;
+    left: 50%;
+    right: 50%;
+    width: 10px;
+    height: 10px;
+    z-index: 999;
 }
 
 /* end CDLA added */
