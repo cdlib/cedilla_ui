@@ -57,11 +57,13 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 
 /*  CDLA added  */
 
+html, body, #view { height: 100%}
+
 .container_full {
   margin: 0 auto;
   width: 100%;
   position: relative;
-  height: 600px;
+  height: 100%;
 }
 
 .ft_frame {
@@ -70,8 +72,6 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
   position: absolute;
   right: 0px;
   left: 0px;
-  top: 0px;
-  bottom: 0px;
 }
 
 .noscroll {
