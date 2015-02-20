@@ -106,7 +106,7 @@
     </div>
 </div>
 
-<div id='fulltext' class="container_full" ng-show="viewState.showFullText && viewState.fullTextIndex === $index" ng-repeat="resource in viewState.displayTargets">
+<div id='fulltext' class="container_lower" ng-show="viewState.showFullText && viewState.fullTextIndex === $index" ng-repeat="resource in viewState.displayTargets">
     <a class="btn_float_over glyphicon glyphicon-collapse-up" href ng-click="viewState.changeView('fullTextMax')"></a>   
     <iframe class="ft_frame" src="{{resource.target}}" onLoad="displayFulltext()"></iframe>
 </div>
