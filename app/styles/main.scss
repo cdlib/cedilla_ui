@@ -23,6 +23,11 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
     padding-bottom: 0px;
 }
 
+.view_fulltext { 
+  height: 100%;
+  position: relative;
+}
+
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,
@@ -58,11 +63,6 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 /*  CDLA added  */
 
 html { height: 100%; }
-
-#view { 
-  height: 100%;
-  position: relative;
-}
 
 .container_full {
   margin: 0 auto;
