@@ -83,9 +83,7 @@
 
     </div>
 
-</div>  
-
-<div id="error_panel"><div id="error_message" class="col-md-12"></div></div>
+</div>
 
 <div id ="wait_page" class="container-fluid" ng-class="{'hidden': !viewState.showWait}">
     <div class="row">
@@ -108,10 +106,14 @@
     </div>
 </div>
 
-<div id='fulltext' class="container_full" ng-show="viewState.showFullText || viewState.showFullTextMax" ng-repeat="resource in viewState.displayTargets">
-    <a class="btn_float_over glyphicon glyphicon-collapse-up" href ng-show="viewState.showFullText" ng-click="viewState.changeView('fullTextMax')"></a>
-    <a class="btn_float glyphicon glyphicon-collapse-down glyph_black" href ng-show="viewState.showFullTextMax" ng-click="viewState.changeView('fullText')"></a>
-    <iframe class="ft_frame" src="{{resource.target}}" onLoad="displayFulltext()" ng-show="viewState.fullTextIndex === $index"></iframe>
+<div id='fulltext' class="container_lower" ng-show="viewState.showFullText && viewState.fullTextIndex === $index" ng-repeat="resource in viewState.displayTargets">
+    <a class="btn_float_over glyphicon glyphicon-collapse-up" href ng-click="viewState.changeView('fullTextMax')"></a>   
+    <iframe class="ft_frame" src="{{resource.target}}" onLoad="displayFulltext()"></iframe>
+</div>
+
+<div id='fulltextMax' class="container_full" ng-show="viewState.showFullTextMax && viewState.fullTextIndex === $index" ng-repeat="resource in viewState.displayTargets">
+    <a class="btn_float glyphicon glyphicon-collapse-down glyph_black" ng-click="viewState.changeView('fullText')"></a>
+    <iframe class="ft_frame" src="{{resource.target}}" onLoad="displayFulltext()"></iframe>
 </div>
 
 <div id="resources" class="container-fluid" ng-show="viewState.showOptions">
