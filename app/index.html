@@ -13,40 +13,17 @@
         <!-- build:css(.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
-    </head>
-    <body ng-app="cdlaUiApp" ng-controller = "MainCtrl" ng-class="bodyClass">
-        <!---[if lt IE 7]>
-          <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-10"></div>
-                <div id="uc_libs" class="col-md-2">
-                    <span id="uc_libs_name"><span class="glyphicon glyphicon-heart"></span> UC Libraries</span>
-                </div>
-            </div>
-
-            <div ng-view=""></div>
-
-            <div class="footer">
-                <ul id="footer_buttons" class="nav nav-pills pull-right">
-                    <li id="home_button" ng-class="{'active': navState.currentPage === 'home'}" ng-click="navState.currentPage = 'home'"><a id="home_linkl" role="button" ng-href="#/main">Home</a></li>
-                    <li id="test_links_button" ng-class="{'active': navState.currentPage === 'test'}" ng-click="navState.currentPage = 'test'"><a id="test_links_link" role="button" ng-href="#/test">Test Links</a></li>
-                    <li id="about_button" ng-class="{'active': navState.currentPage === 'about'}" ng-click="navState.currentPage = 'about'"><a id="about_link" role="button" ng-href="#/about">About</a></li>
-                </ul>
-                <p class="text-muted">Çedilla {{sprint_name}}</p>
-            </div>
-        </div>
-
-        <!-- build:js(.) scripts/oldieshim.js -->
+        
+               <!-- build:js(.) scripts/oldieshim.js -->
         <!--[if lt IE 9]>
         <script src="bower_components/es5-shim/es5-shim.js"></script>
         <script src="bower_components/json3/lib/json3.js"></script>
         <![endif]-->
         <!-- endbuild -->
+        
 
         <!-- build:js(.) scripts/vendor.js -->
+        
         <!-- bower:js -->
         <script src="bower_components/jquery/dist/jquery.js"></script>
         <script src="bower_components/angular/angular.js"></script>
@@ -71,6 +48,8 @@
         <script src="bower_components/angular-route/angular-route.js"></script>
         <script src="bower_components/angular-socket-io/socket.js"></script>
         <!-- endbower -->
+        
+        <script src="scripts/vendor/socket.io.js"></script>
         <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -82,7 +61,36 @@
         <script src="scripts/services.js"></script>
         <script src="scripts/filters.js"></script>
         <!-- endbuild -->
-        
-        <script src="http://cdla-api-stg.cdlib.org:3005/socket.io/socket.io.js"></script>
+    </head>
+    <body ng-app="cdlaUiApp" ng-controller = "MainCtrl" ng-class="bodyClass">
+        <!---[if lt IE 7]>
+          <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid" ng-show="showHeader">
+            <div class="row">
+                <div class="col-lg-2 col-lg-offset-8 col-md-2 col-md-offset-7 col-sm-3 col-sm-offset-5">
+                    <a id="chat_link" href="http://ucelinks.cdlib.org:8888/sfx_local/img/docs/Ask.html"><span class="glyphicon glyphicon-comment"></span>&nbsp;Chat with a librarian</a>
+                </div>
+                     
+                <div id="uc_libs" class="col-lg-2 col-md-3 col-sm-4">
+                    <span id="uc_libs_name"><span class="glyphicon glyphicon-heart-empty"></span>&nbsp;UC Libraries</span>
+                </div>
+            </div>
+        </div>
+
+        <div ng-view="" id="view" ng-class="viewClass"></div>
+
+        <div class="container-fluid" ng-show="showFooter">
+            <div class="footer nav ">
+                <ul id="footer_buttons" class="nav nav-pills pull-right pull_right_adjust">
+                    <li id="home_button" ng-class="{'active': navState.currentPage === 'home'}" ng-click="navState.currentPage = 'home'"><a id="home_linkl" role="button" ng-href="#/main">Home</a></li>
+                    <li id="test_links_button" ng-class="{'active': navState.currentPage === 'test'}" ng-click="navState.currentPage = 'test'"><a id="test_links_link" role="button" ng-href="#/test">Test Links</a></li>
+                    <li id="about_button" ng-class="{'active': navState.currentPage === 'about'}" ng-click="navState.currentPage = 'about'"><a id="about_link" role="button" ng-href="#/about">About</a></li>
+                </ul>
+                <div class="text-muted nav pull-left pull_left_adjust">Çedilla {{sprint_name}}</div>
+            </div>
+        </div>
+
     </body>
 </html>

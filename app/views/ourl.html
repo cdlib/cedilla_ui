@@ -1,51 +1,55 @@
 <!-- COINS metadata -->
 <span class="Z3988" title="{{item.query}}"></span>
 
-<div id="citation_panel" class="container-fluid" ng-show="item.displayCitation">
-    <div class="panel panel_default" ng-show="item.displayCitation.container_title">
-        <div class="row">
-            <div id='title_display_field' class='col-md-8' ng-show="item.displayCitation.title">
-                <span class='cite_field_val'>{{item.displayCitation.title}}</span>
-            </div>
-            <div class="col-md-4"></div>
-        </div>
-        <div id='source_display_field' class='row'>
-            <div class="col-md-8">
-                <span>{{item.displayCitation.authors}}</span>
-            </div>
-            <div class="col-md-4"></div>
-        </div>
-        <div id="citation_details">
-            <div class="row" ng-show="item.displayCitation.container_title">
-                <div class='col-md-8'>
-                    {{item.displayCitation.container_title}}
-                </div>
-                <div class="col-md-4"></div>
-            </div>
-            <div class="row" ng-show="item.displayCitation.volume">
-                <div class='col-md-8'>
-                    <strong>Volume:&nbsp;</strong>{{item.displayCitation.volume}}
-                </div>
-                <div class="col-md-4"></div>
-            </div>
-            <div class ="row" ng-show="item.displayCitation.issue">
-                <div class='col-md-8'>
-                    <strong>Issue:&nbsp;</strong>{{item.displayCitation.issue}}
-                </div>
-                <div class="col-md-4"></div>
-            </div>
-            <div class ="row" ng-show="item.displayCitation.pages">
-                <div class='col-md-8'>
-                    <strong>Pages:&nbsp;</strong>{{item.displayCitation.pages}}
-                </div>
-                <div class="col-md-4">
+<div id="citation_panel" class="container-fluid" ng-show="item.displayCitation && viewState.displayCitationPanel">
 
-                </div>
+    <div ng-show="item.displayCitation.container_title">
+
+        <div class="row" id="citation_author_title">
+            <div class="col-lg-8 col-md-7 col-sm-6 col-xs-10">
+                <ul class="list-unstyled">
+                    <li id='title_display_field' class='citation_title' ng-show="item.displayCitation.title">
+                        <span class='cite_field_val'>{{item.displayCitation.title}}</span>
+                    </li>
+                    <li>
+                        <span>{{item.displayCitation.authors}}</span>
+                    </li>
+                </ul>
             </div>
-            <div class="row">
-                <ul class="nav nav-pills pull-left">
+        </div>
+
+        <div class="row" id="citation_details">
+            <div class="col-lg-8 col-md-7 col-sm-6 top_separated">
+                <ul class="list-unstyled">
+                    <li ng-show="item.displayCitation.container_title">
+                        {{item.displayCitation.container_title}}
+                    </li>
+                    <li ng-show="item.displayCitation.volume">
+                        <strong>Volume:&nbsp;</strong>{{item.displayCitation.volume}}
+                    </li>
+                    <li ng-show="item.displayCitation.issue">
+                        <strong>Issue:&nbsp;</strong>{{item.displayCitation.issue}}
+                    </li>
+                    <li ng-show="item.displayCitation.pages">
+                        <strong>Pages:&nbsp;</strong>{{item.displayCitation.pages}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row" ng-show="complete">
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <ul class="list-unstyled">
                     <li id="display_controls" class="dropdown" ng-show="navState.currentPage === 'ourl'">
-                        <a href class="dropdown-toggle" data-toggle="dropdown" ng-show="!navState.viewState.showOptions && item.eResources.length > 1">Online versions ({{item.eResources.length}}) <b class="caret"></b></a>
+                        <a href class="dropdown-toggle" data-toggle="dropdown" ng-show="item.eResources.length > 1">
+                            <span class="glyphicon glyphicon-ok-sign glyph_green"></span><span>Online versions ({{item.eResources.length}}) <b class="caret"></b></span>
+                        </a>
+                        <span ng-show="!item.fullTextFound && complete">
+                            <span class="glyphicon glyphicon-remove-sign glyph_red"></span><span>No online version found</span>
+                        </span>
+                        <span ng-show="item.eResources.length === 1 && complete">
+                            <span class="glyphicon glyphicon-ok-sign glyph_green"></span><span>Online version found</span>
+                        </span>
                         <ul class="dropdown-menu">
                             <li ng-repeat="resource in item.eResources">
                                 <a href ng-bind-html="resource.source" ng-click="viewState.switchFullTextDisplay($index)"></a>   
@@ -53,19 +57,37 @@
                         </ul>
                     </li>
                 </ul>
-                <ul class="nav nav-pills pull-right pull_right_adjust">
-                    <li><a id="show_all_button" href ng-show="viewState.showFullText" ng-click="viewState.changeView('options')">Show All</a></li>
+            </div>
+
+            <div class="col-lg-2 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-4 col-sm-offset-2 left_separated">
+                <ul class="list-unstyled button_list">
+                    <li ng-show = "item.holdingsFound">
+                        <span class="glyphicon glyphicon-ok-sign glyph_green"></span><span>Available on campus</span>
+                    </li>
+                    <li ng-show = "!item.holdingsFound">
+                        <span class="glyphicon glyphicon-remove-sign glyph_red"></span><span>Not available on campus</span>
+                    </li>
+                    <li>
+                        <button id="show_all_button" type="button" class="btn btn-primary" href ng-click="viewState.changeView('options')" ng-show="viewState.showFullText">
+                            <span class="glyphicon glyphicon-list-alt">&nbsp;</span>
+                            Show other options
+                        </button>
+                        <button id="hide_options_button" type="button" class="btn btn-primary" href ng-click="viewState.changeView('fullText')" ng-show="viewState.showOptions">
+                            <span class="glyphicon glyphicon-remove">&nbsp;</span>
+                            Hide other options
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
-    </div>
-</div>  
 
-<div id="error_panel"><div id="error_message" class="col-md-12"></div></div>
+    </div>
+
+</div>
 
 <div id ="wait_page" class="container-fluid" ng-class="{'hidden': !viewState.showWait}">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-lg-4 col-md-6 col-sm-8 col-xs-10./">
             <div class="progress">
                 <div id="progress_bar" class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="{{progressBar.percent}}" aria-valuemin="10" aria-valuemax="100" style="width: {{progressBar.percent}}%;">
                     {{progressBar.text}}
@@ -75,7 +97,7 @@
     </div>
     <div class="panel panel-info">
         <div class="panel-heading">
-            <h3 class="panel-title">Waiting room reading</h3>
+            <h3 class="panel-title">Something to read while you wait</h3>
         </div>
         <div class="panel-body">
             <div class="text">{{viewState.quote.quote}}</div>
@@ -84,8 +106,14 @@
     </div>
 </div>
 
-<div id='fulltext' ng-show="viewState.showFullText" ng-repeat="resource in viewState.displayTargets">
-    <iframe class="ft_frame" src="{{resource.target}}" onLoad="displayFulltext()" ng-show="viewState.fullTextIndex === $index"></iframe>
+<div id='fulltext' class="container_lower" ng-show="viewState.showFullText && viewState.fullTextIndex === $index" ng-repeat="resource in viewState.displayTargets">
+    <a class="btn_float_over glyphicon glyphicon-collapse-up" href ng-click="viewState.changeView('fullTextMax')"></a>   
+    <iframe class="ft_frame" src="{{resource.target}}" onLoad="displayFulltext()"></iframe>
+</div>
+
+<div id='fulltextMax' class="container_full" ng-show="viewState.showFullTextMax && viewState.fullTextIndex === $index" ng-repeat="resource in viewState.displayTargets">
+    <a class="btn_float glyphicon glyphicon-collapse-down glyph_black" ng-click="viewState.changeView('fullText')"></a>
+    <iframe class="ft_frame" src="{{resource.target}}" onLoad="displayFulltext()"></iframe>
 </div>
 
 <div id="resources" class="container-fluid" ng-show="viewState.showOptions">
