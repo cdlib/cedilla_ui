@@ -32,8 +32,7 @@
     "karma-phantomjs-launcher": "~0.1.4",
     "load-grunt-tasks": "~0.4.0",
     "protractor": "~1.5.0",
-    "time-grunt": "~0.3.1",
-    "socket.io-client": "~1.2.1"
+    "time-grunt": "~0.3.1"
   },
   "engines": {
     "node": ">=0.10.0"
