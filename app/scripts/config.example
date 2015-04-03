@@ -4,7 +4,7 @@ var cdlaConfig = angular.module('cdlaConfig', []);
 var aggregatorAddress = 'http://cdla-api-stg.cdlib.org:3005/';
 
 var appProperties = {
-  'INSTANCE' : '',
+  'INSTANCE' : 'DEV',
   'AGGREGATOR_ADDRESS': aggregatorAddress,
   'CITATION_SERVICE_ADDRESS': aggregatorAddress + 'citation',
   'MAX_LINK_DISPLAY': 3,
@@ -15,7 +15,11 @@ var appProperties = {
     'Synergy Blackwell Premium 2',
     'Synergy Blackwell Premium 3'
   ],
-  NOFRAME_FULLTEXT_DISPLAY: ['Oxford University Press Journals Current']
+  NOFRAME_FULLTEXT_DISPLAY: ['Oxford University Press Journals Current'],
+  VERSION: '0.1.0-sprint06',
+  SPRINT_NAME: 'Sweetheart',
+  SPRINT_IMAGE: 'Valentine-Day-Candy-Hearts-2.jpg',
+  RELEASE_DATE: 'February 17, 2015'
 
 };
 
