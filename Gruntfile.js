@@ -18,7 +18,8 @@ module.exports = function (grunt) {
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
-    dist: 'dist'
+    dist: 'dist',
+    htdocs: '../../httpd/htdocs'
   };
 
   // Define the configuration for all the tasks
@@ -132,6 +133,9 @@ module.exports = function (grunt) {
 
     // Empties folders to start fresh
     clean: {
+      options: {
+         force: true
+      },
       dist: {
         files: [{
           dot: true,
@@ -142,6 +146,7 @@ module.exports = function (grunt) {
           ]
         }]
       },
+      htdocs: '<%= yeoman.htdocs %>/{,*/}*', 
       server: '.tmp', 
       app: '<%= yeoman.app %>/scripts/vendor'
     },
@@ -330,14 +335,6 @@ module.exports = function (grunt) {
 
     // Copies remaining files to places other tasks can use
     copy: {
-      socketio: {
-        files: [{
-            cwd: './node_modules/socket.io-client',
-            src: 'socket.io.js',
-            dest: '<%= yeoman.app %>/scripts/vendor/',
-            expand: true
-        }]
-      },
       dist: {
         files: [{
           expand: true,
@@ -414,7 +411,6 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-      'copy:socketio',
       'wiredep',
       'concurrent:server',
       'autoprefixer',
@@ -448,7 +444,6 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'clean:app',
-    'copy:socketio',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
@@ -462,6 +457,11 @@ module.exports = function (grunt) {
     'filerev',
     'usemin',
     'htmlmin'
+  ]);
+
+  grunt.registerTask('deploy', [
+    'build',
+    'clean:htdocs'
   ]);
 
   grunt.registerTask('default', [
