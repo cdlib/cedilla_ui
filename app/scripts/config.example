@@ -16,10 +16,10 @@ var appProperties = {
     'Synergy Blackwell Premium 3'
   ],
   NOFRAME_FULLTEXT_DISPLAY: ['Oxford University Press Journals Current'],
-  VERSION: '0.1.0-sprint06',
-  SPRINT_NAME: 'Sweetheart',
-  SPRINT_IMAGE: 'Valentine-Day-Candy-Hearts-2.jpg',
-  RELEASE_DATE: 'February 17, 2015'
+  VERSION: '0.1.0-sprint07',
+  SPRINT_NAME: 'Cumulus',
+  SPRINT_IMAGE: 'cumulus.jpg',
+  RELEASE_DATE: 'April 3, 2015'
 
 };
 

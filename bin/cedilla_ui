@@ -14,36 +14,29 @@ NAME="cedilla_ui"
 
 function start {
   echo "starting $NAME"
-  if [ -f "${PID}" ]; then
-    echo "Cedilla_ui appears to already be running, based on the presence of ${PID}."
-    return 1
-  fi
-  cd ${HOME}
-  grunt serve &
+  ${CDLA_HOME}/httpd/bin/start_server 
   if [ $? -ne 0 ]; then
     echo "Cedilla start failed."
     return 1
   fi
-  echo $! > $PID
   sleep 10
   echo "$NAME started"
 }
 
 function stop {
   echo "Stopping $NAME"
-  if [ ! -f "${PID}" ]; then
-    echo "pid file not found; assuming process is already stopped"
-    exit 0
-  fi
-  read PIDN <${PID}
-  kill -2 ${PIDN}
-  if [ $(ps -p ${PIDN} | wc -l) -eq 2 ]; then
-    echo "Process ${PIDN} was still up, killed with signal 9"
-    kill -9 ${PIDN}
-  fi
+  ${CDLA_HOME}/httpd/bin/stop_server
   sleep 5 
-  rm ${PID}
   echo "$NAME stopped"
+}
+
+function deploy {
+  echo "deploying $NAME"
+  stop
+  cd ${HOME}
+  grunt clean build
+  cp -r ${HOME}/dist/* ${CDLA_HOME}/httpd/htdocs/
+  start
 }
  
 function restart {
