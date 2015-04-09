@@ -8,3 +8,5 @@ app/scripts/config.js
 app/scripts/vendor
 .DS_Store
 *.pid
+.cache/
+.config/
