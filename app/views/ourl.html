@@ -37,50 +37,6 @@
             </div>
         </div>
 
-        <div class="row" ng-show="complete">
-            <div class="col-lg-8 col-md-7 col-sm-6">
-                <ul class="list-unstyled">
-                    <li id="display_controls" class="dropdown" ng-show="navState.currentPage === 'ourl'">
-                        <a href class="dropdown-toggle" data-toggle="dropdown" ng-show="item.eResources.length > 1">
-                            <span class="glyphicon glyphicon-ok-sign glyph_green"></span><span>Online versions ({{item.eResources.length}}) <b class="caret"></b></span>
-                        </a>
-                        <span ng-show="!item.fullTextFound && complete">
-                            <span class="glyphicon glyphicon-remove-sign glyph_red"></span><span>No online version found</span>
-                        </span>
-                        <span ng-show="item.eResources.length === 1 && complete">
-                            <span class="glyphicon glyphicon-ok-sign glyph_green"></span><span>Online version found</span>
-                        </span>
-                        <ul class="dropdown-menu">
-                            <li ng-repeat="resource in item.eResources">
-                                <a href ng-bind-html="resource.source" ng-click="viewState.switchFullTextDisplay($index)"></a>   
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="col-lg-2 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-4 col-sm-offset-2 left_separated">
-                <ul class="list-unstyled button_list">
-                    <li ng-show = "item.holdingsFound">
-                        <span class="glyphicon glyphicon-ok-sign glyph_green"></span><span>Available on campus</span>
-                    </li>
-                    <li ng-show = "!item.holdingsFound">
-                        <span class="glyphicon glyphicon-remove-sign glyph_red"></span><span>Not available on campus</span>
-                    </li>
-                    <li>
-                        <button id="show_all_button" type="button" class="btn btn-primary" href ng-click="viewState.changeView('options')" ng-show="viewState.showFullText">
-                            <span class="glyphicon glyphicon-list-alt">&nbsp;</span>
-                            Show other options
-                        </button>
-                        <button id="hide_options_button" type="button" class="btn btn-primary" href ng-click="viewState.changeView('fullText')" ng-show="viewState.showOptions">
-                            <span class="glyphicon glyphicon-remove">&nbsp;</span>
-                            Hide other options
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
     </div>
 
 </div>
@@ -117,16 +73,8 @@
 </div>
 
 <div id="resources" class="container-fluid" ng-show="viewState.showOptions">
-    <div class="well">
-        <p><strong>Available digitally from</strong></p>
-        <ul class="list-unstyled">
-            <li ng-repeat="resource in item.eResources">
-                <a href ng-bind-html="resource.source" ng-click="viewState.switchFullTextDisplay($index)"></a> 
-            </li>
-        </ul>
-    </div>
     <div id="your_library_display" class="well">
-        <p><strong>Copies in your library</strong></p>
+        <p><strong>Found holdings:</strong></p>
         <ul class="list-unstyled">
             <ul ng-repeat="resource in item.resources| printHoldings" class="list-inline">
                 <li ng-show="resource.location"><strong>Location: </strong>{{resource.location}}</li>

@@ -65,7 +65,7 @@ cdlaControllers.controller('AboutCtrl', ['$scope', 'cdlaProperties', function($s
  */
 cdlaControllers.controller('TestCtrl', ['$scope', function($scope) {
     $scope.$parent.navState.currentPage = 'test';
-    $scope.campus = 'ucb';
+    $scope.campus = 'nrlf,srlf';
   }]);
 
 /**
@@ -103,7 +103,7 @@ cdlaControllers.controller('OurlCtrl', ['$scope', '$window', 'cdlaSocketListener
       vwState.showDebug = false;
       vwState.showFullText = false;
       vwState.showFullTextMax = false;
-      vwState.showOptions = false;
+      vwState.showOptions = true;
       vwState.showWait = true;
       vwState.fullTextIndex = 0;
       vwState.displayCitationPanel = true;

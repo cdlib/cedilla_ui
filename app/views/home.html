@@ -1,10 +1,7 @@
 <div class="container-fluid">
-    <div class="row">
-        <ul class="nav nav-tabs">
-            <li role="presentation" class="active"><a href="#">Identifier</a></li>
-            <li role="presentation"><a href="#">Journal Article</a></li>
-            <li role="presentation"><a href="#">Book</a></li>
-        </ul>
-    </div>
+<label for="campus">Campus: &nbsp;</label><input id="campus" ng-model="campus"></input>
+<label for="oclc">OCLC Number: &nbsp;</label><input id="oclc" ng-model="oclc">
+</input>
+<a ng-href="#/ourl?cedilla:affiliation={{campus}}&oclc={{oclc}}">Find RLF Holdings</a>
 
 </div>
